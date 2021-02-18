@@ -1,0 +1,14 @@
+
+.screen {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    justify-content: flex-start;
+    padding-top: 24px;
+}
+
+.home-screen-h1 {
+    display: flex;
+    flex-direction: row;
+    margin: 24 12;
+}
