@@ -1,5 +1,8 @@
 
-export const DOMAIN = 'nimatzdev.it';
+export const APIS = {
+  expenses: 'https://toto-nodems-expenses-6lv62poq7a-ew.a.run.app'
+}
+
 
 export const EVENTS = {
   userInfoChanged: 'userInfoChanged', // User info received from Google

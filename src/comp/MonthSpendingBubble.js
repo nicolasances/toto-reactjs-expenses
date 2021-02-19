@@ -25,7 +25,7 @@ export default class MonthSpendingBubble extends Component {
         this.loadSpending();
     }
 
-    /**
+    /*
      * Loads the current month spending
      */
     loadSpending() {

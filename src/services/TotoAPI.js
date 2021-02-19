@@ -26,6 +26,6 @@ export default class TotoAPI {
     // options.headers['Authorization'] = config.AUTH;
     options.headers['x-correlation-id'] = newCid();
 
-    return fetch("https://" + api + "." + config.DOMAIN + url, options);
+    return fetch(config.APIS[api] + url, options);
   }
 }

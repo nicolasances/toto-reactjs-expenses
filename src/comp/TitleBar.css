@@ -1,0 +1,11 @@
+
+.title-bar {
+    display: flex;
+    flex-direction: row;
+    padding: 24px 12px 12px 12px;
+    justify-content: center;
+}
+
+.title {
+    font-size: 18px;
+}

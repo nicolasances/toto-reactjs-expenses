@@ -11,7 +11,7 @@ export default class ExpensesAPI {
    */
   getAppSettings(userEmail) {
 
-    return new TotoAPI().fetch('/app/expenses/settings?user=' + userEmail)
+    return new TotoAPI().fetch('expenses', '/app/expenses/settings?user=' + userEmail)
         .then((response) => response.json());
 
   }
@@ -22,7 +22,7 @@ export default class ExpensesAPI {
   putAppSettings(settings) {
 
     // Post the data
-    return new TotoAPI().fetch('/app/expenses/settings', {
+    return new TotoAPI().fetch('expenses', '/app/expenses/settings', {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json'
@@ -36,9 +36,9 @@ export default class ExpensesAPI {
   /**
    * Retrieves the month's expenses
    */
-  getExpenses(userEmail, yearMonth) {
+  O(userEmail, yearMonth) {
 
-    return new TotoAPI().fetch('/expenses/expenses?yearMonth=' + yearMonth + '&sortDate=true&sortDesc=true&user=' + userEmail)
+    return new TotoAPI().fetch('expenses', '/expenses?yearMonth=' + yearMonth + '&sortDate=true&sortDesc=true&user=' + userEmail)
         .then((response) => response.json());
 
   }
@@ -49,7 +49,7 @@ export default class ExpensesAPI {
   postExpense(ex) {
 
     // Post the data
-    return new TotoAPI().fetch('/expenses/expenses', {
+    return new TotoAPI().fetch('expenses', '/expenses', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -65,7 +65,7 @@ export default class ExpensesAPI {
   deleteExpense(exId) {
 
     // Post the data
-    return new TotoAPI().fetch('/expenses/expenses/' + exId, {method: 'DELETE'}).then((response => response.json()));
+    return new TotoAPI().fetch('expenses', '/expenses/' + exId, {method: 'DELETE'}).then((response => response.json()));
 
   }
 
@@ -75,7 +75,7 @@ export default class ExpensesAPI {
   putExpense(exId, ex) {
 
     // Post the data
-    return new TotoAPI().fetch('/expenses/expenses/' + exId, {
+    return new TotoAPI().fetch('expenses', '/expenses/' + exId, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json'
@@ -91,7 +91,7 @@ export default class ExpensesAPI {
   consolidateExpense(exId) {
 
     // Post the data
-    return new TotoAPI().fetch('/expenses/expenses/' + exId, {
+    return new TotoAPI().fetch('expenses', '/expenses/' + exId, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json'
@@ -123,7 +123,7 @@ export default class ExpensesAPI {
     let dateToFilter = dateTo == null ? '' : ('&dateTo=' + dateTo);
     let currencyFilter = targetCurrency ? '&targetCurrency=' + targetCurrency : '';
 
-    return new TotoAPI().fetch('/expenses/stats/expensesPerDay?user=' + userEmail + '&dateFrom=' + dateFrom + dateToFilter + currencyFilter)
+    return new TotoAPI().fetch('expenses', '/stats/expensesPerDay?user=' + userEmail + '&dateFrom=' + dateFrom + dateToFilter + currencyFilter)
         .then((response) => response.json());
 
   }
@@ -135,7 +135,7 @@ export default class ExpensesAPI {
 
     let targetCurrencyFilter = targetCurrency ? '&targetCurrency=' + targetCurrency : ''
 
-    return new TotoAPI().fetch('/expenses/stats/expensesPerMonth?user=' + userEmail + '&yearMonthGte=' + yearMonthGte + targetCurrencyFilter)
+    return new TotoAPI().fetch('expenses', '/stats/expensesPerMonth?user=' + userEmail + '&yearMonthGte=' + yearMonthGte + targetCurrencyFilter)
         .then((response) => response.json());
 
   }
@@ -147,7 +147,7 @@ export default class ExpensesAPI {
 
     let targetCurrencyFilter = targetCurrency ? '&targetCurrency=' + targetCurrency : ''
 
-    return new TotoAPI().fetch('/expenses/stats/expensesPerYear?user=' + userEmail + targetCurrencyFilter)
+    return new TotoAPI().fetch('expenses', '/stats/expensesPerYear?user=' + userEmail + targetCurrencyFilter)
         .then((response) => response.json());
 
   }
@@ -160,7 +160,7 @@ export default class ExpensesAPI {
     let maxCatFilter = maxCategories ? '&maxCategories=' + maxCategories :'';
     let targetCurrencyFilter = targetCurrency ? '&targetCurrency=' + targetCurrency : ''
 
-    return new TotoAPI().fetch('/expenses/stats/topCategoriesOfMonth?user=' + userEmail + '&yearMonth=' + yearMonth + maxCatFilter + targetCurrencyFilter)
+    return new TotoAPI().fetch('expenses', '/stats/topCategoriesOfMonth?user=' + userEmail + '&yearMonth=' + yearMonth + maxCatFilter + targetCurrencyFilter)
         .then((response) => response.json());
 
   }
@@ -172,7 +172,7 @@ export default class ExpensesAPI {
 
     let targetCurrencyFilter = targetCurrency ? '&targetCurrency=' + targetCurrency : ''
 
-    return new TotoAPI().fetch('/expenses/stats/topCategoriesPerMonth?user=' + userEmail + '&yearMonthGte=' + yearMonthGte + targetCurrencyFilter)
+    return new TotoAPI().fetch('expenses', '/stats/topCategoriesPerMonth?user=' + userEmail + '&yearMonthGte=' + yearMonthGte + targetCurrencyFilter)
         .then((response) => response.json());
 
   }
@@ -182,7 +182,7 @@ export default class ExpensesAPI {
    */
   getSettings(userEmail) {
 
-    return new TotoAPI().fetch('/expenses/settings?user=' + userEmail)
+    return new TotoAPI().fetch('expenses', '/settings?user=' + userEmail)
         .then((response) => response.json());
 
   }
@@ -193,7 +193,7 @@ export default class ExpensesAPI {
   putSettings(settings) {
 
     // Post the data
-    return new TotoAPI().fetch('/expenses/settings', {
+    return new TotoAPI().fetch('expenses', '/settings', {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json'

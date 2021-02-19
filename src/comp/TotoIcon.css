@@ -1,0 +1,25 @@
+
+.toto-icon {
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  border-radius: 50%;
+}
+.toto-icon.disabled {
+  opacity: 0.5;
+}
+
+.toto-icon .icon {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  fill: currentColor;
+}
+
+.toto-icon.ms {padding: 8px;}
+.toto-icon.s {padding: 6px;}
+
+.toto-icon.ms .icon {width: 16px; height: 16px;}
+.toto-icon.s .icon {width: 14px; height: 14px;}
