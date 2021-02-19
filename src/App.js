@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import HomeScreen from './screens/HomeScreen';
 import Cookies from 'universal-cookie';
+import { GoogleLogin, GoogleLogout } from 'react-google-login';
 
 import './App.css';
 import googleLogo from './img/google-logo.png';
@@ -11,52 +12,47 @@ class App extends Component {
   constructor(props) {
     super(props);
 
-    this.state = {};
+    this.state = {
+      signedIn: false
+    };
 
     this.signOut = this.signOut.bind(this);
     this.signIn = this.signIn.bind(this);
+    this.handleLoginFailure = this.handleLoginFailure.bind(this);
 
   }
 
   componentDidMount() {
 
-    window.gapi.load('auth2', () => {
+    let user = cookies.get('user');
 
-      let auth = window.gapi.auth2.init({
-        client_id: '945392829583-vo2c7v1brbgerasn8iksduelm4k876mo.apps.googleusercontent.com'
-      });
-      // Check if the cookie is there
-      let user = cookies.get('user');
+    if (user != null) this.setState({ signedIn: true }, () => { console.log("Is user logged in: " + this.state.signedIn); })
 
-      if (user != null) this.setState({ signedIn: true }, () => {console.log("Is user logged in: " + this.state.signedIn);})
-      else {
-        // Try to signin with google
-        let signedIn = auth.isSignedIn.get();
-        this.setState({ signedIn: signedIn }, () => {console.log("Is user logged in: " + this.state.signedIn);})
-      }
-      
-    })
+  }
+
+  handleLoginFailure() {
+
   }
 
   /**
    * Google sign in
    */
-  signIn() {
+  signIn(response) {
 
-    window.gapi.auth2.getAuthInstance().signIn().then((googleUser) => {
+    if (response.accessToken) {
+      this.setState({
+        signedIn: true
+      });
 
-      let profile = googleUser.getBasicProfile();
+      let profile = response.getBasicProfile();
 
       // Define the user
       let user = { name: profile.getName(), email: profile.getEmail() };
 
       // Set the cookies
       cookies.set('user', user, { path: '/' });
+    }
 
-      // Update the state
-      this.setState({ signedIn: true });
-
-    }, (err) => { this.setState({ signedIn: false, error: err }) });
   }
 
 
@@ -65,14 +61,8 @@ class App extends Component {
    */
   signOut() {
 
-    window.gapi.auth2.getAuthInstance().signOut().then(() => {
-
-      // Update the state
-      this.setState({ signedIn: false })
-
-      // Clear the cookies
-      cookies.remove('user');
-    });
+    // Clear the cookies
+    cookies.remove('user');
 
   }
 
@@ -92,11 +82,20 @@ class App extends Component {
     if (this.state.signedIn) content = (
       <HomeScreen />
     );
-    else content = <HomeScreen />
+    else content = (
+      <GoogleLogin
+        clientId='945392829583-vo2c7v1brbgerasn8iksduelm4k876mo.apps.googleusercontent.com'
+        buttonText='Login'
+        onSuccess={this.signIn}
+        onFailure={this.handleLoginFailure}
+        cookiePolicy={'single_host_origin'}
+        responseType='code,token'
+      />
+    )
 
     return (
       <div className="toto-app">
-        content:
+        Welcome {cookies.get('user') ? cookies.get('user').email : ''}
         {content}
       </div>
     );
