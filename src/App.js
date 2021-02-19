@@ -92,7 +92,7 @@ class App extends Component {
     if (this.state.signedIn) content = (
       <HomeScreen />
     );
-    else content = (SignInContent);
+    else content = <HomeScreen />
 
     return (
       <div className="toto-app">
