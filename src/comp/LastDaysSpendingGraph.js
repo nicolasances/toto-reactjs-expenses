@@ -1,7 +1,10 @@
 import React, { Component } from 'react';
 import ExpensesAPI from '../services/ExpensesAPI';
 import TotoLineChart from './TotoLineChart';
+import Cookies from 'universal-cookie';
 import moment from 'moment-timezone';
+
+const cookies = new Cookies();
 
 export default class LastDaysSpendingGraph extends Component {
 
@@ -30,7 +33,7 @@ export default class LastDaysSpendingGraph extends Component {
         let dateFrom = moment().subtract(daysInPast, 'days').format('YYYYMMDD');
         let targetCurrency = this.state.settings ? this.state.settings.currency : null;
 
-        new ExpensesAPI().getExpensesPerDay("nicolas.matteazzi@gmail.com", dateFrom, null, targetCurrency).then((data) => {
+        new ExpensesAPI().getExpensesPerDay(cookies.get('user').email, dateFrom, null, targetCurrency).then((data) => {
 
             if (data == null || data.days == null) return;
 

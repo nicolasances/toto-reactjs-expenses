@@ -4,7 +4,6 @@ import Cookies from 'universal-cookie';
 import { GoogleLogin, GoogleLogout } from 'react-google-login';
 
 import './App.css';
-import googleLogo from './img/google-logo.png';
 
 const cookies = new Cookies();
 
@@ -69,33 +68,26 @@ class App extends Component {
   render() {
     let content;
 
-    let SignInContent = (
-      <div className="toto-login" >
-        login content:
-        <div className="toto-login-button" onClick={this.signIn}>
-          <div className="sign-in">Login</div>
-          <img className="logo" src={googleLogo} alt="google-logo" />
-        </div>
-      </div>
-    )
-
     if (this.state.signedIn) content = (
       <HomeScreen />
     );
     else content = (
-      <GoogleLogin
-        clientId='945392829583-vo2c7v1brbgerasn8iksduelm4k876mo.apps.googleusercontent.com'
-        buttonText='Login'
-        onSuccess={this.signIn}
-        onFailure={this.handleLoginFailure}
-        cookiePolicy={'single_host_origin'}
-        responseType='code,token'
-      />
+      <div className="toto-login">
+
+        <GoogleLogin
+          clientId='945392829583-vo2c7v1brbgerasn8iksduelm4k876mo.apps.googleusercontent.com'
+          buttonText='Login with Google'
+          onSuccess={this.signIn}
+          onFailure={this.handleLoginFailure}
+          cookiePolicy={'single_host_origin'}
+          responseType='code,token'
+        />
+      </div>
+
     )
 
     return (
       <div className="toto-app">
-        Welcome {cookies.get('user') ? cookies.get('user').email : ''}
         {content}
       </div>
     );
