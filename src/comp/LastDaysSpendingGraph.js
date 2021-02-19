@@ -134,7 +134,7 @@ export default class LastDaysSpendingGraph extends Component {
                     maxHeight={100}
                     valueLabelTransform={this.valueLabel}
                     xAxisTransform={this.xAxisTransform}
-                    margins={{ horizontal: 24, vertical: 24 }}
+                    margins={{ horizontal: 12, vertical: 24 }}
                     theme={theme}
                 />
             </div>
