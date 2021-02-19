@@ -81,6 +81,7 @@ class App extends Component {
 
     let SignInContent = (
       <div className="toto-login" >
+        login content:
         <div className="toto-login-button" onClick={this.signIn}>
           <div className="sign-in">Login</div>
           <img className="logo" src={googleLogo} alt="google-logo" />
@@ -95,6 +96,7 @@ class App extends Component {
 
     return (
       <div className="toto-app">
+        content:
         {content}
       </div>
     );
