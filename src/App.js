@@ -1,11 +1,13 @@
 import React, { Component } from 'react';
 import HomeScreen from './screens/HomeScreen';
 import Cookies from 'universal-cookie';
+import {BrowserRouter as Router, Switch, Route} from 'react-router-dom';
 import ls from 'local-storage';
 
 import './App.css';
 
 import googleLogo from './img/google-logo.png';
+import ExpensesScreen from './screens/ExpensesScreen';
 
 const cookies = new Cookies();
 const googleClientID = '945392829583-vo2c7v1brbgerasn8iksduelm4k876mo.apps.googleusercontent.com';
@@ -33,7 +35,7 @@ class App extends Component {
   loadGoogleAPI() {
 
     if (window.gapi) {
-      
+
       console.log("Google API loaded!");
       
       window.gapi.load('auth2', () => {
@@ -112,7 +114,16 @@ class App extends Component {
 
     return (
       <div className="toto-app">
-        {content}
+        <Router>
+          <Switch>
+            <Route exact path="/">
+              {content} 
+            </Route>
+            <Route exact path="/expenses">
+              <ExpensesScreen/>
+            </Route>
+          </Switch>
+        </Router>
       </div>
     );
   }

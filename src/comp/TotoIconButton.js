@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { ReactSVG } from 'react-svg';
+import { withRouter } from 'react-router-dom';
 
 import TouchableOpacity from './TouchableOpacity';
 
@@ -14,9 +14,10 @@ import './TotoIconButton.css';
  * - borders            : (optional, default true) if false, won't show the border of the button (only the icon)
  *
  * - onPress            : (optional) a callback() to be called when the button has been clicked
+ * - navigateTo         : (optional) a path to navigate to. This path should match a route declared in the App.js router
  *
  */
-export default class TotoIconButton extends Component {
+class TotoIconButton extends Component {
 
   constructor(props) {
     super(props);
@@ -42,6 +43,9 @@ export default class TotoIconButton extends Component {
 
     // Call the onPress, if any
     if (this.props.onPress) this.props.onPress();
+
+    // If there's a navigation involved:
+    if (this.props.navigateTo) this.props.history.push(this.props.navigateTo);
 
   }
 
@@ -70,7 +74,7 @@ export default class TotoIconButton extends Component {
 
     return (
       <div style={style} className="toto-icon-button-container">
-        <TouchableOpacity className={buttonClass} onPress={this.handleClick}>
+        <TouchableOpacity className={buttonClass} onPress={this.handleClick} navigateTo={this.props.navigateTo}>
           {img}
         </TouchableOpacity>
         {label}
@@ -78,3 +82,5 @@ export default class TotoIconButton extends Component {
     )
   }
 }
+
+export default withRouter(TotoIconButton);
