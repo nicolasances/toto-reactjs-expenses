@@ -1,5 +1,8 @@
 import React, { Component } from 'react';
 import TitleBar from '../comp/TitleBar';
+import MonthNavigator from '../comp/MonthNavigator';
+
+import './ExpensesScreen.css';
 
 export default class ExpensesScreen extends Component {
 
@@ -9,8 +12,11 @@ export default class ExpensesScreen extends Component {
 
     render() {
         return (
-            <div className="screen">
-                <TitleBar title="Payments list" back={true}/>
+            <div className="screen expenses-screen">
+                <TitleBar title="Payments list" back={true} />
+                <div className="month-navigator-container">
+                    <MonthNavigator />
+                </div>
             </div>
         )
     }
