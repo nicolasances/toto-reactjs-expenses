@@ -25,10 +25,11 @@
   display: flex;
   flex: 1;
   margin-left: 12px;
-  font-size: 14px;
+  font-size: 13px;
 }
 .toto-list .item .item-amount {
   margin-left: 12px;
+  font-size: 14px;
 }
 
 .toto-list .item .highlights { display: flex; flex-direction: 'row'; }

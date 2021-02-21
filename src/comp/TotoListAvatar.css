@@ -34,12 +34,12 @@
   height: 18px;
 }
 
-.toto-list-avatar.l {width: 28px; height: 28px;}
+.toto-list-avatar.l {width: 32px; height: 32px;}
 .toto-list-avatar.m {width: 24px; height: 24px;}
 .toto-list-avatar.ms {width: 20px; height: 20px;}
 .toto-list-avatar.s {width: 16px; height: 16px;}
 
-.toto-list-avatar.l .icon, .toto-list-avatar.l .icon div, .toto-list-avatar.l svg {width: 16px; height: 16px;}
+.toto-list-avatar.l .icon, .toto-list-avatar.l .icon div, .toto-list-avatar.l svg {width: 18px; height: 18px;}
 .toto-list-avatar.m .icon, .toto-list-avatar.m .icon div, .toto-list-avatar.m  svg {width: 12px; height: 12px;}
 .toto-list-avatar.ms .icon, .toto-list-avatar.ms .icon div, .toto-list-avatar.ms svg {width: 10px; height: 10px;}
 .toto-list-avatar.s .icon, .toto-list-avatar.s .icon div, .toto-list-avatar.s svg {width: 8px; height: 8px;}
