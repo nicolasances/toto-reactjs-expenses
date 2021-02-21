@@ -6,6 +6,10 @@ import './MonthNavigator.css';
 
 /**
  * This class is a touch navigator that allows the user to scroll through months
+ * 
+ * The following properties are supported: 
+ * - onMonthChange              :   (optional) a function to be called when the month is changed. 
+ *                                  The month will be passed as an instance of moment()
  */
 export default class MonthNavigator extends Component {
 
@@ -16,6 +20,8 @@ export default class MonthNavigator extends Component {
         this.selectedYearFontSize = 12;
         this.unselectedMonthFontSize = 11;
         this.unselectedYearFontSize = 7;
+        this.unselectedMonthOpacity = 0.75;
+        this.selectedMonthOpacity = 1.0;
 
         this.state = {
             position: 0,
@@ -25,7 +31,10 @@ export default class MonthNavigator extends Component {
             nextMonthFontSize: this.unselectedMonthFontSize, 
             currentYearFontSize: this.selectedYearFontSize, 
             previousYearFontSize: this.unselectedYearFontSize, 
-            nextYearFontSize: this.unselectedYearFontSize
+            nextYearFontSize: this.unselectedYearFontSize, 
+            currentMonthOpacity: this.selectedMonthOpacity, 
+            previousMonthOpacity: this.unselectedMonthOpacity, 
+            nextMonthOpacity: this.unselectedMonthOpacity
         }
 
         this.windowWidth = window.innerWidth;
@@ -60,8 +69,15 @@ export default class MonthNavigator extends Component {
             nextMonthFontSize: this.unselectedMonthFontSize, 
             currentYearFontSize: this.selectedYearFontSize, 
             previousYearFontSize: this.unselectedYearFontSize, 
-            nextYearFontSize: this.unselectedYearFontSize
-        }));
+            nextYearFontSize: this.unselectedYearFontSize,
+            currentMonthOpacity: this.selectedMonthOpacity, 
+            previousMonthOpacity: this.unselectedMonthOpacity, 
+            nextMonthOpacity: this.unselectedMonthOpacity 
+        }), () => {
+
+            // Call the onMonthChange callback, if any
+            if (this.props.onMonthChange) this.props.onMonthChange(this.state.currentMonth);
+        });
     }
 
     /**
@@ -77,8 +93,15 @@ export default class MonthNavigator extends Component {
             nextMonthFontSize: this.unselectedMonthFontSize, 
             currentYearFontSize: this.selectedYearFontSize, 
             previousYearFontSize: this.unselectedYearFontSize, 
-            nextYearFontSize: this.unselectedYearFontSize
-        }));
+            nextYearFontSize: this.unselectedYearFontSize, 
+            currentMonthOpacity: this.selectedMonthOpacity, 
+            previousMonthOpacity: this.unselectedMonthOpacity, 
+            nextMonthOpacity: this.unselectedMonthOpacity
+        }), () => {
+
+            // Call the onMonthChange callback, if any
+            if (this.props.onMonthChange) this.props.onMonthChange(this.state.currentMonth);
+        });
     }
 
     /**
@@ -119,7 +142,9 @@ export default class MonthNavigator extends Component {
         if (movementWidthFromStart > this.sensitivity) movementWidthFromStart = this.sensitivity;
         // If I have moved of "sensitivity" => the font should be reduced to the unselectedMonthFontSize 
         let monthMaxFontDiff = this.selectedMonthFontSize - this.unselectedMonthFontSize;
+        let opacityMaxDiff = this.selectedMonthOpacity - this.unselectedMonthOpacity;
         let fontReduction = movementWidthFromStart * monthMaxFontDiff / this.sensitivity;
+        let opacityReduction = movementWidthFromStart * opacityMaxDiff / this.sensitivity;
 
         let currentMonthFontSize = this.selectedMonthFontSize - fontReduction;
         let previousMonthFontSize = (direction == 'right') ? (this.unselectedMonthFontSize + fontReduction) : this.unselectedMonthFontSize;
@@ -127,6 +152,9 @@ export default class MonthNavigator extends Component {
         let currentYearFontSize = this.selectedYearFontSize - fontReduction;
         let previousYearFontSize = (direction == 'right') ? (this.unselectedYearFontSize + fontReduction) : this.unselectedYearFontSize;
         let nextYearFontSize = (direction == 'left') ? (this.unselectedYearFontSize + fontReduction) : this.unselectedYearFontSize;
+        let currentMonthOpacity = this.selectedMonthOpacity - opacityReduction;
+        let previousMonthOpacity = (direction == 'right') ? (this.unselectedMonthOpacity + opacityReduction) : this.unselectedMonthOpacity;
+        let nextMonthOpacity = (direction == 'left') ? (this.unselectedMonthOpacity + opacityReduction) : this.unselectedMonthOpacity;
 
         this.setState({
             position: previousPosition + delta,
@@ -135,7 +163,10 @@ export default class MonthNavigator extends Component {
             nextMonthFontSize: nextMonthFontSize, 
             currentYearFontSize: currentYearFontSize, 
             previousYearFontSize: previousYearFontSize, 
-            nextYearFontSize: nextYearFontSize
+            nextYearFontSize: nextYearFontSize, 
+            currentMonthOpacity: currentMonthOpacity, 
+            previousMonthOpacity: previousMonthOpacity, 
+            nextMonthOpacity: nextMonthOpacity
         })
 
         this.previousMousePosition = mousePosition;
@@ -178,7 +209,10 @@ export default class MonthNavigator extends Component {
             nextMonthFontSize: this.unselectedMonthFontSize,
             currentYearFontSize: this.selectedYearFontSize, 
             previousYearFontSize: this.unselectedYearFontSize, 
-            nextYearFontSize: this.unselectedYearFontSize
+            nextYearFontSize: this.unselectedYearFontSize, 
+            currentMonthOpacity: this.selectedMonthOpacity, 
+            previousMonthOpacity: this.unselectedMonthOpacity, 
+            nextMonthOpacity: this.unselectedMonthOpacity
         })
 
 
@@ -197,16 +231,16 @@ export default class MonthNavigator extends Component {
                 >
 
                     <div className="month" style={{ width: this.elWidth }}>
-                        <div className="month-label" style={{ fontSize: this.state.previousMonthFontSize }}>{this.state.currentMonth.clone().subtract(1, 'months').format('MMMM')}</div>
-                        <div className="year-label" style={{ fontSize: this.state.previousYearFontSize }}>{this.state.currentMonth.clone().subtract(1, 'months').format('YYYY')}</div>
+                        <div className="month-label" style={{ fontSize: this.state.previousMonthFontSize, opacity: this.state.previousMonthOpacity }}>{this.state.currentMonth.clone().subtract(1, 'months').format('MMMM')}</div>
+                        <div className="year-label" style={{ fontSize: this.state.previousYearFontSize, opacity: this.state.previousMonthOpacity }}>{this.state.currentMonth.clone().subtract(1, 'months').format('YYYY')}</div>
                     </div>
                     <div className="month current" style={{ width: this.elWidth }}>
-                        <div className="month-label" style={{ fontSize: this.state.currentMonthFontSize }}>{this.state.currentMonth.clone().format('MMMM')}</div>
-                        <div className="year-label" style={{ fontSize: this.state.currentYearFontSize }}>{this.state.currentMonth.clone().format('YYYY')}</div>
+                        <div className="month-label" style={{ fontSize: this.state.currentMonthFontSize, opacity: this.state.currentMonthOpacity }}>{this.state.currentMonth.clone().format('MMMM')}</div>
+                        <div className="year-label" style={{ fontSize: this.state.currentYearFontSize, opacity: this.state.currentMonthOpacity}}>{this.state.currentMonth.clone().format('YYYY')}</div>
                     </div>
                     <div className="month" style={{ width: this.elWidth }}>
-                        <div className="month-label" style={{ fontSize: this.state.nextMonthFontSize }}>{this.state.currentMonth.clone().add(1, 'months').format('MMMM')}</div>
-                        <div className="year-label" style={{ fontSize: this.state.nextYearFontSize }}>{this.state.currentMonth.clone().add(1, 'months').format('YYYY')}</div>
+                        <div className="month-label" style={{ fontSize: this.state.nextMonthFontSize, opacity: this.state.nextMonthOpacity }}>{this.state.currentMonth.clone().add(1, 'months').format('MMMM')}</div>
+                        <div className="year-label" style={{ fontSize: this.state.nextYearFontSize, opacity: this.state.nextMonthOpacity }}>{this.state.currentMonth.clone().add(1, 'months').format('YYYY')}</div>
                     </div>
                 </div>
                 <div className="underline-block" style={{ width: this.blockWidth }}>
