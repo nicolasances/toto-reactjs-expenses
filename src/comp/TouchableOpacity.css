@@ -3,6 +3,7 @@
   transition: opacity 100ms;
   opacity: 1;
   cursor: pointer;
+  display: flex;
 }
 
 .touchable-opacity.pressed {
