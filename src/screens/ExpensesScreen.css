@@ -1,0 +1,9 @@
+  
+ .expenses-screen .expenses-list-widget {
+      color: rgba(0,0,0,0.7);
+      margin-top: 12px;
+      display: flex;
+      flex-direction: row;
+      flex: 1;
+      overflow-y: scroll;
+  }

@@ -36,7 +36,7 @@ export default class ExpensesAPI {
   /**
    * Retrieves the month's expenses
    */
-  O(userEmail, yearMonth) {
+  getExpenses(userEmail, yearMonth) {
 
     return new TotoAPI().fetch('expenses', '/expenses?yearMonth=' + yearMonth + '&sortDate=true&sortDesc=true&user=' + userEmail)
         .then((response) => response.json());
