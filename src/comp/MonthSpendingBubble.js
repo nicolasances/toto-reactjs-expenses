@@ -45,7 +45,7 @@ export default class MonthSpendingBubble extends Component {
 
     render() {
         return (
-            <div className="container">
+            <div className="month-spending-bubble container">
 
                 <div className="currency-container"><div className="currency">{this.state.currency}</div></div>
                 <div className="amount-container"><div className="amount">{this.state.spending.toFixed(0)}</div></div>

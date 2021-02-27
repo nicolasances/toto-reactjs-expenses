@@ -1,0 +1,50 @@
+.new-expense .label {
+  font-size: 15px;
+  color: rgba(0, 0, 0, 0.7);
+  opacity: 0.8;
+  margin-bottom: 6px;
+}
+
+.new-expense .line1 {
+  display: flex;
+  margin: 24px 0;
+  padding: 0 12px;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.new-expense .dateContainer {
+  flex: 1;
+  align-items: center;
+}
+
+.new-expense .amountContainer {
+  flex: 1;
+  align-items: center;
+}
+
+.new-expense .currencyContainer {
+  flex: 1;
+  align-items: center;
+}
+
+.new-expense .line2 {
+  padding: 0 12px;
+  align-items: center;
+  margin: 24px 0;
+}
+
+.new-expense .descriptionInput {
+  font-size: 18px;
+  color: rgba(0, 0, 0, 0.7);
+}
+
+.new-expense .line3 {
+  align-items: center;
+  margin: 24px 0;
+}
+
+.new-expense .line4 {
+  margin-bottom: 24px;
+}

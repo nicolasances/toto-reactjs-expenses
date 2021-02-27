@@ -1,0 +1,16 @@
+.date-selector {}
+
+.date-selector .date-display {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.date-selector .date-display .day {
+    font-size: 28px;
+}
+.date-selector .date-display .month {
+    font-size: 14px;
+}
+.date-selector .date-display .year {
+    font-size: 12px
+}
