@@ -4,6 +4,7 @@ import { withRouter } from 'react-router-dom';
 import './DateSelectionScreen.css';
 import moment from 'moment-timezone';
 import ScrollPicker from '../comp/ScrollPicker';
+import YearMonthTile from '../picker/YearMonthTile';
 
 class DateSelectionScreen extends Component {
 
@@ -23,7 +24,12 @@ class DateSelectionScreen extends Component {
 
         return (
             <div className="date-selection-screen screen">
-                <ScrollPicker />
+                <ScrollPicker 
+                    tile={<YearMonthTile/>}
+                    defaultValue={moment()}
+                    previousValue={(currentValue) => currentValue.clone().subtract(1, 'months')}
+                    nextValue={(currentValue) => currentValue.clone().add(1, 'months')}
+                />
             </div>
         )
     }

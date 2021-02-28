@@ -1,28 +1,24 @@
-.month-navigator {}
+.scroll-picker {}
 
-.month-navigator .block {
+.scroll-picker .tiles-container {
     position: relative;
     height: 60px;
     display: flex;
     flex-direction: row;
 }
 
-.month-navigator .block .month {
+.scroll-picker .tiles-container .tile {
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
 }
 
-.month-navigator .block .month .month-label {
-    text-transform: capitalize;
-}
-
-.month-navigator .underline-block {
+.scroll-picker .underline-container {
     display: flex;
     flex-direction: row;
 }
 
-.month-navigator .underline-block .underline {
+.scroll-picker .underline-container .underline {
     border-bottom: 2px solid #c8b900;
 }

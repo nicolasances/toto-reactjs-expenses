@@ -1,0 +1,10 @@
+.year-month-tile {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.year-month-tile .month-label {
+    text-transform: capitalize;
+}

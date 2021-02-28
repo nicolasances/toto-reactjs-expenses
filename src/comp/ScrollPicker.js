@@ -3,37 +3,21 @@ import React, { Component } from 'react';
 import moment from 'moment-timezone';
 
 import './ScrollPicker.css';
-
+import YearMonthTile from '../picker/YearMonthTile';
 /**
  * This class is a scroll picker that can display a scrollable list of values from which people can choose.
  * 
  * The following properties are supported: 
- * - onChange              :   (optional) a function to be called when the picked value is changed. 
+ * - onSelectionChange              :   (optional) a function to be called when the picked value is changed. 
  */
 export default class ScrollPicker extends Component {
 
     constructor(props) {
         super(props);
 
-        this.selectedMonthFontSize = 16;
-        this.selectedYearFontSize = 12;
-        this.unselectedMonthFontSize = 11;
-        this.unselectedYearFontSize = 7;
-        this.unselectedMonthOpacity = 0.75;
-        this.selectedMonthOpacity = 1.0;
-
         this.state = {
             position: 0,
-            currentMonth: moment(),
-            currentMonthFontSize: this.selectedMonthFontSize, 
-            previousMonthFontSize: this.unselectedMonthFontSize, 
-            nextMonthFontSize: this.unselectedMonthFontSize, 
-            currentYearFontSize: this.selectedYearFontSize, 
-            previousYearFontSize: this.unselectedYearFontSize, 
-            nextYearFontSize: this.unselectedYearFontSize, 
-            currentMonthOpacity: this.selectedMonthOpacity, 
-            previousMonthOpacity: this.unselectedMonthOpacity, 
-            nextMonthOpacity: this.unselectedMonthOpacity
+            currentValue: this.props.defaultValue
         }
 
         this.windowWidth = window.innerWidth;
@@ -45,62 +29,104 @@ export default class ScrollPicker extends Component {
 
         // The sensitivity is how much the gesture has to travel (movement width) to scroll the months of "one block"
         // For example, if the sensitivty = this.elWidth / 2, it means that if the finger moves more than that distance, then the month is going to be scrolled to either the previous or the next, based on the direction of the movement 
-        this.sensitivity = 0.7 * this.elWidth;
+        this.sensitivity = 0.5 * this.elWidth;
 
         // Bindings
         this.onTouchStart = this.onTouchStart.bind(this);
         this.onTouchMove = this.onTouchMove.bind(this);
         this.onTouchEnd = this.onTouchEnd.bind(this);
-        this.goToNextMonth = this.goToNextMonth.bind(this);
-        this.goToPreviousMonth = this.goToPreviousMonth.bind(this);
+        this.goToNextTile = this.goToNextTile.bind(this);
+        this.goToPreviousTile = this.goToPreviousTile.bind(this);
+        this.bounceBackToOrigin = this.bounceBackToOrigin.bind(this);
+        this.animateTowardsPosition = this.animateTowardsPosition.bind(this);
+    }
+
+    animateTowardsPosition(containerPosition, targetContainerPosition, onComplete) {
+        let increment = 10;
+        let frameSpeed = 10;
+        let newPosition;
+
+        // Make sure that the object doesn't start oscillating around the target position
+        if (containerPosition < targetContainerPosition && containerPosition + increment > targetContainerPosition) newPosition = targetContainerPosition;
+        else if (containerPosition > targetContainerPosition && containerPosition - increment < targetContainerPosition) newPosition = targetContainerPosition;
+        else newPosition = containerPosition < targetContainerPosition ? containerPosition + increment : containerPosition - increment;
+
+        if (newPosition == targetContainerPosition) {
+
+            this.setState({
+                position: targetContainerPosition
+            }, onComplete);
+        }
+        else {
+            this.setState({
+                position: newPosition
+            });
+
+            // Keep going towards the target position
+            setTimeout(() => { this.animateTowardsPosition(newPosition, targetContainerPosition, onComplete) }, frameSpeed);
+        }
     }
 
     /**
      * Moves the selector to the next month
      */
-    goToNextMonth() {
+    goToNextTile(containerPosition) {
 
-        this.setState(() => ({
-            currentMonth: this.state.currentMonth.clone().add(1, 'months'),
-            position: 0,
-            currentMonthFontSize: this.selectedMonthFontSize,
-            previousMonthFontSize: this.unselectedMonthFontSize, 
-            nextMonthFontSize: this.unselectedMonthFontSize, 
-            currentYearFontSize: this.selectedYearFontSize, 
-            previousYearFontSize: this.unselectedYearFontSize, 
-            nextYearFontSize: this.unselectedYearFontSize,
-            currentMonthOpacity: this.selectedMonthOpacity, 
-            previousMonthOpacity: this.unselectedMonthOpacity, 
-            nextMonthOpacity: this.unselectedMonthOpacity 
-        }), () => {
+        this.animateTowardsPosition(containerPosition, -this.elWidth, () => {
+            
+            this.setState(() => ({
+                currentValue: this.props.nextValue(this.state.currentValue),
+                position: 0,
+                currentTileScale: null,
+                previousTileScale: null,
+                nextTileScale: null
+            }), () => {
 
-            // Call the onMonthChange callback, if any
-            if (this.props.onMonthChange) this.props.onMonthChange(this.state.currentMonth);
-        });
+                // Call the onSelectionChange callback, if any
+                if (this.props.onSelectionChange) this.props.onSelectionChange(this.state.currentValue);
+            });
+        })
+
     }
 
     /**
      * Moves the selector to the previous month
      */
-    goToPreviousMonth() {
+    goToPreviousTile(containerPosition) {
 
-        this.setState(() => ({
-            currentMonth: this.state.currentMonth.clone().subtract(1, 'months'),
-            position: 0,
-            currentMonthFontSize: this.selectedMonthFontSize, 
-            previousMonthFontSize: this.unselectedMonthFontSize, 
-            nextMonthFontSize: this.unselectedMonthFontSize, 
-            currentYearFontSize: this.selectedYearFontSize, 
-            previousYearFontSize: this.unselectedYearFontSize, 
-            nextYearFontSize: this.unselectedYearFontSize, 
-            currentMonthOpacity: this.selectedMonthOpacity, 
-            previousMonthOpacity: this.unselectedMonthOpacity, 
-            nextMonthOpacity: this.unselectedMonthOpacity
-        }), () => {
+        this.animateTowardsPosition(containerPosition, this.elWidth, () => {
 
-            // Call the onMonthChange callback, if any
-            if (this.props.onMonthChange) this.props.onMonthChange(this.state.currentMonth);
-        });
+            this.setState({
+                currentValue: this.props.previousValue(this.state.currentValue),
+                position: 0,
+                currentTileScale: null,
+                previousTileScale: null,
+                nextTileScale: null
+            })
+
+            // Call the onSelectionChange callback, if any
+            if (this.props.onSelectionChange) this.props.onSelectionChange(this.state.currentValue);
+        })
+
+    }
+
+    /**
+     * This function bounces "back" the slider to its original position, to implement the effect of the user abandoning the gesture before it reached 
+     * far enough to move to the next tile
+     * 
+     * @param {int} containerPosition 
+     */
+    bounceBackToOrigin(containerPosition) {
+
+        this.animateTowardsPosition(containerPosition, 0, () => {
+
+            this.setState({
+                currentTileScale: null,
+                previousTileScale: null,
+                nextTileScale: null
+            });
+        })
+
     }
 
     /**
@@ -109,18 +135,18 @@ export default class ScrollPicker extends Component {
      * @param {} event 
      */
     onTouchStart(event) {
-        this.touchStartPosition = event.nativeEvent.changedTouches[0].clientX;
+        // Save the position of the initial touch (cursor)
+        this.cursorStartPosition = event.nativeEvent.changedTouches[0].clientX;
 
         // Compute the relative position of the cursor to the element
         // All positions are positive numbers: they are distances
-        let left = this.state.position;
-
         this.cursorRelativePos = {
-            left: this.touchStartPosition - left,
-            right: left + this.windowWidth - this.touchStartPosition
+            left: this.cursorStartPosition - this.state.position, // this.state.position is the position of the top left corner of the tile
+            right: this.state.position + this.windowWidth - this.cursorStartPosition
         }
 
-        this.previousMousePosition = this.touchStartPosition;
+        // Save the current cursor position as the previous position
+        this.previousCursorPosition = this.cursorStartPosition;
     }
 
     /**
@@ -130,45 +156,29 @@ export default class ScrollPicker extends Component {
      */
     onTouchMove(event) {
 
+        // Save the previous position of the tile
         let previousPosition = this.state.position;
-        let mousePosition = event.nativeEvent.changedTouches[0].clientX;
 
-        let delta = mousePosition - this.previousMousePosition;
-        let movementWidthFromStart = Math.abs(mousePosition - this.touchStartPosition);
-        let direction = mousePosition - this.touchStartPosition < 0 ? 'left' : 'right';
+        // Get the new position of the cursor
+        let cursorPosition = event.nativeEvent.changedTouches[0].clientX;
+
+        let delta = cursorPosition - this.previousCursorPosition;
+        let movementWidthFromStart = Math.abs(cursorPosition - this.cursorStartPosition);
+        let direction = cursorPosition - this.cursorStartPosition < 0 ? 'left' : 'right';
 
         // Reduce or increase the font based on the movement width
         if (movementWidthFromStart > this.sensitivity) movementWidthFromStart = this.sensitivity;
-        // If I have moved of "sensitivity" => the font should be reduced to the unselectedMonthFontSize 
-        let monthMaxFontDiff = this.selectedMonthFontSize - this.unselectedMonthFontSize;
-        let opacityMaxDiff = this.selectedMonthOpacity - this.unselectedMonthOpacity;
-        let fontReduction = movementWidthFromStart * monthMaxFontDiff / this.sensitivity;
-        let opacityReduction = movementWidthFromStart * opacityMaxDiff / this.sensitivity;
 
-        let currentMonthFontSize = this.selectedMonthFontSize - fontReduction;
-        let previousMonthFontSize = (direction == 'right') ? (this.unselectedMonthFontSize + fontReduction) : this.unselectedMonthFontSize;
-        let nextMonthFontSize = (direction == 'left') ? (this.unselectedMonthFontSize + fontReduction) : this.unselectedMonthFontSize;
-        let currentYearFontSize = this.selectedYearFontSize - fontReduction;
-        let previousYearFontSize = (direction == 'right') ? (this.unselectedYearFontSize + fontReduction) : this.unselectedYearFontSize;
-        let nextYearFontSize = (direction == 'left') ? (this.unselectedYearFontSize + fontReduction) : this.unselectedYearFontSize;
-        let currentMonthOpacity = this.selectedMonthOpacity - opacityReduction;
-        let previousMonthOpacity = (direction == 'right') ? (this.unselectedMonthOpacity + opacityReduction) : this.unselectedMonthOpacity;
-        let nextMonthOpacity = (direction == 'left') ? (this.unselectedMonthOpacity + opacityReduction) : this.unselectedMonthOpacity;
+        let scale = movementWidthFromStart / this.sensitivity;
 
         this.setState({
             position: previousPosition + delta,
-            currentMonthFontSize: currentMonthFontSize, 
-            previousMonthFontSize:  previousMonthFontSize, 
-            nextMonthFontSize: nextMonthFontSize, 
-            currentYearFontSize: currentYearFontSize, 
-            previousYearFontSize: previousYearFontSize, 
-            nextYearFontSize: nextYearFontSize, 
-            currentMonthOpacity: currentMonthOpacity, 
-            previousMonthOpacity: previousMonthOpacity, 
-            nextMonthOpacity: nextMonthOpacity
+            currentTileScale: scale,
+            previousTileScale: (direction == 'right') ? scale : null,
+            nextTileScale: (direction == 'left') ? scale : null
         })
 
-        this.previousMousePosition = mousePosition;
+        this.previousCursorPosition = cursorPosition;
     }
 
     onTouchEnd(event) {
@@ -178,8 +188,8 @@ export default class ScrollPicker extends Component {
 
         // Has the cursor moved past the boundaries of the element? 
         // This is the same as saying that the mouse has moved more than half the element width
-        let movementWidth = Math.abs(mousePosition - this.touchStartPosition);
-        let direction = mousePosition - this.touchStartPosition > 0 ? 'left' : 'right';
+        let movementWidth = Math.abs(mousePosition - this.cursorStartPosition);
+        let direction = mousePosition - this.cursorStartPosition > 0 ? 'left' : 'right';
 
         // If the cursor has moved enough, move the whole bar
         let hasMovedFarEnough = movementWidth > this.sensitivity;
@@ -187,41 +197,41 @@ export default class ScrollPicker extends Component {
         if (hasMovedFarEnough) {
             if (direction == 'left') {
                 // Move the bar left "1 block"
-                this.setState({ position: this.elWidth }, () => {
-                    // Only when the movement is finished, update the current selected month 
-                    this.goToPreviousMonth();
-                });
+                this.goToPreviousTile(this.state.position);
             }
             else {
                 // Move the bar right "1 block"
-                this.setState({ position: -this.elWidth }, () => {
-                    // Only when the movement is finished, update the current selected month 
-                    this.goToNextMonth();
-                });
+                this.goToNextTile(this.state.position);
             }
         }
         // If the cursor hasn't moved enough, bring the bar back to the original position
-        else this.setState({
-            position: 0,
-            currentMonthFontSize: this.selectedMonthFontSize,
-            previousMonthFontSize: this.unselectedMonthFontSize, 
-            nextMonthFontSize: this.unselectedMonthFontSize,
-            currentYearFontSize: this.selectedYearFontSize, 
-            previousYearFontSize: this.unselectedYearFontSize, 
-            nextYearFontSize: this.unselectedYearFontSize, 
-            currentMonthOpacity: this.selectedMonthOpacity, 
-            previousMonthOpacity: this.unselectedMonthOpacity, 
-            nextMonthOpacity: this.unselectedMonthOpacity
-        })
+        else this.bounceBackToOrigin(this.state.position)
 
 
     }
 
     render() {
+
+        let previousTile = React.cloneElement(this.props.tile, {
+            contentData: { date: this.props.previousValue(this.state.currentValue) },
+            selected: false,
+            scale: this.state.previousTileScale
+        });
+        let currentTile = React.cloneElement(this.props.tile, {
+            contentData: { date: this.state.currentValue.clone() },
+            selected: true,
+            scale: this.state.currentTileScale
+        });
+        let nextTile = React.cloneElement(this.props.tile, {
+            contentData: { date: this.props.nextValue(this.state.currentValue) },
+            selected: false,
+            scale: this.state.nextTileScale
+        });
+
         return (
-            <div className="month-navigator" style={{ width: this.windowWidth, overflow: 'hidden' }}>
+            <div className="scroll-picker" style={{ width: this.windowWidth, overflow: 'hidden' }}>
                 <div
-                    className="block"
+                    className="tiles-container"
                     style={{ width: this.blockWidth, left: this.state.position }}
                     draggable="true"
                     onTouchStart={this.onTouchStart}
@@ -229,20 +239,19 @@ export default class ScrollPicker extends Component {
                     onTouchEnd={this.onTouchEnd}
                 >
 
-                    <div className="month" style={{ width: this.elWidth }}>
-                        <div className="month-label" style={{ fontSize: this.state.previousMonthFontSize, opacity: this.state.previousMonthOpacity }}>{this.state.currentMonth.clone().subtract(1, 'months').format('MMMM')}</div>
-                        <div className="year-label" style={{ fontSize: this.state.previousYearFontSize, opacity: this.state.previousMonthOpacity }}>{this.state.currentMonth.clone().subtract(1, 'months').format('YYYY')}</div>
+                    <div className="tile" style={{ width: this.elWidth }}>
+                        {previousTile}
                     </div>
-                    <div className="month current" style={{ width: this.elWidth }}>
-                        <div className="month-label" style={{ fontSize: this.state.currentMonthFontSize, opacity: this.state.currentMonthOpacity }}>{this.state.currentMonth.clone().format('MMMM')}</div>
-                        <div className="year-label" style={{ fontSize: this.state.currentYearFontSize, opacity: this.state.currentMonthOpacity}}>{this.state.currentMonth.clone().format('YYYY')}</div>
+                    <div className="tile" style={{ width: this.elWidth }}>
+                        {currentTile}
                     </div>
-                    <div className="month" style={{ width: this.elWidth }}>
-                        <div className="month-label" style={{ fontSize: this.state.nextMonthFontSize, opacity: this.state.nextMonthOpacity }}>{this.state.currentMonth.clone().add(1, 'months').format('MMMM')}</div>
-                        <div className="year-label" style={{ fontSize: this.state.nextYearFontSize, opacity: this.state.nextMonthOpacity }}>{this.state.currentMonth.clone().add(1, 'months').format('YYYY')}</div>
+                    <div className="tile" style={{ width: this.elWidth }}>
+                        {nextTile}
                     </div>
+
                 </div>
-                <div className="underline-block" style={{ width: this.blockWidth }}>
+
+                <div className="underline-container" style={{ width: this.blockWidth }}>
                     <div style={{ width: this.elWidth + 90 }}></div>
                     <div style={{ width: this.elWidth }} className="underline"></div>
                     <div style={{ width: this.elWidth + 90 }}></div>
