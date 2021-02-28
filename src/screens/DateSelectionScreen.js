@@ -3,6 +3,7 @@ import TitleBar from '../comp/TitleBar';
 import { withRouter } from 'react-router-dom';
 import './DateSelectionScreen.css';
 import moment from 'moment-timezone';
+import ScrollPicker from '../comp/ScrollPicker';
 
 class DateSelectionScreen extends Component {
 
@@ -12,24 +13,17 @@ class DateSelectionScreen extends Component {
         this.state = {
             date: moment()
         }
+
+    }
+
+    componentDidMount() {
     }
 
     render() {
 
-        let days = [];
-        for (var i = 1; i <= this.state.date.daysInMonth(); i++) {
-            days.push((
-                <div key={"day"+i} className="day">
-                    {i}
-                </div>
-            ))
-        }
-
         return (
             <div className="date-selection-screen screen">
-                <div className="day-selector">
-                    {days}
-                </div>
+                <ScrollPicker />
             </div>
         )
     }
