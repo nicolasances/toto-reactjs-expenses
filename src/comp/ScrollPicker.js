@@ -8,7 +8,22 @@ import YearMonthTile from '../picker/YearMonthTile';
  * This class is a scroll picker that can display a scrollable list of values from which people can choose.
  * 
  * The following properties are supported: 
+ * - tile                           :   (MANDATORY) a React component that will serve as prototype for each of the tiles
+ * - defaultValue                   :   (MANDATORY) the value (content) of the default selected tile. 
+ *                                      This is an object that is going to be interpreted by the tile cloned from the one you provided in the "tile" field, 
+ *                                      so it can be anything as long as it's understood by the provided tile prototype. 
+ *                                      This value will be provided as "contentData" to the cloned instances of the prototype.
+ * - previousValue                  :   (MANDATORY) a function that, given the currentValue, generates the value that should come before that in the picker
+ * - nextValue                      :   (MANDATORY) a function that, given the currentValue, generates the value that should come after that in the picker
  * - onSelectionChange              :   (optional) a function to be called when the picked value is changed. 
+ * 
+ * An example of usage: a scroll picker that displays a selector for month and year
+ *      <ScrollPicker 
+ *          tile={<YearMonthTile/>}
+ *          defaultValue={moment()}
+ *          previousValue={(currentValue) => currentValue.clone().subtract(1, 'months')}
+ *          nextValue={(currentValue) => currentValue.clone().add(1, 'months')}
+ *      />
  */
 export default class ScrollPicker extends Component {
 

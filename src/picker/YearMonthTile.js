@@ -15,14 +15,14 @@ export default class YearMonthTile extends Component {
         super(props);
 
         this.selectedMonthFontSize = 16;
-        this.unselectedMonthFontSize = 11;
+        this.unselectedMonthFontSize = 12;
         this.monthFontDiff = this.selectedMonthFontSize - this.unselectedMonthFontSize;
 
         this.selectedYearFontSize = 12;
-        this.unselectedYearFontSize = 7;
+        this.unselectedYearFontSize = 8;
         this.yearFontDiff = 12 - 7;
 
-        this.unselectedOpacity = 0.75;
+        this.unselectedOpacity = 0.7;
         this.selectedOpacity = 1.0;
         this.opacityDiff = this.selectedOpacity - this.unselectedOpacity;
     }
