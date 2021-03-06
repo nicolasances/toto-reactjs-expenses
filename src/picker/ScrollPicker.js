@@ -16,6 +16,9 @@ import YearMonthTile from '../picker/YearMonthTile';
  * - previousValue                  :   (MANDATORY) a function that, given the currentValue, generates the value that should come before that in the picker
  * - nextValue                      :   (MANDATORY) a function that, given the currentValue, generates the value that should come after that in the picker
  * - onSelectionChange              :   (optional) a function to be called when the picked value is changed. 
+ *                                      Will receive a moment() object
+ * - height                         :   (optional, default 60) the height of the component
+ * - underline                      :   (optional, default true) show a line under the selected component
  * 
  * An example of usage: a scroll picker that displays a selector for month and year
  *      <ScrollPicker 
@@ -88,7 +91,7 @@ export default class ScrollPicker extends Component {
     goToNextTile(containerPosition) {
 
         this.animateTowardsPosition(containerPosition, -this.elWidth, () => {
-            
+
             this.setState(() => ({
                 currentValue: this.props.nextValue(this.state.currentValue),
                 position: 0,
@@ -117,10 +120,12 @@ export default class ScrollPicker extends Component {
                 currentTileScale: null,
                 previousTileScale: null,
                 nextTileScale: null
-            })
+            }, () => {
 
-            // Call the onSelectionChange callback, if any
-            if (this.props.onSelectionChange) this.props.onSelectionChange(this.state.currentValue);
+                // Call the onSelectionChange callback, if any
+                if (this.props.onSelectionChange) this.props.onSelectionChange(this.state.currentValue);
+
+            })
         })
 
     }
@@ -227,6 +232,8 @@ export default class ScrollPicker extends Component {
 
     render() {
 
+        let height = this.props.height ? this.props.height : 60;
+
         let previousTile = React.cloneElement(this.props.tile, {
             contentData: { date: this.props.previousValue(this.state.currentValue) },
             selected: false,
@@ -243,11 +250,25 @@ export default class ScrollPicker extends Component {
             scale: this.state.nextTileScale
         });
 
+        // Underline
+        let underline = (
+            <div className="underline-container" style={{ width: this.blockWidth }}>
+                <div style={{ width: this.elWidth + 90 }}></div>
+                <div style={{ width: this.elWidth }} className="underline"></div>
+                <div style={{ width: this.elWidth + 90 }}></div>
+            </div>
+        )
+        if (this.props.underline == false) underline = (<div></div>);
+
+        // Styles
+        let backgroundColor = "transparent";
+        if (this.props.backgroundColor) backgroundColor = this.props.backgroundColor;
+
         return (
-            <div className="scroll-picker" style={{ width: this.windowWidth, overflow: 'hidden' }}>
+            <div className="scroll-picker" style={{ width: this.windowWidth, overflow: 'hidden', backgroundColor: backgroundColor }}>
                 <div
                     className="tiles-container"
-                    style={{ width: this.blockWidth, left: this.state.position }}
+                    style={{ width: this.blockWidth, left: this.state.position, height: height }}
                     draggable="true"
                     onTouchStart={this.onTouchStart}
                     onTouchMove={this.onTouchMove}
@@ -266,11 +287,8 @@ export default class ScrollPicker extends Component {
 
                 </div>
 
-                <div className="underline-container" style={{ width: this.blockWidth }}>
-                    <div style={{ width: this.elWidth + 90 }}></div>
-                    <div style={{ width: this.elWidth }} className="underline"></div>
-                    <div style={{ width: this.elWidth + 90 }}></div>
-                </div>
+                {underline}
+
             </div>
         )
     }

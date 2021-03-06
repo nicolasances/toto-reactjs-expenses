@@ -1,7 +1,6 @@
 
 .scroll-picker .tiles-container {
     position: relative;
-    height: 60px;
     display: flex;
     flex-direction: row;
 }

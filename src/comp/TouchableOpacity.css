@@ -2,7 +2,7 @@
 .touchable-opacity {
   transition: opacity 100ms;
   opacity: 1;
-  cursor: pointer;
+  outline: none;
   display: flex;
 }
 

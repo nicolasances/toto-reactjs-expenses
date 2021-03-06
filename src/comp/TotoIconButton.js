@@ -37,15 +37,20 @@ class TotoIconButton extends Component {
     if (this.props.disabled) return;
 
     // Update the state, to show the press action
-    this.setState({pressed: true}, () => {
-      setTimeout(() => {this.setState({pressed: false})}, 100);
+    this.setState({ pressed: true }, () => {
+
+      setTimeout(() => {
+        this.setState({ pressed: false }, () => {
+
+          // Call the onPress, if any
+          if (this.props.onPress) this.props.onPress();
+
+          // If there's a navigation involved:
+          if (this.props.navigateTo) this.props.history.push(this.props.navigateTo);
+
+        })
+      }, 20);
     });
-
-    // Call the onPress, if any
-    if (this.props.onPress) this.props.onPress();
-
-    // If there's a navigation involved:
-    if (this.props.navigateTo) this.props.history.push(this.props.navigateTo);
 
   }
 
@@ -74,7 +79,7 @@ class TotoIconButton extends Component {
 
     return (
       <div style={style} className="toto-icon-button-container">
-        <TouchableOpacity className={buttonClass} onPress={this.handleClick} navigateTo={this.props.navigateTo}>
+        <TouchableOpacity className={buttonClass} onPress={this.handleClick} >
           {img}
         </TouchableOpacity>
         {label}

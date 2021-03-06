@@ -1,22 +1,33 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import moment from 'moment-timezone';
 import './DateSelector.css';
-import { withRouter } from 'react-router-dom';
+import Popup from 'reactjs-popup';
+import DatePicker from './datepicker/DatePicker';
 
-class DateSelector extends Component {
+export default class DateSelector extends Component {
 
     constructor(props) {
         super(props);
 
         this.state = {
-            date: moment() 
+            date: moment()
         }
 
         this.selectDate = this.selectDate.bind(this);
+        this.onDateSelected = this.onDateSelected.bind(this);
+    }
+
+    onDateSelected(date) {
+        this.setState({
+            date: date,
+            openHelpPopup: false
+        })
     }
 
     selectDate() {
-        this.props.history.push("/selectDate");
+        this.setState({
+            openHelpPopup: true
+        })
     }
 
     render() {
@@ -27,8 +38,22 @@ class DateSelector extends Component {
                     <div className="day">{this.state.date.format('DD')}</div>
                     <div className="month">{this.state.date.format('MMMM')}</div>
                 </div>
+
+                <Popup
+                    on='click'
+                    open={this.state.openHelpPopup}
+                    overlayStyle={{ backgroundColor: 'rgba(0,0,0,0.5)' }}
+                    contentStyle={{ padding: 0, backgroundColor: '#007c91', border: 'none' }}
+                    arrow={false}
+                >
+
+                    <DatePicker
+                        onCancel={() => { this.setState({ openHelpPopup: false }) }}
+                        onConfirm={this.onDateSelected}
+                    />
+
+                </Popup>
             </div>
         )
     }
 }
-export default withRouter(DateSelector);

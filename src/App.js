@@ -9,7 +9,6 @@ import './App.css';
 import googleLogo from './img/google-logo.png';
 import ExpensesScreen from './screens/ExpensesScreen';
 import NewExpenseScreen from './screens/NewExpenseScreen';
-import DateSelectionScreen from './screens/DateSelectionScreen';
 
 const cookies = new Cookies();
 const googleClientID = '945392829583-vo2c7v1brbgerasn8iksduelm4k876mo.apps.googleusercontent.com';
@@ -126,9 +125,6 @@ class App extends Component {
             </Route>
             <Route exact path="/newExpense">
               <NewExpenseScreen />
-            </Route>
-            <Route exact path="/selectDate">
-              <DateSelectionScreen />
             </Route>
           </Switch>
         </Router>
