@@ -1,6 +1,4 @@
 
-.date-selector {}
-
 .date-selector .date-display {
     display: flex;
     flex-direction: column;
