@@ -5,10 +5,10 @@
     align-items: center;
 }
 .date-selector .date-display .day {
-    font-size: 28px;
+    font-size: 26px;
 }
 .date-selector .date-display .month {
-    font-size: 14px;
+    font-size: 12px;
 }
 .date-selector .date-display .year {
     font-size: 12px

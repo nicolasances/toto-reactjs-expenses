@@ -1,3 +1,9 @@
+.new-expense .header {
+  margin-top: 24px;
+  display: flex;
+  justify-content: center;
+  font-size: large;
+}
 .new-expense .label {
   font-size: 15px;
   color: rgba(0, 0, 0, 0.7);

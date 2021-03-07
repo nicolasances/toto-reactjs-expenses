@@ -9,6 +9,7 @@ import './NewExpenseScreen.css';
 import ExpensesAPI from '../services/ExpensesAPI';
 import Cookies from 'universal-cookie';
 import DateSelector from '../comp/DateSelector';
+import AmountSelector from '../comp/AmountSelector';
 
 const cookies = new Cookies();
 
@@ -170,14 +171,14 @@ class NewExpenseScreen extends Component {
       <div className="screen new-expense">
         <div className="container">
 
+          <div className="header">New payment</div>
+
           <div className="line1">
             <div className="dateContainer">
-              <div className="label">Date</div>
               <DateSelector />
-              {/* <DateSelector date={this.state.date} showYear={false} onDateChange={this.setDate} /> */}
             </div>
             <div className="amountContainer">
-              <div className="label">Amount</div>
+              <AmountSelector />
               {/* <AmountSelector amount={this.state.amount} onAmountChange={this.setAmount} /> */}
             </div>
             <div className="currencyContainer">
