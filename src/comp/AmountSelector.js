@@ -11,13 +11,22 @@ export default class AmountSelector extends Component {
             amount: 0.0
         }
 
+        this.updateAmount = this.updateAmount.bind(this);
+
+    }
+
+    updateAmount(event) {
+
+        this.setState({
+            amount: event.target.value
+        })
     }
 
     render() {
         return (
             <div className="amount-selector" onClick={() => {document.getElementById('amount-input').focus()}}>
                 <div className="amount">
-                    <input id="amount-input" type="number" inputMode="numeric" defaultValue={this.state.amount.toLocaleString('it-IT')} />
+                    <input id="amount-input" type="number" inputMode="decimal" defaultValue={this.state.amount.toLocaleString('it-IT')} onChange={this.updateAmount}/>
                 </div>
             </div>
         )
