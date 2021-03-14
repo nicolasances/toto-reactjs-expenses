@@ -4,17 +4,16 @@ import MonthNavigator from '../comp/MonthNavigator';
 import Cookies from 'universal-cookie';
 import TotoList from '../comp/TotoList';
 import categoriesMap from '../services/CategoriesMap';
-
 import { ReactComponent as BankSVG } from '../img/bank.svg';
 import { ReactComponent as ReconcileSVG } from '../img/reconcile.svg';
-
 import moment from 'moment-timezone';
-
 import './ExpensesScreen.css';
 import ExpensesAPI from '../services/ExpensesAPI';
 import { withRouter } from 'react-router';
 import YearMonthTile from '../picker/YearMonthTile';
 import ScrollPicker from '../picker/ScrollPicker';
+import Popup from 'reactjs-popup';
+import CategorySelectionPopup from '../comp/cateogrypicker/CategorySelectionPopup';
 
 const cookies = new Cookies();
 
@@ -24,12 +23,17 @@ class ExpensesScreen extends Component {
         super(props);
 
         this.state = {
-            selectedMonth: this.getLastSelectedMonth()
+            selectedMonth: this.getLastSelectedMonth(),
+            categoryPopupOpen: false
         }
 
         this.onMonthChange = this.onMonthChange.bind(this);
         this.loadExpenses = this.loadExpenses.bind(this);
         this.selectExpense = this.selectExpense.bind(this);
+        this.onCategoryChange = this.onCategoryChange.bind(this);
+        this.changeExpenseCategory = this.changeExpenseCategory.bind(this);
+        this.onReconcilePress = this.onReconcilePress.bind(this);
+        this.dataExtractor = this.dataExtractor.bind(this);
     }
 
     componentDidMount() {
@@ -77,6 +81,52 @@ class ExpensesScreen extends Component {
             this.updateLastSelectedMonth(newMonth);
             this.loadExpenses();
         });
+    }
+
+    /**
+     * When a user clicks on an avatar (category), it triggers the opening of a popup and the change 
+     * of category. 
+     * This function takes care of that! 
+     * @param {expense obj} expense the expense to select
+     */
+    changeExpenseCategory(expense) {
+
+        // Open the popup for the category change
+        // Save the selected expense for the onCategoryChange() function
+        this.setState({
+            categoryPopupOpen: true,
+            selectedExpense: expense
+        })
+
+    }
+
+    /**
+     * Reacts to the change of an expense's category
+     * @param {string} newCategory the new category set
+     */
+    onCategoryChange(newCategory) {
+
+        this.setState({ categoryPopupOpen : false });
+
+        let expense = this.state.selectedExpense; 
+
+        if (!expense) return;
+
+        expense.category = newCategory;
+
+        new ExpensesAPI().putExpense(expense.id, expense).then((data) => {
+            this.setState({ selectedExpense: null });
+        });
+
+    }
+
+    /**
+     * Reacts to the reconcile button click on an expense
+     * @param {expense object} expense the expense for which the reconcile button (highlight) has been pressed
+     */
+    onReconcilePress(expense) {
+
+        new ExpensesAPI().consolidateExpense(expense.id).then(this.loadExpenses);
     }
 
     selectExpense(expense) {
@@ -135,9 +185,21 @@ class ExpensesScreen extends Component {
                         data={this.state.expenses}
                         dataExtractor={this.dataExtractor}
                         onPress={this.selectExpense}
-                        onAvatarClick={this.openCategoryPopup}
+                        onAvatarClick={this.changeExpenseCategory}
                     />
                 </div>
+
+                <Popup
+                    on='click'
+                    open={this.state.categoryPopupOpen}
+                    contentStyle={{ padding: 0, backgroundColor: '#00acc1', border: 'none' }}
+                    arrow={false}
+                    closeOnEscape={false}
+                >
+
+                    <CategorySelectionPopup onCategoryChange={this.onCategoryChange} />
+
+                </Popup>
             </div>
         )
     }

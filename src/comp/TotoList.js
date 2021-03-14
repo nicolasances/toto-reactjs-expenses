@@ -175,7 +175,7 @@ class Item extends Component {
         <div className='highlights'>
           {data.highlights.map((item, index) => {
             return (
-              <TouchableOpacity key={'TotoList-Highlight-' + Math.random()} onClick={() => { if (item.onPress) item.onPress(this.props.item) }}>
+              <TouchableOpacity key={'TotoList-Highlight-' + Math.random()} onPress={() => { if (item.onPress) item.onPress(this.props.item) }}>
                 {item.image}
               </TouchableOpacity>)
           })}
