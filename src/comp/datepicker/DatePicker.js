@@ -5,7 +5,6 @@ import MonthTile from '../../picker/MonthTile';
 import ScrollPicker from '../../picker/ScrollPicker';
 import YearTile from '../../picker/YearTile';
 import TotoIconButton from '../TotoIconButton';
-import { ReactComponent as TickSVG } from '../../img/tick.svg';
 import { ReactComponent as CloseSVG } from '../../img/close.svg';
 import './DatePicker.css';
 

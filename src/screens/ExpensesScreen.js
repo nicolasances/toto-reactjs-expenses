@@ -24,7 +24,7 @@ class ExpensesScreen extends Component {
         super(props);
 
         this.state = {
-            selectedMonth: moment()
+            selectedMonth: this.getLastSelectedMonth()
         }
 
         this.onMonthChange = this.onMonthChange.bind(this);
@@ -36,14 +36,45 @@ class ExpensesScreen extends Component {
         this.loadExpenses();
     }
 
+
+    /**
+     * Returns the last used yearMonth, so that the user doesn't have to scroll continuously, when he's working on a 
+     * specific month. 
+     * Note that the last used month is only cached for a short duration of time, to avoid annoying user experiences.
+     * @returns moment object
+     */
+    getLastSelectedMonth() {
+
+        let lastUsedMonth = cookies.get('expensesListYearMonth');
+
+        return lastUsedMonth ? moment(lastUsedMonth, 'YYYYMMDD') : moment();
+
+    }
+
+    /**
+     * Updates the cookie to store the selected year month
+     * @param {moment object} yearMonth the selected year month
+     */
+    updateLastSelectedMonth(yearMonth) {
+
+        cookies.set('expensesListYearMonth', yearMonth.format('YYYYMMDD'), {
+            expires: moment().add(1, 'minutes').toDate()
+        })
+    }
+
     loadExpenses() {
         new ExpensesAPI().getExpenses(cookies.get('user').email, this.state.selectedMonth.format('YYYYMM')).then((data) => {
             this.setState({ expenses: data.expenses });
         })
     }
 
+    /**
+     * Switches to a different year month
+     * @param {moment object} newMonth the new month to use
+     */
     onMonthChange(newMonth) {
         this.setState({ selectedMonth: newMonth }, () => {
+            this.updateLastSelectedMonth(newMonth);
             this.loadExpenses();
         });
     }
@@ -93,7 +124,7 @@ class ExpensesScreen extends Component {
                 <div className="month-navigator-container">
                     <ScrollPicker
                         tile={<YearMonthTile />}
-                        defaultValue={moment()}
+                        defaultValue={this.state.selectedMonth}
                         previousValue={(currentValue) => currentValue.clone().subtract(1, 'months')}
                         nextValue={(currentValue) => currentValue.clone().add(1, 'months')}
                         onSelectionChange={this.onMonthChange}
