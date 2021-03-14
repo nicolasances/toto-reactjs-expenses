@@ -32,8 +32,6 @@ export default class HomeScreen extends Component {
 
     render() {
 
-        console.log(require('../img/bank.svg'));
-        
         return (
             <div className="screen">
                 <TitleBar title="Payments"/>

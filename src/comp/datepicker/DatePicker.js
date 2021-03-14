@@ -39,7 +39,9 @@ export default class DatePicker extends Component {
     onChangeDate(date) {
         this.setState({
             date: date
-        })
+        }, () => {
+            setTimeout(this.confirm, 50);
+        });
     }
 
     onChangeYear(date) {
@@ -83,13 +85,12 @@ export default class DatePicker extends Component {
                             onSelectionChange={this.onChangeMonth}
                             height={50}
                             underline={false}
-                            backgroundColor="#00acc1"
+                            backgroundColor="#007c91"
                         />
                     </div>
                     <DayPicker year={this.state.year} month={this.state.month} defaultValue={moment()} onDateSelected={this.onChangeDate} />
                 </div>
                 <div className="footer">
-                    <div style={{ marginLeft: 6, marginRight: 6 }}><TotoIconButton image={<TickSVG className="icon" />} onPress={this.confirm} /></div>
                     <div style={{ marginLeft: 6, marginRight: 6 }}><TotoIconButton image={<CloseSVG className="icon" />} onPress={this.cancel} /></div>
                 </div>
             </div>

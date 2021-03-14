@@ -72,7 +72,8 @@
     opacity: 0.3;
 }
 .date-picker .day-picker .grid-container .row .cell.selected {
-    background-color: #ffeb3b;
+    color: #ffeb3b;
+    font-weight: bold;
 }
 .date-picker .day-picker .grid-container .row .cell.header {
     opacity: 0.5;

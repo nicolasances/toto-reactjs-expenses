@@ -12,10 +12,13 @@ import moment from 'moment-timezone';
 
 import './ExpensesScreen.css';
 import ExpensesAPI from '../services/ExpensesAPI';
+import { withRouter } from 'react-router';
+import YearMonthTile from '../picker/YearMonthTile';
+import ScrollPicker from '../picker/ScrollPicker';
 
 const cookies = new Cookies();
 
-export default class ExpensesScreen extends Component {
+class ExpensesScreen extends Component {
 
     constructor(props) {
         super(props);
@@ -26,6 +29,7 @@ export default class ExpensesScreen extends Component {
 
         this.onMonthChange = this.onMonthChange.bind(this);
         this.loadExpenses = this.loadExpenses.bind(this);
+        this.selectExpense = this.selectExpense.bind(this);
     }
 
     componentDidMount() {
@@ -42,6 +46,10 @@ export default class ExpensesScreen extends Component {
         this.setState({ selectedMonth: newMonth }, () => {
             this.loadExpenses();
         });
+    }
+
+    selectExpense(expense) {
+        this.props.history.push('/expenses/' + expense.id);
     }
 
     /**
@@ -83,7 +91,13 @@ export default class ExpensesScreen extends Component {
             <div className="screen expenses-screen">
                 <TitleBar title="Payments list" back={true} />
                 <div className="month-navigator-container">
-                    <MonthNavigator onMonthChange={this.onMonthChange} />
+                    <ScrollPicker
+                        tile={<YearMonthTile />}
+                        defaultValue={moment()}
+                        previousValue={(currentValue) => currentValue.clone().subtract(1, 'months')}
+                        nextValue={(currentValue) => currentValue.clone().add(1, 'months')}
+                        onSelectionChange={this.onMonthChange}
+                    />
                 </div>
                 <div className="expenses-list-widget">
                     <TotoList
@@ -97,3 +111,4 @@ export default class ExpensesScreen extends Component {
         )
     }
 }
+export default withRouter(ExpensesScreen);

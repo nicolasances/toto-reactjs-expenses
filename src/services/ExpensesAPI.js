@@ -11,7 +11,7 @@ export default class ExpensesAPI {
    */
   getAppSettings(userEmail) {
 
-    return new TotoAPI().fetch('expenses', '/app/expenses/settings?user=' + userEmail)
+    return new TotoAPI().fetch('expenses', '/settings?user=' + userEmail)
         .then((response) => response.json());
 
   }
@@ -22,7 +22,7 @@ export default class ExpensesAPI {
   putAppSettings(settings) {
 
     // Post the data
-    return new TotoAPI().fetch('expenses', '/app/expenses/settings', {
+    return new TotoAPI().fetch('expenses', '/settings', {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json'
@@ -41,6 +41,16 @@ export default class ExpensesAPI {
     return new TotoAPI().fetch('expenses', '/expenses?yearMonth=' + yearMonth + '&sortDate=true&sortDesc=true&user=' + userEmail)
         .then((response) => response.json());
 
+  }
+
+  /**
+   * Retrieves the specified expense
+   * @param {string} id the id of the expense to get
+   * @returns the expense 
+   */
+  getExpense(id) {
+
+    return new TotoAPI().fetch('expenses', '/expenses/' + id).then((response) => response.json());
   }
 
   /**

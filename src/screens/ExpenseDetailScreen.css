@@ -1,42 +1,42 @@
-.new-expense .header {
+.expense-detail-screen .header {
   margin-top: 24px;
   display: flex;
   justify-content: center;
   font-size: large;
 }
-.new-expense .label {
+.expense-detail-screen .label {
   font-size: 15px;
   color: rgba(0, 0, 0, 0.7);
   opacity: 0.8;
-  margin-bottom: 6px;
+  margin-bottom: 16px;
 }
 
-.new-expense .line1 {
+.expense-detail-screen .line1 {
   display: flex;
   padding: 0 12px;
   flex-direction: row;
   justify-content: flex-start;
   align-items: center;
-  margin-top: 48px;
+  margin-top: 24px;
 }
 
-.new-expense .dateContainer {
+.expense-detail-screen .dateContainer {
   flex: 1;
   align-items: center;
 }
 
-.new-expense .amountContainer {
+.expense-detail-screen .amountContainer {
   display: flex;
   flex: 1;
   justify-content: center;
 }
 
-.new-expense .currencyContainer {
+.expense-detail-screen .currencyContainer {
   flex: 1;
   align-items: center;
 }
 
-.new-expense .line2 {
+.expense-detail-screen .line2 {
   display: flex;
   flex-direction: row;
   padding: 0 12px;
@@ -45,19 +45,19 @@
   justify-content: center;
 }
 
-.new-expense .descriptionInput {
+.expense-detail-screen .descriptionInput {
   font-size: 18px;
   color: rgba(0, 0, 0, 0.7);
 }
 
-.new-expense .line3 {
+.expense-detail-screen .line3 {
   display: flex;
   align-items: center;
   flex: 1;
   justify-content: center;
 }
 
-.new-expense .line4 {
+.expense-detail-screen .line4 {
   display: flex;
   flex-direction: row;
   justify-content: center;

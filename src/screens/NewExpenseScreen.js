@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import moment from 'moment';
-import {withRouter} from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
 import TotoIconButton from '../comp/TotoIconButton';
 import categoriesMap from '../services/CategoriesMap';
 import { ReactComponent as TickSVG } from '../img/tick.svg';
@@ -10,6 +10,11 @@ import ExpensesAPI from '../services/ExpensesAPI';
 import Cookies from 'universal-cookie';
 import DateSelector from '../comp/DateSelector';
 import AmountSelector from '../comp/AmountSelector';
+import CurrencySwitcher from '../comp/CurrencySwitcher';
+import TextInput from '../comp/TextInput';
+import CategoryPicker from '../comp/cateogrypicker/CategoryPicker';
+import {bus as eventBus} from '../event/TotoEventBus';
+import * as config from '../Config';
 
 const cookies = new Cookies();
 
@@ -75,10 +80,10 @@ class NewExpenseScreen extends Component {
       expense.id = data.id;
 
       // Publish an event
-      // TRC.TotoEventBus.bus.publishEvent({name: config.EVENTS.expenseCreated, context: {expense: expense}});
+      eventBus.publishEvent({name: config.EVENTS.expenseCreated, context: {expense: expense}});
 
       // Return back
-      // this.props.navigation.goBack();
+      this.props.history.goBack();
 
     })
 
@@ -152,63 +157,49 @@ class NewExpenseScreen extends Component {
    */
   render() {
 
-    // let categoryImageSource, categoryImageColor;
-    // if (this.state.category == null) {
-    //   categoryImageSource = categoriesMap.get('VARIE');
-    //   categoryImageColor = {tintColor: TRC.TotoTheme.theme.COLOR_THEME_LIGHT}
-    // }
-
     // Show save button only when the data is there!
     let saveButton;
     if (this.state.amount != null && this.state.description != null) saveButton = (
       <TotoIconButton
-        image={<TickSVG />}
+        image={<TickSVG className="icon" />}
         onPress={this.saveExpense}
       />
     )
 
     return (
       <div className="screen new-expense">
-        <div className="container">
 
-          <div className="header">New payment</div>
+        <div className="header">New payment</div>
 
-          <div className="line1">
-            <div className="dateContainer">
-              <DateSelector />
-            </div>
-            <div className="amountContainer">
-              <AmountSelector />
-              {/* <AmountSelector amount={this.state.amount} onAmountChange={this.setAmount} /> */}
-            </div>
-            <div className="currencyContainer">
-              <div className="label">Currency</div>
-              {/* <CurrencySelector currency={this.state.currency} onCurrencyChange={this.setCurrency} /> */}
-            </div>
+        <div className="line1">
+          <div className="dateContainer">
+            <DateSelector initialValue={moment()} onDateChange={this.setDate} />
           </div>
-
-          <div className="line2">
-            {/* <TextInput
-              className="descriptionInput"
-              onChangeText={this.setDescription}
-              placeholder='Expense description here...'
-              placeholderTextColor={TRC.TotoTheme.theme.COLOR_THEME_LIGHT}
-              keyboardType='default'
-              /> */}
+          <div className="amountContainer">
+            <AmountSelector initialValue={0} onAmountChange={this.setAmount} />
+          </div>
+          <div className="currencyContainer">
+            <CurrencySwitcher default="EUR" onCurrencyChange={this.setCurrency} />
           </div>
         </div>
 
+        <div className="line2">
+          <TextInput placeholder="What was this payment for?"
+            align="center"
+            onTextChange={this.setDescription}
+          />
+        </div>
+
         <div className="line3">
-          <div className="label" style={{ marginBottom: 12 }}>Category</div>
-          {/* <CategorySelector category={this.state.category} onCategoryChange={this.setCategory} /> */}
+          <CategoryPicker onCategoryChange={this.setCategory} />
         </div>
 
         <div style={{ flex: 1 }}>
         </div>
 
         <div className="line4">
-          {saveButton}
-          <TotoIconButton image={(<CloseSVG className="icon" />)} onPress={this.cancel} />
+          <div style={{ marginLeft: 6, marginRight: 6 }}>{saveButton}</div>
+          <div style={{ marginLeft: 6, marginRight: 6 }}><TotoIconButton image={(<CloseSVG className="icon" />)} onPress={this.cancel} /></div>
         </div>
 
       </div>
