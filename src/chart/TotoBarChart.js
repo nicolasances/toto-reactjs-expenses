@@ -41,6 +41,7 @@ import './TotoBarChart.css';
  *                            vertical      : vertical margin
  *                          }
  * - maxHeight            : (optional) max height of the chart
+ * - onBarClick           : (opt) a callback function to be called when clicking on a bar
  */
 export default class TotoBarChart extends Component {
 
@@ -53,6 +54,7 @@ export default class TotoBarChart extends Component {
         this.createGraph = this.createGraph.bind(this);
         this.createBars = this.createBars.bind(this);
         this.createXAxis = this.createXAxis.bind(this);
+        this.onBarClick = this.onBarClick.bind(this);
     }
 
     /**
@@ -131,6 +133,7 @@ export default class TotoBarChart extends Component {
             .attr('y', this.height)
             .attr('width', this.x.bandwidth())
             .attr('height', 0)
+            .on('click', (e, d) => { this.onBarClick(e, d); })
             .transition()
             .attr('y', (d) => { return this.height - this.y(d.y) })
             .attr('height', (d) => { return this.y(d.y) })
@@ -202,6 +205,28 @@ export default class TotoBarChart extends Component {
 
         return images;
 
+    }
+
+    /**
+     * Reacs to the click of a bar
+     */
+    onBarClick(event, data) {
+
+        if (this.props.onBarClick) {
+
+            // Change the opacity
+            event.target.classList.add("touched");
+            setTimeout(() => {
+                event.target.classList.remove("touched");
+
+                setTimeout(() => {
+                    // Call the callback
+                    this.props.onBarClick(data);
+                }, 10);
+                
+            }, 10)
+            
+        }
     }
 
     render() {

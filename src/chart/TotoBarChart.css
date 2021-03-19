@@ -1,3 +1,7 @@
 .toto-bar-chart {
     width: 100vw;
 }
+
+.toto-bar-chart .bar.touched {
+    opacity: 0.5;
+}

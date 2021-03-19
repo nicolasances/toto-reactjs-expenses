@@ -48,7 +48,7 @@ export default class HomeScreen extends Component {
                 </div>
                 
                 <div className="home-graph-container">
-                    <PastMonthsGraph />
+                    <PastMonthsGraph months={9} />
                 </div>
             </div>
         )

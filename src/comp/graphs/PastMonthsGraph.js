@@ -6,16 +6,16 @@ import TotoBarChart from '../../chart/TotoBarChart';
 import ExpensesAPI from '../../services/ExpensesAPI';
 
 import './PastMonthsGraph.css'
+import { withRouter } from 'react-router';
 
 const cookies = new Cookies();
 
-export default class PastMonthsGraph extends Component {
+class PastMonthsGraph extends Component {
 
   constructor(props) {
     super(props);
 
     this.maxMonths = props.months ? props.months : 10;
-    this.limitMonthsToShowValue = 10;
 
     this.state = {
       loaded: false,
@@ -30,7 +30,7 @@ export default class PastMonthsGraph extends Component {
     // this.valueLabel = this.valueLabel.bind(this);
     this.loadExpenses = this.loadExpenses.bind(this);
     this.xAxisTransform = this.xAxisTransform.bind(this);
-    this.onExpenseCreated = this.onExpenseCreated.bind(this);
+    this.onBarClick = this.onBarClick.bind(this);
 
   }
 
@@ -41,15 +41,6 @@ export default class PastMonthsGraph extends Component {
 
     // Load
     this.load();
-
-  }
-
-  /**
-   * When an expense is created, reload
-   */
-  onExpenseCreated(event) {
-
-    this.loadExpenses();
 
   }
 
@@ -99,7 +90,7 @@ export default class PastMonthsGraph extends Component {
     let month = this.state.months[value];
     let parsedMonth = moment(month.yearMonth + '01', 'YYYYMMDD');
 
-    return parsedMonth.format('MMM YY');
+    return parsedMonth.format('MMM');
 
   }
 
@@ -138,6 +129,15 @@ export default class PastMonthsGraph extends Component {
     return Math.round(value,0).toLocaleString('it');
   }
 
+  /**
+   * Reacts to a bar click
+   * @param {object} data the data object (as created in the prepareData() function)
+   */
+  onBarClick(data) {
+      // Navigate to the expenses of that month
+      this.props.history.push('/expenses?yearMonth=' + this.state.months[data.x].yearMonth)
+  }
+
   render() {
     return (
       <div className='graph-past-months-expenses'>
@@ -147,8 +147,11 @@ export default class PastMonthsGraph extends Component {
           valueLabelTransform={this.valueLabel}
           maxHeight={this.props.maxHeight}
           margins={{horizontal: 24, vertical: 12}}
+          onBarClick={this.onBarClick}
           />
       </div>
     )
   }
 }
+
+export default withRouter(PastMonthsGraph);

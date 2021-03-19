@@ -14,6 +14,7 @@ import YearMonthTile from '../picker/YearMonthTile';
 import ScrollPicker from '../picker/ScrollPicker';
 import Popup from 'reactjs-popup';
 import CategorySelectionPopup from '../comp/cateogrypicker/CategorySelectionPopup';
+import querystring from 'querystring';
 
 const cookies = new Cookies();
 
@@ -50,8 +51,13 @@ class ExpensesScreen extends Component {
     getLastSelectedMonth() {
 
         let lastUsedMonth = cookies.get('expensesListYearMonth');
+        let searchParams = this.props.location.search ? querystring.parse(this.props.location.search.substring(1)) : null;
 
-        return lastUsedMonth ? moment(lastUsedMonth, 'YYYYMMDD') : moment();
+        if (lastUsedMonth) return moment(lastUsedMonth, 'YYYYMMDD');
+        // Otherwise, check if there's a query param in the URL
+        else if (searchParams && searchParams.yearMonth) return moment (searchParams.yearMonth + '01', 'YYYYMMDD');
+        // Otherwise, current month
+        else return moment();
 
     }
 
