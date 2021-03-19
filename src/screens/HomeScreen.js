@@ -11,6 +11,7 @@ import { ReactComponent as ListSVG } from '../img/list.svg';
 import './Screen.css';
 import './HomeScreen.css';
 import TotoIconButton from '../comp/TotoIconButton';
+import PastMonthsGraph from '../comp/graphs/PastMonthsGraph';
 
 export default class HomeScreen extends Component {
 
@@ -44,6 +45,10 @@ export default class HomeScreen extends Component {
                     <div className="button-container"> <TotoIconButton image={(<SettingsSVG className="icon" />)} /></div>
                     <div className="button-container"> <TotoIconButton image={(<AddSVG className="icon" />)} navigateTo="/newExpense" /></div>
                     <div className="button-container"> <TotoIconButton image={(<ListSVG className="icon" />)} navigateTo="/expenses" /></div>
+                </div>
+                
+                <div className="home-graph-container">
+                    <PastMonthsGraph />
                 </div>
             </div>
         )

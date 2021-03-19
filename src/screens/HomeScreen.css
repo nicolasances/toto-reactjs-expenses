@@ -15,3 +15,9 @@
 .button-container {
     margin: 12px 6px;
 }
+
+.home-graph-container {
+    display: flex;
+    flex: 1;
+    margin-top: 48px;
+}
