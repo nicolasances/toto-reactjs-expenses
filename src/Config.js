@@ -1,6 +1,5 @@
-
 export const APIS = {
-  expenses: 'https://toto-nodems-expenses-6lv62poq7a-ew.a.run.app'
+  expenses: process.env.REACT_APP_EXPENSES_API_ENDPOINT
 }
 
 
