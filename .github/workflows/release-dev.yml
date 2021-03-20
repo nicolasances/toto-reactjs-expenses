@@ -31,8 +31,7 @@ jobs:
 
     - name: Build Docker image
       run: |
-        export REACT_APP_EXPENSES_API_ENDPOINT=${{ secrets.EXPENSES_API_ENDPOINT }}
-        docker build . -t eu.gcr.io/${{ secrets.GCP_PID }}/${{env.PACKAGE_NAME}}:${{env.PACKAGE_VERSION}}
+        docker build --build-arg REACT_APP_EXPENSES_API_ENDPOINT=${{ secrets.EXPENSES_API_ENDPOINT }} . -t eu.gcr.io/${{ secrets.GCP_PID }}/${{env.PACKAGE_NAME}}:${{env.PACKAGE_VERSION}}
  
     - name: Push Docker image to Dockerhub 
       run: |
