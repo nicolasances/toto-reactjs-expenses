@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import moment from 'moment';
 import { withRouter } from 'react-router-dom';
 import TotoIconButton from '../comp/TotoIconButton';
-import categoriesMap from '../services/CategoriesMap';
 import { ReactComponent as TickSVG } from '../img/tick.svg';
 import { ReactComponent as CloseSVG } from '../img/close.svg';
 import './NewExpenseScreen.css';

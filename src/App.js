@@ -10,6 +10,7 @@ import googleLogo from './img/google-logo.png';
 import ExpensesScreen from './screens/ExpensesScreen';
 import NewExpenseScreen from './screens/NewExpenseScreen';
 import ExpenseDetailScreen from './screens/ExpenseDetailScreen';
+import SettingsScreen from './screens/SettingsScreen';
 
 const cookies = new Cookies();
 const googleClientID = '945392829583-vo2c7v1brbgerasn8iksduelm4k876mo.apps.googleusercontent.com';
@@ -129,6 +130,9 @@ class App extends Component {
             </Route>
             <Route exact path="/expenses/:id">
               <ExpenseDetailScreen />
+            </Route>
+            <Route exact path="/settings">
+              <SettingsScreen />
             </Route>
           </Switch>
         </Router>

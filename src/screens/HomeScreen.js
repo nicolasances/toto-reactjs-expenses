@@ -42,7 +42,7 @@ export default class HomeScreen extends Component {
                 </div>
 
                 <div className="home-screen-h2">
-                    <div className="button-container"> <TotoIconButton image={(<SettingsSVG className="icon" />)} /></div>
+                    <div className="button-container"> <TotoIconButton image={(<SettingsSVG className="icon" />)} navigateTo="/settings" /></div>
                     <div className="button-container"> <TotoIconButton image={(<AddSVG className="icon" />)} navigateTo="/newExpense" /></div>
                     <div className="button-container"> <TotoIconButton image={(<ListSVG className="icon" />)} navigateTo="/expenses" /></div>
                 </div>
