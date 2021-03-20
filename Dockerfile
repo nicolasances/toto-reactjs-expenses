@@ -12,4 +12,4 @@ COPY ./nginx.conf /etc/nginx/nginx.conf
 WORKDIR /app
 
 RUN npm install
-RUN npm run build
+RUN REACT_APP_EXPENSES_API_ENDPOINT=https://toto-nodems-expenses-6lv62poq7a-ew.a.run.app npm run build
