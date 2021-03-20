@@ -1,3 +1,5 @@
+console.log("The expenses API endpoint is: " + process.env.REACT_APP_EXPENSES_API_ENDPOINT);
+
 export const APIS = {
   expenses: process.env.REACT_APP_EXPENSES_API_ENDPOINT
 }
