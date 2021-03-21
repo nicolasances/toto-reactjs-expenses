@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import HomeScreen from './screens/HomeScreen';
 import Cookies from 'universal-cookie';
-import {BrowserRouter as Router, Switch, Route} from 'react-router-dom';
+import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import ls from 'local-storage';
 
 import './App.css';
@@ -13,7 +13,7 @@ import ExpenseDetailScreen from './screens/ExpenseDetailScreen';
 import SettingsScreen from './screens/SettingsScreen';
 
 const cookies = new Cookies();
-const googleClientID = '945392829583-vo2c7v1brbgerasn8iksduelm4k876mo.apps.googleusercontent.com';
+const googleClientID = process.env.REACT_APP_GOOGLE_CLIENT_ID;
 
 class App extends Component {
   constructor(props) {
@@ -23,9 +23,10 @@ class App extends Component {
       signedIn: false
     };
 
-    this.signOut = this.signOut.bind(this);
     this.signIn = this.signIn.bind(this);
     this.loadGoogleAPI = this.loadGoogleAPI.bind(this);
+    this.signinChanged = this.signinChanged.bind(this);
+    this.storeUser = this.storeUser.bind(this);
 
   }
 
@@ -40,62 +41,75 @@ class App extends Component {
     if (window.gapi) {
 
       console.log("Google API loaded!");
-      
+
       window.gapi.load('auth2', () => {
 
-        let auth = window.gapi.auth2.init({
+        window.gapi.auth2.init({
           client_id: googleClientID
+        }).then((auth) => {
+
+          auth.isSignedIn.listen(this.signinChanged);
+
+          if (auth.isSignedIn.get()) {
+
+            console.log("The user is signed in!");
+
+            this.storeUser(auth.currentUser.get());
+          }
+
         });
-
-        // Check if the cookie is there
-        let user = cookies.get('user');
-
-        if (user != null) this.setState({ signedIn: true })
-        else {
-          // Try to signin with google
-          let signedIn = auth.isSignedIn.get();
-          this.setState({ signedIn: signedIn })
-        }
       })
     }
     else {
       console.log("Google API not loaded... waiting..");
-      setTimeout(this.loadGoogleAPI, 200);
+      setTimeout(this.loadGoogleAPI, 50);
     }
+  }
+
+  /**
+   * Reacts to changes in the status of the user sign in 
+   * @param {boolean} signedIn true if the user is signed in
+   */
+  signinChanged(signedIn) {
+
+    console.log("Sign in status changed to: " + signedIn);
+
+    if (!signedIn) {
+      this.signIn();
+    }
+  }
+
+  storeUser(googleUser) {
+
+    let profile = googleUser.getBasicProfile();
+    let authResponse = googleUser.getAuthResponse();
+
+    // Define the user
+    let user = { name: profile.getName(), email: profile.getEmail(), idToken: authResponse.id_token };
+
+    // Set the cookies
+    cookies.set('user', user, { path: '/' });
+
+    this.setState({ signedIn: true });
+
   }
 
   /**
    * Google sign in
    */
-  signIn(response) {
+  signIn() {
 
     if (!window.gapi) { console.log("ERROR! Google API hasn't been loaded for some reason!"); return; }
 
-    window.gapi.auth2.getAuthInstance().signIn().then((googleUser) => {
+    window.gapi.auth2.signIn().then((googleUser) => {
 
-      let profile = googleUser.getBasicProfile();
+      this.storeUser(googleUser);
 
-      // Define the user
-      let user = { name: profile.getName(), email: profile.getEmail() };
-
-      // Set the cookies
-      cookies.set('user', user, { path: '/' });
-
-      // Update the state
-      this.setState({ signedIn: true });
-
-    }, (err) => { this.setState({ signedIn: false, error: err }) });
-
-  }
-
-
-  /**
-   * Sign out
-   */
-  signOut() {
-
-    // Clear the cookies
-    cookies.remove('user');
+    }, (err) => {
+      console.log("Couldn't sign in with Google SignIn");
+      console.log(err);
+      this.setState({ signedIn: false, error: err });
+    });
 
   }
 
@@ -120,10 +134,10 @@ class App extends Component {
         <Router>
           <Switch>
             <Route exact path="/">
-              {content} 
+              {content}
             </Route>
             <Route exact path="/expenses">
-              <ExpensesScreen/>
+              <ExpensesScreen />
             </Route>
             <Route exact path="/newExpense">
               <NewExpenseScreen />

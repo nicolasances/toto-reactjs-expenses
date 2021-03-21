@@ -2,13 +2,13 @@ name: Release
 
 on:
   push:
-    branches: [ dev ]
+    branches: [ master ]
 
 jobs:
   # This workflow contains a single job called "release"
   release:
     name: Build & Deploy to Cloud run
-    environment: dev
+    environment: prod
     runs-on: ubuntu-latest
 
     steps:
@@ -31,7 +31,7 @@ jobs:
 
     - name: Build Docker image
       run: |
-        docker build --build-arg EXPENSES_API_ENDPOINT=${{ secrets.EXPENSES_API_ENDPOINT }} --build-arg GOOGLE_CLIENT_ID=${{ secrets.GOOGLE_CLIENT_ID }} . -t eu.gcr.io/${{ secrets.GCP_PID }}/${{env.PACKAGE_NAME}}:${{env.PACKAGE_VERSION}}
+        docker build --build-arg EXPENSES_API_ENDPOINT=${{ secrets.EXPENSES_API_ENDPOINT }} . -t eu.gcr.io/${{ secrets.GCP_PID }}/${{env.PACKAGE_NAME}}:${{env.PACKAGE_VERSION}}
  
     - name: Push Docker image to Dockerhub 
       run: |
