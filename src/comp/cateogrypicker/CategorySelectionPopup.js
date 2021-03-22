@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import categoriesMap from '../../services/CategoriesMap';
 import './CategoryPicker.css';
 import TouchableOpacity from '../TouchableOpacity';
+import {ReactComponent as CloseSVG} from '../../img/close.svg';
+import TotoIconButton from '../../comp/TotoIconButton';
 
 export default class CategorySelectionPopup extends Component {
 
@@ -46,6 +48,14 @@ export default class CategorySelectionPopup extends Component {
       categoryButtons.push(cat);
     })
 
+    // Close button
+    let closeButton; 
+    if (this.props.onPressClose) closeButton = (
+      <div style={{marginBottom: 24}}>
+        <TotoIconButton image={<CloseSVG class="icon" />} onPress={this.props.onPressClose} />
+      </div>
+    )
+
 
     return (
       <div className='category-selection-popup screen' ref={this.comp}>
@@ -54,6 +64,7 @@ export default class CategorySelectionPopup extends Component {
           {categoryButtons}
         </div>
         <div style={{display: 'flex', flex: 1}}></div>
+        {closeButton}
       </div>
     )
   }
