@@ -1,0 +1,28 @@
+.month-navigator {}
+
+.month-navigator .block {
+    position: relative;
+    height: 60px;
+    display: flex;
+    flex-direction: row;
+}
+
+.month-navigator .block .month {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.month-navigator .block .month .month-label {
+    text-transform: capitalize;
+}
+
+.month-navigator .underline-block {
+    display: flex;
+    flex-direction: row;
+}
+
+.month-navigator .underline-block .underline {
+    border-bottom: 2px solid #c8b900;
+}

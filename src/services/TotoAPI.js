@@ -1,14 +1,17 @@
 import React from 'react';
 import * as config from '../Config';
 import moment from 'moment';
+import Cookies from 'universal-cookie';
 
-var newCid = function() {
+const cookies = new Cookies();
 
-	let ts = moment().format('YYYYMMDDHHmmssSSS');
+var newCid = function () {
 
-	let random = (Math.random() * 100000).toFixed(0).padStart(5, '0');
+  let ts = moment().format('YYYYMMDDHHmmssSSS');
 
-	return ts + '-' + random;
+  let random = (Math.random() * 100000).toFixed(0).padStart(5, '0');
+
+  return ts + '-' + random;
 
 }
 /**
@@ -18,14 +21,14 @@ export default class TotoAPI {
 
   fetch(api, url, options) {
 
-    if (options == null) options = {method: 'GET', headers: {}};
+    if (options == null) options = { method: 'GET', headers: {} };
     if (options.headers == null) options.headers = {};
 
     // Adding standard headers
     options.headers['Accept'] = 'application/json';
-    // options.headers['Authorization'] = config.AUTH;
     options.headers['x-correlation-id'] = newCid();
+    options.headers['Authorization'] = 'Bearer ' + cookies.get('user').idToken;
 
-    return fetch("https://" + api + "." + config.DOMAIN + url, options);
+    return fetch(config.APIS[api] + url, options);
   }
 }

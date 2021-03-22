@@ -1,0 +1,65 @@
+.new-expense .header {
+  margin-top: 24px;
+  display: flex;
+  justify-content: center;
+  font-size: large;
+}
+.new-expense .label {
+  font-size: 15px;
+  color: rgba(0, 0, 0, 0.7);
+  opacity: 0.8;
+  margin-bottom: 6px;
+}
+
+.new-expense .line1 {
+  display: flex;
+  padding: 0 12px;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  margin-top: 48px;
+}
+
+.new-expense .dateContainer {
+  flex: 1;
+  align-items: center;
+}
+
+.new-expense .amountContainer {
+  display: flex;
+  flex: 1;
+  justify-content: center;
+}
+
+.new-expense .currencyContainer {
+  flex: 1;
+  align-items: center;
+}
+
+.new-expense .line2 {
+  display: flex;
+  flex-direction: row;
+  padding: 0 12px;
+  flex: 1;
+  align-items: center;
+  justify-content: center;
+}
+
+.new-expense .descriptionInput {
+  font-size: 18px;
+  color: rgba(0, 0, 0, 0.7);
+}
+
+.new-expense .line3 {
+  display: flex;
+  align-items: center;
+  flex: 1;
+  justify-content: center;
+}
+
+.new-expense .line4 {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  margin-bottom: 24px;
+}

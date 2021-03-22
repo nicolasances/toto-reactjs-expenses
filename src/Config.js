@@ -1,5 +1,7 @@
+export const APIS = {
+  expenses: process.env.REACT_APP_EXPENSES_API_ENDPOINT
+}
 
-export const DOMAIN = 'nimatzdev.it';
 
 export const EVENTS = {
   userInfoChanged: 'userInfoChanged', // User info received from Google

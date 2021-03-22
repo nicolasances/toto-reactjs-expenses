@@ -1,0 +1,22 @@
+
+.title-bar {
+    display: flex;
+    flex-direction: row;
+    padding: 24px 12px 12px 12px;
+    justify-content: center;
+}
+
+.title {
+    flex: 1;
+    font-size: 18px;
+    text-align: center;
+}
+
+.title-bar .button-container {
+    margin: 0 12px;
+    width: 28px;
+}
+.title-bar .icon {
+    width: 24px;
+    height: 24px;
+}

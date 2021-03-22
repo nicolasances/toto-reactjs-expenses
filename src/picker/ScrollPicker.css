@@ -1,0 +1,22 @@
+
+.scroll-picker .tiles-container {
+    position: relative;
+    display: flex;
+    flex-direction: row;
+}
+
+.scroll-picker .tiles-container .tile {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.scroll-picker .underline-container {
+    display: flex;
+    flex-direction: row;
+}
+
+.scroll-picker .underline-container .underline {
+    border-bottom: 2px solid #c8b900;
+}

@@ -1,0 +1,21 @@
+
+.amount-selector {
+    display: flex;
+    border: 3px solid #5ddef4;
+    height: 90px;
+    width: 90px;
+    border-radius: 50%;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.amount-selector input {
+    border: none;
+    background-color: transparent;
+    width: 70px;
+    text-align: center;
+    color: rgba(0,0,0,0.7);
+    font-size: large;
+    outline: none;
+}

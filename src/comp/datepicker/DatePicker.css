@@ -1,0 +1,82 @@
+
+.date-picker {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.date-picker .day-selector {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 50vh;
+    width: 70px;
+    background-color: rgba(0,0,0,0.1);
+    overflow-y: scroll;
+    -webkit-overflow-scrolling: touch;
+}
+
+.date-picker .header {
+    display: flex;
+    height: 25vh;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+.date-picker .header .label {
+    font-size: x-small;
+    text-transform: uppercase;
+    opacity: 0.6;
+}
+.date-picker .header .value {
+    font-size: xx-large;
+    margin-top: 6px;
+}
+
+.date-picker .footer {
+    display: flex;
+    flex: 1;
+    flex-direction: row;
+    align-items: flex-end;
+    margin-bottom: 24px;
+}
+
+
+.date-picker .day-picker {
+    width: 100vw;
+}
+
+.date-picker .day-picker .grid-container {
+    display: flex;
+    flex-direction: column;
+    padding: 12px;
+}
+
+.date-picker .day-picker .grid-container .row {
+    display: flex;
+    flex-direction: row;
+}
+
+.date-picker .day-picker .grid-container .row .cell {
+    display: flex;
+    flex: 1;
+    padding: 6px;
+    justify-content: center;
+    align-items: center;
+    font-size: 14px;
+    border-radius: 3px;
+}
+
+.date-picker .day-picker .grid-container .row .cell.disabled {
+    opacity: 0.3;
+}
+.date-picker .day-picker .grid-container .row .cell.selected {
+    color: #ffeb3b;
+    font-weight: bold;
+}
+.date-picker .day-picker .grid-container .row .cell.header {
+    opacity: 0.5;
+    font-size: 12px;
+    height: auto;
+}

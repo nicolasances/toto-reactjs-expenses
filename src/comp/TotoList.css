@@ -1,0 +1,37 @@
+
+.toto-list {
+  display: flex;
+  flex-direction: column;
+  color: currentColor;
+  flex: 1;
+  overflow-y: scroll;
+  -webkit-overflow-scrolling: touch;
+}
+::-webkit-scrollbar {display: none;}
+
+.toto-list .item {
+  display: flex;
+  flex-direction: row;
+  margin: 3px 12px 3px 12px;
+  align-items: center;
+}
+
+.toto-list .item .yearMonth { margin-left: 12px; width: 50px; }
+.toto-list .item .dayMonth { margin-left: 12px; text-align: center; }
+.toto-list .item .dayMonth .day { font-size: 16px;}
+.toto-list .item .dayMonth .month { font-size: 10px; text-transform: uppercase;}
+
+.toto-list .item .item-title {
+  display: flex;
+  flex: 1;
+  margin-left: 12px;
+  font-size: 13px;
+}
+.toto-list .item .item-amount {
+  margin-left: 12px;
+  font-size: 14px;
+}
+
+.toto-list .item .highlights { display: flex; flex-direction: row; }
+.toto-list .item .highlights svg { width: 18px; height: 18px; margin-left: 12px; fill: #ffeb3b; }
+.toto-list .item .highlights .disabled svg { fill: currentColor; opacity: 0.7; }

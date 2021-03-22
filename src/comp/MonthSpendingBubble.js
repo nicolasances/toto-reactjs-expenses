@@ -1,9 +1,12 @@
 import React, { Component } from 'react';
 import moment from 'moment';
+import Cookies from 'universal-cookie';
 
 import ExpensesAPI from '../services/ExpensesAPI';
 
 import './MonthSpendingBubble.css'
+
+const cookies = new Cookies();
 
 export default class MonthSpendingBubble extends Component {
 
@@ -25,14 +28,14 @@ export default class MonthSpendingBubble extends Component {
         this.loadSpending();
     }
 
-    /**
+    /*
      * Loads the current month spending
      */
     loadSpending() {
 
         let targetCurrency = this.state.settings ? this.state.settings.currency : null;
 
-        new ExpensesAPI().getMonthTotalSpending("nicolas.matteazzi@gmail.com", this.state.yearMonth, targetCurrency).then((data) => {
+        new ExpensesAPI().getMonthTotalSpending(cookies.get('user').email, this.state.yearMonth, targetCurrency).then((data) => {
 
             // Animate
             if (data != null && data.total != null) this.setState({spending: data.total});
@@ -42,7 +45,7 @@ export default class MonthSpendingBubble extends Component {
 
     render() {
         return (
-            <div className="container">
+            <div className="month-spending-bubble container">
 
                 <div className="currency-container"><div className="currency">{this.state.currency}</div></div>
                 <div className="amount-container"><div className="amount">{this.state.spending.toFixed(0)}</div></div>

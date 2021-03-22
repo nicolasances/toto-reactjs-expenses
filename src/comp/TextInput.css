@@ -1,0 +1,18 @@
+.text-input {
+    display: flex;
+    flex-direction: row;
+    flex: 1;
+    justify-content: center;
+    align-items: center;
+    padding: 0 12px;
+}
+
+.text-input input[type="text"] {
+    width: 100%;
+    background-color: transparent;
+    border: none;
+    border-bottom: 1px solid #007c91;
+    outline: none;
+    font-size: large;
+    color: rgba(0,0,0,0.7)
+}
