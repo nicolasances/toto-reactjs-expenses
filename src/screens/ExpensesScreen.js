@@ -163,7 +163,7 @@ class ExpensesScreen extends Component {
         return {
             avatar: {
                 type: 'image',
-                value: categoriesMap.get(item.category).image,
+                value: item.category ? categoriesMap.get(item.category).image : null,
                 size: 'l'
             },
             date: { date: item.date },
@@ -203,7 +203,10 @@ class ExpensesScreen extends Component {
                     closeOnEscape={false}
                 >
 
-                    <CategorySelectionPopup onCategoryChange={this.onCategoryChange} />
+                    <CategorySelectionPopup 
+                        onCategoryChange={this.onCategoryChange} 
+                        onPressClose={() => {this.setState({categoryPopupOpen: false})}}
+                        />
 
                 </Popup>
             </div>

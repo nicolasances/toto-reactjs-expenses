@@ -33,7 +33,6 @@
 .category-selection-popup { 
     display: flex; 
     flex-direction: column; 
-    padding: 12px;
 }
 
 .category-selection-popup .title { 
