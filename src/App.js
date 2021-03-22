@@ -101,7 +101,7 @@ class App extends Component {
 
     if (!window.gapi) { console.log("ERROR! Google API hasn't been loaded for some reason!"); return; }
 
-    window.gapi.auth2.signIn().then((googleUser) => {
+    window.gapi.auth2.getAuthInstance().signIn().then((googleUser) => {
 
       this.storeUser(googleUser);
 
