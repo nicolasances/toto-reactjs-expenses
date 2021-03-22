@@ -50,7 +50,7 @@ class ExpensesScreen extends Component {
      */
     getLastSelectedMonth() {
 
-        let lastUsedMonth = cookies.get('expensesListYearMonth');
+        let lastUsedMonth;
         let searchParams = this.props.location.search ? querystring.parse(this.props.location.search.substring(1)) : null;
 
         if (lastUsedMonth) return moment(lastUsedMonth, 'YYYYMMDD');
@@ -67,9 +67,9 @@ class ExpensesScreen extends Component {
      */
     updateLastSelectedMonth(yearMonth) {
 
-        cookies.set('expensesListYearMonth', yearMonth.format('YYYYMMDD'), {
-            expires: moment().add(1, 'minutes').toDate()
-        })
+        // cookies.set('expensesListYearMonth', yearMonth.format('YYYYMMDD'), {
+        //     expires: moment().add(1, 'minutes').toDate()
+        // })
     }
 
     loadExpenses() {
