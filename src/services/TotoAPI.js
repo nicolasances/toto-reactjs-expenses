@@ -21,14 +21,13 @@ export default class TotoAPI {
 
   fetch(api, url, options) {
   
-    console.log(cookies.get('user').idToken);
-
     if (options == null) options = { method: 'GET', headers: {} };
     if (options.headers == null) options.headers = {};
 
     // Adding standard headers
     options.headers['Accept'] = 'application/json';
     options.headers['x-correlation-id'] = newCid();
+    options.headers['x-client'] = "totoMoneyWeb";
     options.headers['Authorization'] = 'Bearer ' + cookies.get('user').idToken;
 
     return fetch(config.APIS[api] + url, options);

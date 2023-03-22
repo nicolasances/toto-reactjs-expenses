@@ -3,6 +3,7 @@ import HomeScreen from './screens/HomeScreen';
 import Cookies from 'universal-cookie';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import ls from 'local-storage';
+import jwt from "jsonwebtoken";
 
 import './App.css';
 
@@ -25,7 +26,6 @@ class App extends Component {
 
     this.signIn = this.signIn.bind(this);
     this.loadGoogleAPI = this.loadGoogleAPI.bind(this);
-    this.signinChanged = this.signinChanged.bind(this);
     this.storeUser = this.storeUser.bind(this);
 
   }
@@ -36,29 +36,43 @@ class App extends Component {
 
   }
 
+  userFromToken(idToken) {
+
+    const decodedToken = jwt.decode(idToken);
+
+    return {
+      name: decodedToken.name,
+      email: decodedToken.email,
+      idToken: idToken
+    }
+  }
+
   loadGoogleAPI() {
 
-    if (window.gapi) {
+    console.log(window.google);
+
+    if (window.google) {
 
       console.log("Google API loaded!");
 
-      window.gapi.load('auth2', () => {
+      console.log(window.google.accounts.id);
 
-        window.gapi.auth2.init({
-          client_id: googleClientID
-        }).then((auth) => {
+      window.google.accounts.id.initialize({
+        client_id: googleClientID,
+        callback: (auth) => {
 
-          auth.isSignedIn.listen(this.signinChanged);
+          console.log("Received auth response from Google SignIn");
 
-          if (auth.isSignedIn.get()) {
+          if (auth.credential) {
 
             console.log("The user is signed in!");
 
-            this.storeUser(auth.currentUser.get());
-          }
+            const user = this.userFromToken(auth.credential);
 
-        });
-      })
+            this.storeUser(user);
+          }
+        }
+      });
     }
     else {
       console.log("Google API not loaded... waiting..");
@@ -66,26 +80,7 @@ class App extends Component {
     }
   }
 
-  /**
-   * Reacts to changes in the status of the user sign in 
-   * @param {boolean} signedIn true if the user is signed in
-   */
-  signinChanged(signedIn) {
-
-    console.log("Sign in status changed to: " + signedIn);
-
-    if (!signedIn) {
-      this.signIn();
-    }
-  }
-
-  storeUser(googleUser) {
-
-    let profile = googleUser.getBasicProfile();
-    let authResponse = googleUser.getAuthResponse();
-
-    // Define the user
-    let user = { name: profile.getName(), email: profile.getEmail(), idToken: authResponse.id_token };
+  storeUser(user) {
 
     // Set the cookies
     cookies.set('user', user, { path: '/' });
@@ -99,17 +94,7 @@ class App extends Component {
    */
   signIn() {
 
-    if (!window.gapi) { console.log("ERROR! Google API hasn't been loaded for some reason!"); return; }
-
-    window.gapi.auth2.getAuthInstance().signIn().then((googleUser) => {
-
-      this.storeUser(googleUser);
-
-    }, (err) => {
-      console.log("Couldn't sign in with Google SignIn");
-      console.log(err);
-      this.setState({ signedIn: false, error: err });
-    });
+    window.google.accounts.id.prompt();
 
   }
 
