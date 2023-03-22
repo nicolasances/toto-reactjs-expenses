@@ -20,6 +20,8 @@ var newCid = function () {
 export default class TotoAPI {
 
   fetch(api, url, options) {
+  
+    console.log(cookies.get('user').idToken);
 
     if (options == null) options = { method: 'GET', headers: {} };
     if (options.headers == null) options.headers = {};
