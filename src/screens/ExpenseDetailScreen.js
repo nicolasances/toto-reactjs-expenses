@@ -4,7 +4,7 @@ import { useParams, withRouter } from 'react-router-dom';
 import TotoIconButton from '../comp/TotoIconButton';
 import categoriesMap from '../services/CategoriesMap';
 import { ReactComponent as TickSVG } from '../img/tick.svg';
-import { ReactComponent as CloseSVG } from '../img/close.svg';
+import { ReactComponent as DeleteSVG } from '../img/trash.svg';
 import './ExpenseDetailScreen.css';
 import ExpensesAPI from '../services/ExpensesAPI';
 import Cookies from 'universal-cookie';
@@ -26,6 +26,7 @@ class ExpenseDetailScreen extends Component {
 
         this.loadExpense = this.loadExpense.bind(this);
         this.saveExpense = this.saveExpense.bind(this);
+        this.deleteExpense = this.deleteExpense.bind(this);
         this.loadAmount = this.loadAmount.bind(this);
         this.loadDate = this.loadDate.bind(this);
         this.loadCurrency = this.loadCurrency.bind(this);
@@ -70,6 +71,17 @@ class ExpenseDetailScreen extends Component {
         new ExpensesAPI().putExpense(this.state.expense.id, this.state.expense).then((data) => {
             this.props.history.goBack();
         })
+
+    }
+
+    /**
+     * Deletes the current expense
+     */
+    async deleteExpense() {
+        
+        await new ExpensesAPI().deleteExpense(this.state.expense.id);
+        
+        this.props.history.goBack();
 
     }
 
@@ -220,6 +232,7 @@ class ExpenseDetailScreen extends Component {
 
                 <div className="line4">
                     <div style={{ marginLeft: 6, marginRight: 6 }}><TotoIconButton image={(<TickSVG className="icon" />)} onPress={this.saveExpense} /></div>
+                    <div style={{ marginLeft: 6, marginRight: 6 }}><TotoIconButton image={(<DeleteSVG className="icon" />)} onPress={this.deleteExpense} /></div>
                 </div>
             </div>
         )
