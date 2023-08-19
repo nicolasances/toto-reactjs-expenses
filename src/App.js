@@ -59,6 +59,7 @@ class App extends Component {
 
       window.google.accounts.id.initialize({
         client_id: googleClientID,
+        auto_select: true, 
         callback: (auth) => {
 
           console.log("Received auth response from Google SignIn");
@@ -73,6 +74,8 @@ class App extends Component {
           }
         }
       });
+
+      window.google.accounts.id.prompt();
     }
     else {
       console.log("Google API not loaded... waiting..");
