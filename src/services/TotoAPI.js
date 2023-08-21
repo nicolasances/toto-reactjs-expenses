@@ -31,6 +31,7 @@ export default class TotoAPI {
       options.headers['x-correlation-id'] = newCid();
       options.headers['x-client'] = "totoMoneyWeb";
       options.headers['Authorization'] = 'Bearer ' + cookies.get('user').idToken;
+      options.headers['auth-provider'] = "toto";
     }
 
     return fetch(config.APIS[api] + url, options);
