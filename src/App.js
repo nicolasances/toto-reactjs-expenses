@@ -4,6 +4,7 @@ import Cookies from 'universal-cookie';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import ls from 'local-storage';
 import jwt from "jsonwebtoken";
+import AuthAPI from './services/AuthaPI';
 
 import './App.css';
 
@@ -24,15 +25,40 @@ class App extends Component {
       signedIn: false
     };
 
-    this.signIn = this.signIn.bind(this);
-    this.loadGoogleAPI = this.loadGoogleAPI.bind(this);
+    this.googleSignIn = this.googleSignIn.bind(this);
     this.storeUser = this.storeUser.bind(this);
+    this.isTokenStored = this.isTokenStored.bind(this);
+    this.getTotoToken = this.getTotoToken.bind(this);
 
   }
 
   componentDidMount() {
 
-    this.loadGoogleAPI();
+    if (!this.isTokenStored()) {
+      
+      this.googleSignIn();
+
+    }
+    else {
+      
+      console.log(`User already signed in. User: ${JSON.stringify(cookies.get("user"))}`);
+
+      this.setState({ signedIn: true });
+      
+    }
+
+  }
+
+  isTokenStored() {
+
+    const user = cookies.get("user");
+
+    return user && user.idToken;
+  }
+
+  async getTotoToken(googleToken) {
+
+    return await new AuthAPI().getTotoToken(googleToken);
 
   }
 
@@ -41,25 +67,21 @@ class App extends Component {
     const decodedToken = jwt.decode(idToken);
 
     return {
-      name: decodedToken.name,
-      email: decodedToken.email,
+      name: decodedToken.user,
+      email: decodedToken.user,
       idToken: idToken
     }
   }
 
-  loadGoogleAPI() {
-
-    console.log(window.google);
+  googleSignIn() {
 
     if (window.google) {
 
       console.log("Google API loaded!");
 
-      console.log(window.google.accounts.id);
-
       window.google.accounts.id.initialize({
         client_id: googleClientID,
-        auto_select: true, 
+        auto_select: true,
         callback: (auth) => {
 
           console.log("Received auth response from Google SignIn");
@@ -68,9 +90,18 @@ class App extends Component {
 
             console.log("The user is signed in!");
 
-            const user = this.userFromToken(auth.credential);
+            this.getTotoToken(auth.credential).then((totoToken) => {
 
-            this.storeUser(user);
+              const user = this.userFromToken(totoToken.token);
+
+              console.log(user);
+
+              this.storeUser(user);
+
+            }, (error) => {
+              console.log(error);
+            })
+
           }
         }
       });
@@ -79,8 +110,9 @@ class App extends Component {
     }
     else {
       console.log("Google API not loaded... waiting..");
-      setTimeout(this.loadGoogleAPI, 50);
+      setTimeout(this.googleSignIn, 50);
     }
+
   }
 
   storeUser(user) {
@@ -92,14 +124,14 @@ class App extends Component {
 
   }
 
-  /**
-   * Google sign in
-   */
-  signIn() {
+  // /**
+  //  * Google sign in
+  //  */
+  // signIn() {
 
-    window.google.accounts.id.prompt();
+  //   window.google.accounts.id.prompt();
 
-  }
+  // }
 
   render() {
     let content;

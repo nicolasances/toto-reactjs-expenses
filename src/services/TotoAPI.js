@@ -16,19 +16,22 @@ var newCid = function () {
 }
 /**
  * Wrapper for the fetch() React method that adds the required fields for Toto authentication
+ * @param noHeaderOverride set to true to avoid that this method overrides some of the headers
  */
 export default class TotoAPI {
 
-  fetch(api, url, options) {
-  
+  fetch(api, url, options, noHeaderOverride) {
+
     if (options == null) options = { method: 'GET', headers: {} };
     if (options.headers == null) options.headers = {};
 
     // Adding standard headers
-    options.headers['Accept'] = 'application/json';
-    options.headers['x-correlation-id'] = newCid();
-    options.headers['x-client'] = "totoMoneyWeb";
-    options.headers['Authorization'] = 'Bearer ' + cookies.get('user').idToken;
+    if (!noHeaderOverride) {
+      options.headers['Accept'] = 'application/json';
+      options.headers['x-correlation-id'] = newCid();
+      options.headers['x-client'] = "totoMoneyWeb";
+      options.headers['Authorization'] = 'Bearer ' + cookies.get('user').idToken;
+    }
 
     return fetch(config.APIS[api] + url, options);
   }
