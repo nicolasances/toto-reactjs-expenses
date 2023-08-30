@@ -1,5 +1,6 @@
 export const APIS = {
-  expenses: process.env.REACT_APP_EXPENSES_API_ENDPOINT
+  expenses: process.env.REACT_APP_EXPENSES_API_ENDPOINT, 
+  expcat: process.env.REACT_APP_EXPCAT_API_ENDPOINT
 }
 
 
