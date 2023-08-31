@@ -170,6 +170,8 @@ class ExpenseDetailScreen extends Component {
 
     render() {
 
+        if (!this.state.expense) return <div className="screen expense-detail-screen"></div>
+
         return (
             <div className="screen expense-detail-screen">
                 <TitleBar title="Payment Detail" back={true} />
@@ -219,6 +221,7 @@ class ExpenseDetailScreen extends Component {
 
                 <div className="line3">
                     <CategoryPicker initialValueLoader={this.loadCategory}    
+                                    category={this.state.expense.category}
                                     onCategoryChange={(cat) => {
                                         let expense = this.state.expense;
                                         expense.category = cat;

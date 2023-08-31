@@ -12,8 +12,10 @@ import AmountSelector from '../comp/AmountSelector';
 import CurrencySwitcher from '../comp/CurrencySwitcher';
 import TextInput from '../comp/TextInput';
 import CategoryPicker from '../comp/cateogrypicker/CategoryPicker';
-import {bus as eventBus} from '../event/TotoEventBus';
+import { bus as eventBus } from '../event/TotoEventBus';
 import * as config from '../Config';
+import ExpCatAPI from '../services/ExpCatAPI';
+import categoriesMap from '../services/CategoriesMap';
 
 const cookies = new Cookies();
 
@@ -79,7 +81,7 @@ class NewExpenseScreen extends Component {
       expense.id = data.id;
 
       // Publish an event
-      eventBus.publishEvent({name: config.EVENTS.expenseCreated, context: {expense: expense}});
+      eventBus.publishEvent({ name: config.EVENTS.expenseCreated, context: { expense: expense } });
 
       // Return back
       this.props.history.goBack();
@@ -122,14 +124,13 @@ class NewExpenseScreen extends Component {
     this.setState({ category: c });
   }
 
-  predictCategory() {
+  async predictCategory() {
 
-    // // Guess the category
-    // new ERCBOD().predictCategory(this.state.description, user.userInfo.email).then((data) => {
+    const prediction = await new ExpCatAPI().predictCategory(this.state.description, this.user.email);
 
-    //   this.setState({category: data.category});
-
-    // })
+    if (prediction && prediction.prediction && prediction.prediction.length > 0 && categoriesMap.get(prediction.prediction[0])) {
+      this.setState({ category: prediction.prediction[0] })
+    }
 
   }
 
@@ -140,13 +141,13 @@ class NewExpenseScreen extends Component {
 
     // We're setting a timeout after which, if the user hasn't typed any other letter,  the category prediction will start
     // Clear the timeout: the user has typed another letter!
-    // clearTimeout(this.descriptionChangeTimer)
+    clearTimeout(this.descriptionChangeTimer)
 
     // Change the state
     this.setState({ description: text })
 
     // Start the timeout
-    // this.descriptionChangeTimer = setTimeout(this.predictCategory, 400)
+    this.descriptionChangeTimer = setTimeout(this.predictCategory, 400)
 
   }
 
@@ -190,7 +191,7 @@ class NewExpenseScreen extends Component {
         </div>
 
         <div className="line3">
-          <CategoryPicker onCategoryChange={this.setCategory} />
+          <CategoryPicker category={this.state.category} onCategoryChange={this.setCategory} />
         </div>
 
         <div style={{ flex: 1 }}>

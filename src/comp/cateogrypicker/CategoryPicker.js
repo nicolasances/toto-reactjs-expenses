@@ -12,6 +12,7 @@ import { variance } from 'd3-array';
  * 
  *  - initialValue              :   (OPT) the initial value that the selector should show
  *  - initialValueLoader        :   (OPT) a function that will load the initial value. 
+ *  - category                  :   (MAND) the category (this is a managed component)
  *  - onCategoryChange          :   (OPT) callback to receive changes of selected category
  */
 export default class CategoryPicker extends React.Component {
@@ -42,16 +43,15 @@ export default class CategoryPicker extends React.Component {
     onCategoryChange(category) {
 
         this.setState({
-            category: category, 
             openPopup: false
         }, () => {
-            if (this.props.onCategoryChange) this.props.onCategoryChange(this.state.category);
+            if (this.props.onCategoryChange) this.props.onCategoryChange(category);
         })
     }
 
     render() {
 
-        let categoryComponent = categoriesMap.get(this.state.category);
+        let categoryComponent = categoriesMap.get(this.props.category);
 
         return (
             <div className="category-picker">

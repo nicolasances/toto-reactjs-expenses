@@ -12,9 +12,9 @@ export default class ExpCatAPI {
    * 
    * An example is {prediction: ["VIAGGI"]}
    */
-  predictCategory(desc) {
+  predictCategory(desc, email) {
 
-    return new TotoAPI().fetch('expcat', `/predict?description=${desc}`)
+    return new TotoAPI().fetch('expcat', `/predict?description=${desc}&email=${email}`)
         .then((response) => response.json());
 
   }
