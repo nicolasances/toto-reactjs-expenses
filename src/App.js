@@ -2,8 +2,7 @@ import React, { Component } from 'react';
 import HomeScreen from './screens/HomeScreen';
 import Cookies from 'universal-cookie';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
-import ls from 'local-storage';
-import jwt from "jsonwebtoken";
+import jwt, { JsonWebTokenError } from "jsonwebtoken";
 import AuthAPI from './services/AuthaPI';
 
 import './App.css';
@@ -35,25 +34,31 @@ class App extends Component {
   componentDidMount() {
 
     if (!this.isTokenStored()) {
-      
+
       this.googleSignIn();
 
     }
     else {
-      
-      console.log(`User already signed in. User: ${JSON.stringify(cookies.get("user"))}`);
 
       this.setState({ signedIn: true });
-      
+
     }
 
   }
 
   isTokenStored() {
 
-    const user = cookies.get("user");
+    // const user = cookies.get("user");
+    const user = window.localStorage.getItem("user");
 
-    return user && user.idToken;
+    console.log(`User found on local storage? [${user != null}]`);
+    
+    if (user) {
+      cookies.set('user', JSON.parse(user), { path: '/' });
+      console.log(`User: ${user}`);
+    }
+
+    return user;
   }
 
   async getTotoToken(googleToken) {
@@ -119,6 +124,7 @@ class App extends Component {
 
     // Set the cookies
     cookies.set('user', user, { path: '/' });
+    window.localStorage.setItem("user", JSON.stringify(user));
 
     this.setState({ signedIn: true });
 
