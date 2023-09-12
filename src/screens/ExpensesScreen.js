@@ -168,6 +168,7 @@ class ExpensesScreen extends Component {
             },
             date: { date: item.date },
             title: item.description,
+            monthly: item.monthly, 
             amount: currency + ' ' + item.amount.toLocaleString('it'),
             highlights: highlights
         }

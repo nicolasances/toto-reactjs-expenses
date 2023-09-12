@@ -16,6 +16,7 @@ import { bus as eventBus } from '../event/TotoEventBus';
 import * as config from '../Config';
 import ExpCatAPI from '../services/ExpCatAPI';
 import categoriesMap from '../services/CategoriesMap';
+import Checkbox from '../comp/Checkbox';
 
 const cookies = new Cookies();
 
@@ -44,6 +45,7 @@ class NewExpenseScreen extends Component {
     this.setDescription = this.setDescription.bind(this);
     this.predictCategory = this.predictCategory.bind(this);
     this.cancel = this.cancel.bind(this);
+    this.onToggleMonthly = this.onToggleMonthly.bind(this);
 
   }
 
@@ -73,7 +75,8 @@ class NewExpenseScreen extends Component {
       yearMonth: this.state.date.substring(0, 6),
       consolidated: false,
       currency: this.state.currency,
-      user: this.user.email
+      user: this.user.email, 
+      monthly: this.state.monthly
     }
 
     new ExpensesAPI().postExpense(expense).then((data) => {
@@ -97,6 +100,15 @@ class NewExpenseScreen extends Component {
   setDate(date) {
 
     this.setState({ date: moment(date).format('YYYYMMDD') });
+
+  }
+
+  /**
+   * Toggles the recurring monthly setting
+   */
+  onToggleMonthly() {
+
+    this.setState((prevState) => { return { monthly: !prevState.monthly } })
 
   }
 
@@ -194,10 +206,14 @@ class NewExpenseScreen extends Component {
           <CategoryPicker category={this.state.category} onCategoryChange={this.setCategory} />
         </div>
 
+        <div className="line4">
+          <Checkbox onToggleFlag={this.onToggleMonthly} flag={this.state.monthly} />
+        </div>
+
         <div style={{ flex: 1 }}>
         </div>
 
-        <div className="line4">
+        <div className="line5">
           <div style={{ marginLeft: 6, marginRight: 6 }}>{saveButton}</div>
           <div style={{ marginLeft: 6, marginRight: 6 }}><TotoIconButton image={(<CloseSVG className="icon" />)} onPress={this.cancel} /></div>
         </div>

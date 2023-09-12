@@ -162,6 +162,12 @@ class Item extends Component {
       title = (<div className='item-title'>{data.title}</div>)
     }
 
+    // Monthly Recurrence
+    let monthly; 
+    if (data.monthly) {
+      monthly = (<div className="item-recurrance">M</div>)
+    }
+
     // Amount if any
     let amount;
     if (data.amount) {
@@ -188,6 +194,7 @@ class Item extends Component {
         {avatar}
         {date}
         {title}
+        {monthly}
         {amount}
         {highlights}
       </div>

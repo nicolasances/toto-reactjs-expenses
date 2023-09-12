@@ -2,7 +2,9 @@ name: Release
 
 on:
   push:
-    branches: [ dev ]
+    branches: 
+      - 'feature/**'
+      - dev
 
 jobs:
   # This workflow contains a single job called "release"

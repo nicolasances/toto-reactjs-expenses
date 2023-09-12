@@ -16,6 +16,7 @@ import CategoryPicker from '../comp/cateogrypicker/CategoryPicker';
 import { bus as eventBus } from '../event/TotoEventBus';
 import * as config from '../Config';
 import TitleBar from '../comp/TitleBar';
+import Checkbox from '../comp/Checkbox';
 
 class ExpenseDetailScreen extends Component {
 
@@ -32,6 +33,7 @@ class ExpenseDetailScreen extends Component {
         this.loadCurrency = this.loadCurrency.bind(this);
         this.loadDescription = this.loadDescription.bind(this);
         this.loadCategory = this.loadCategory.bind(this);
+        this.onToggleMonthly = this.onToggleMonthly.bind(this);
     }
 
     componentDidMount() {
@@ -57,7 +59,8 @@ class ExpenseDetailScreen extends Component {
                 expense: expense,
                 date: moment(expense.date, 'YYYYMMDD'),
                 amount: expense.amount,
-                currency: expense.currency
+                currency: expense.currency,
+                monthly: expense.monthly
             })
 
         })
@@ -67,9 +70,25 @@ class ExpenseDetailScreen extends Component {
      * Saves the updated expense
      */
     saveExpense() {
-        
+
         new ExpensesAPI().putExpense(this.state.expense.id, this.state.expense).then((data) => {
             this.props.history.goBack();
+        })
+
+    }
+
+    /**
+     * Toggles the recurring monthly setting
+     */
+    onToggleMonthly() {
+
+        this.setState((prevState) => {
+            return {
+                expense: {
+                    ...prevState.expense, 
+                    monthly: !prevState.monthly
+                }
+            }
         })
 
     }
@@ -78,9 +97,9 @@ class ExpenseDetailScreen extends Component {
      * Deletes the current expense
      */
     async deleteExpense() {
-        
+
         await new ExpensesAPI().deleteExpense(this.state.expense.id);
-        
+
         this.props.history.goBack();
 
     }
@@ -89,7 +108,7 @@ class ExpenseDetailScreen extends Component {
      * Loads the currency for the CurrencySwitcher
      * @returns Promise
      */
-     loadCurrency() {
+    loadCurrency() {
 
         var waitForData = (success) => {
             if (this.state.expense != null) return success(this.state.expense.currency);
@@ -178,62 +197,66 @@ class ExpenseDetailScreen extends Component {
 
                 <div className="line1">
                     <div className="dateContainer">
-                        <DateSelector   initialValueLoader={this.loadDate}
-                                        onDateChange={(date) => {
-                                            let expense = this.state.expense;
-                                            expense.date = date.format('YYYYMMDD');
-                                            this.setState({ expense: expense });
-                                        }}
+                        <DateSelector initialValueLoader={this.loadDate}
+                            onDateChange={(date) => {
+                                let expense = this.state.expense;
+                                expense.date = date.format('YYYYMMDD');
+                                this.setState({ expense: expense });
+                            }}
                         />
                     </div>
                     <div className="amountContainer">
-                        <AmountSelector initialValueLoader={this.loadAmount} 
-                                        onAmountChange={(amt) => {
-                                            let expense = this.state.expense;
-                                            expense.amount = amt;
-                                            this.setState({ expense: expense });
-                                        }} 
+                        <AmountSelector initialValueLoader={this.loadAmount}
+                            onAmountChange={(amt) => {
+                                let expense = this.state.expense;
+                                expense.amount = amt;
+                                this.setState({ expense: expense });
+                            }}
                         />
                     </div>
                     <div className="currencyContainer">
-                        <CurrencySwitcher   initialValueLoader={this.loadCurrency}
-                                            onCurrencyChange={(c) => {
-                                                let expense = this.state.expense;
-                                                expense.currency = c;
-                                                this.setState({ expense: expense });
-                                            }} 
-                                            loadFromSettings={false}
+                        <CurrencySwitcher initialValueLoader={this.loadCurrency}
+                            onCurrencyChange={(c) => {
+                                let expense = this.state.expense;
+                                expense.currency = c;
+                                this.setState({ expense: expense });
+                            }}
+                            loadFromSettings={false}
                         />
                     </div>
                 </div>
 
                 <div className="line2">
-                    <TextInput  placeholder="What was this payment for?"
-                                initialValueLoader={this.loadDescription}
-                                align="center"
-                                onTextChange={(t) => {
-                                    let expense = this.state.expense;
-                                    expense.description = t;
-                                    this.setState({ expense: expense });
-                                }} 
+                    <TextInput placeholder="What was this payment for?"
+                        initialValueLoader={this.loadDescription}
+                        align="center"
+                        onTextChange={(t) => {
+                            let expense = this.state.expense;
+                            expense.description = t;
+                            this.setState({ expense: expense });
+                        }}
                     />
                 </div>
 
                 <div className="line3">
-                    <CategoryPicker initialValueLoader={this.loadCategory}    
-                                    category={this.state.expense.category}
-                                    onCategoryChange={(cat) => {
-                                        let expense = this.state.expense;
-                                        expense.category = cat;
-                                        this.setState({ expense: expense });
-                                    }} 
+                    <CategoryPicker initialValueLoader={this.loadCategory}
+                        category={this.state.expense.category}
+                        onCategoryChange={(cat) => {
+                            let expense = this.state.expense;
+                            expense.category = cat;
+                            this.setState({ expense: expense });
+                        }}
                     />
+                </div>
+
+                <div className="line4">
+                    <Checkbox onToggleFlag={this.onToggleMonthly} flag={this.state.expense && this.state.expense.monthly} />
                 </div>
 
                 <div style={{ flex: 1 }}>
                 </div>
 
-                <div className="line4">
+                <div className="line5">
                     <div style={{ marginLeft: 6, marginRight: 6 }}><TotoIconButton image={(<TickSVG className="icon" />)} onPress={this.saveExpense} /></div>
                     <div style={{ marginLeft: 6, marginRight: 6 }}><TotoIconButton image={(<DeleteSVG className="icon" />)} onPress={this.deleteExpense} /></div>
                 </div>

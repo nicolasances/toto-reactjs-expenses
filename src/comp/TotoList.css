@@ -20,6 +20,7 @@
 .toto-list .item .dayMonth { margin-left: 12px; text-align: center; }
 .toto-list .item .dayMonth .day { font-size: 16px;}
 .toto-list .item .dayMonth .month { font-size: 10px; text-transform: uppercase;}
+.toto-list .item .item-recurrance {font-size: 12px; text-transform: uppercase; font-weight: bold; color: white}
 
 .toto-list .item .item-title {
   display: flex;
