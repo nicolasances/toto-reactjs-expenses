@@ -4,6 +4,7 @@ import Cookies from 'universal-cookie';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import jwt, { JsonWebTokenError } from "jsonwebtoken";
 import AuthAPI from './services/AuthaPI';
+import ExpCatAPI from './services/ExpCatAPI';
 
 import './App.css';
 
@@ -28,10 +29,14 @@ class App extends Component {
     this.storeUser = this.storeUser.bind(this);
     this.isTokenStored = this.isTokenStored.bind(this);
     this.getTotoToken = this.getTotoToken.bind(this);
+    this.preStartAPIs = this.preStartAPIs.bind(this);
 
   }
 
   componentDidMount() {
+
+    // Pre-start APIs
+    this.preStartAPIs();
 
     if (!this.isTokenStored()) {
 
@@ -43,6 +48,15 @@ class App extends Component {
       this.setState({ signedIn: true });
 
     }
+
+  }
+
+  /**
+   * This method starts APIs that need to be reactive, so that we don't have a cold start
+   */
+  async preStartAPIs() {
+
+    await new ExpCatAPI().smoke();
 
   }
 
