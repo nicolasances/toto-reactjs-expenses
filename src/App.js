@@ -56,6 +56,8 @@ class App extends Component {
    */
   async preStartAPIs() {
 
+    console.log("Pre-starting APIs");
+
     await new ExpCatAPI().smoke();
 
   }
