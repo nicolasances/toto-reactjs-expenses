@@ -46,7 +46,10 @@ class TotoIconButton extends Component {
           if (this.props.onPress) this.props.onPress();
 
           // If there's a navigation involved:
-          if (this.props.navigateTo) this.props.history.push(this.props.navigateTo);
+          console.log(this.props.navigationParams);
+          if (this.props.navigateTo) {
+            this.props.history.push(this.props.navigateTo, this.props.navigationParams);
+          }
 
         })
       }, 20);

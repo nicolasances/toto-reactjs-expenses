@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import moment from 'moment-timezone';
 
 import MonthSpendingBubble from "../comp/MonthSpendingBubble";
 import TitleBar from '../comp/TitleBar';
@@ -35,18 +36,18 @@ export default class HomeScreen extends Component {
 
         return (
             <div className="screen">
-                <TitleBar title="Payments"/>
+                <TitleBar title="Payments" />
                 <div className="home-screen-h1">
-                    <div style={{flex: 1}}><LastDaysSpendingGraph /></div>
-                    <div style={{flex: 0.5, alignItems: "center"}}><MonthSpendingBubble /></div>
+                    <div style={{ flex: 1 }}><LastDaysSpendingGraph /></div>
+                    <div style={{ flex: 0.5, alignItems: "center" }}><MonthSpendingBubble /></div>
                 </div>
 
                 <div className="home-screen-h2">
                     <div className="button-container"> <TotoIconButton image={(<SettingsSVG className="icon" />)} navigateTo="/settings" /></div>
                     <div className="button-container"> <TotoIconButton image={(<AddSVG className="icon" />)} navigateTo="/newExpense" /></div>
-                    <div className="button-container"> <TotoIconButton image={(<ListSVG className="icon" />)} navigateTo="/expenses" /></div>
+                    <div className="button-container"> <TotoIconButton image={(<ListSVG className="icon" />)} navigateTo="/expenses" navigationParams={{ selectedMonth: moment().format("YYYYMM") }} /></div>
                 </div>
-                
+
                 <div className="home-graph-container">
                     <PastMonthsGraph months={9} />
                 </div>

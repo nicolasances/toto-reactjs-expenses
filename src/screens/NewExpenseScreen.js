@@ -30,9 +30,13 @@ class NewExpenseScreen extends Component {
 
     this.user = cookies.get('user');
 
+    // Check if there's a selected month
+    let date = moment().format('YYYYMMDD')
+    if (this.props.location && this.props.location.state && this.props.location.state.selectedMonth) date = this.props.location.state.selectedMonth + "01"
+
     this.state = {
       currency: 'DKK',
-      date: moment().format('YYYYMMDD'),
+      date: date,
       category: 'VARIE',
     }
 
@@ -185,7 +189,7 @@ class NewExpenseScreen extends Component {
 
         <div className="line1">
           <div className="dateContainer">
-            <DateSelector initialValue={moment()} onDateChange={this.setDate} />
+            <DateSelector initialValue={moment(this.state.date, "YYYYMMDD")} onDateChange={this.setDate} />
           </div>
           <div className="amountContainer">
             <AmountSelector initialValue={0} onAmountChange={this.setAmount} />

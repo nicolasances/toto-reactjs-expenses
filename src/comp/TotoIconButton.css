@@ -14,7 +14,7 @@
 .toto-icon-button.disabled {opacity: 0.5;}
 .toto-icon-button.no-border {border: none;}
 
-.toto-icon-button .icon, .toto-icon-button .icon svg {
+.toto-icon-button .icon, .toto-icon-button .icon svg, .toto-icon-button svg {
   fill: #ffeb3b;
 }
 
@@ -27,8 +27,8 @@
 .toto-icon-button.xl .icon, .toto-icon-button.xl .icon svg {width: 54px; height: 54px;}
 .toto-icon-button.l .icon, .toto-icon-button.l .icon svg {width: 32px; height: 32px;}
 .toto-icon-button.m .icon, .toto-icon-button.m .icon svg {width: 20px; height: 20px;}
-.toto-icon-button.ms .icon, .toto-icon-button.ms .icon svg {width: 16px; height: 16px;}
-.toto-icon-button.s .icon, .toto-icon-button.s .icon svg {width: 12px; height: 12px;}
+.toto-icon-button.ms .icon, .toto-icon-button.ms .icon svg, .toto-icon-button.ms svg {width: 16px; height: 16px;}
+.toto-icon-button.s .icon, .toto-icon-button.s .icon svg, .toto-icon-button.s svg {width: 12px; height: 12px;}
 
 .toto-icon-button-container .label {
   margin-top: 9px;

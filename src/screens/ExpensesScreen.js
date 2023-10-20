@@ -48,12 +48,17 @@ class ExpensesScreen extends Component {
      * Note that the last used month is only cached for a short duration of time, to avoid annoying user experiences.
      * @returns moment object
      */
-    getLastSelectedMonth() {
+    getLastSelectedMonth(navigation) {
 
         let lastUsedMonth;
         let searchParams = this.props.location.search ? querystring.parse(this.props.location.search.substring(1)) : null;
 
-        if (lastUsedMonth) return moment(lastUsedMonth, 'YYYYMMDD');
+        console.log(this.props.location);
+
+        // Check the cookies: they override everything
+        if (cookies.get("expensesListYearMonth")) return moment(cookies.get("expensesListYearMonth") + "01", "YYYYMMDD");
+        // Otherwise, check the navigation state
+        else if (this.props.location && this.props.location.state && this.props.location.state.selectedMonth) return moment(this.props.location.state.selectedMonth + '01', "YYYYMMDD");
         // Otherwise, check if there's a query param in the URL
         else if (searchParams && searchParams.yearMonth) return moment (searchParams.yearMonth + '01', 'YYYYMMDD');
         // Otherwise, current month
@@ -67,9 +72,19 @@ class ExpensesScreen extends Component {
      */
     updateLastSelectedMonth(yearMonth) {
 
-        // cookies.set('expensesListYearMonth', yearMonth.format('YYYYMMDD'), {
-        //     expires: moment().add(1, 'minutes').toDate()
-        // })
+        cookies.set('expensesListYearMonth', yearMonth.format('YYYYMMDD'), {
+            expires: moment().add(5, 'minutes').toDate()
+        })
+    }
+
+    /**
+     * Clear the expensesListYearMonth cookie
+     * This is needed to make sure that when coming from the dashboard, cookies used when navigating months are not overriding everything. 
+     * This is to avoid the behaviour of the user entering this Screen from the Home Screen and finding itself on a weird month, just because last time it was in the expenses list 
+     * it was scrolling through months. Entering from the HomeScreen always has to set you on the current month
+     */
+    clearCookies() {
+        cookies.remove("expensesListYearMonth")
     }
 
     loadExpenses() {
@@ -177,7 +192,7 @@ class ExpensesScreen extends Component {
     render() {
         return (
             <div className="screen expenses-screen">
-                <TitleBar title="Payments list" back={true} />
+                <TitleBar title="Payments list" back={true} onBack={this.clearCookies} newExpenseEnabled={true} selectedMonth={this.state.selectedMonth.format("YYYYMM")} />
                 <div className="month-navigator-container">
                     <ScrollPicker
                         tile={<YearMonthTile />}
