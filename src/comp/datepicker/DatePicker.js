@@ -13,10 +13,12 @@ export default class DatePicker extends Component {
     constructor(props) {
         super(props);
 
+        const initialValue = this.props.initialValue ?? moment() 
+
         this.state = {
-            date: moment(),
-            year: moment().format('YYYY'),
-            month: moment().format('MM')
+            date: initialValue,
+            year: initialValue.format('YYYY'),
+            month: initialValue.format('MM')
         }
 
         this.onChangeYear = this.onChangeYear.bind(this);
@@ -67,7 +69,7 @@ export default class DatePicker extends Component {
                     <div>
                         <ScrollPicker
                             tile={<YearTile selectedFontSize={14} unselectedFontSize={10} />}
-                            defaultValue={moment()}
+                            defaultValue={this.state.date}
                             previousValue={(currentValue) => currentValue.clone().subtract(1, 'years')}
                             nextValue={(currentValue) => currentValue.clone().add(1, 'years')}
                             onSelectionChange={this.onChangeYear}
@@ -78,7 +80,7 @@ export default class DatePicker extends Component {
                     <div style={{ marginBottom: 12, marginTop: 12 }}>
                         <ScrollPicker
                             tile={<MonthTile selectedFontSize={16} unselectedFontSize={12} />}
-                            defaultValue={moment()}
+                            defaultValue={this.state.date}
                             previousValue={(currentValue) => currentValue.clone().subtract(1, 'months')}
                             nextValue={(currentValue) => currentValue.clone().add(1, 'months')}
                             onSelectionChange={this.onChangeMonth}
@@ -87,7 +89,7 @@ export default class DatePicker extends Component {
                             backgroundColor="#007c91"
                         />
                     </div>
-                    <DayPicker year={this.state.year} month={this.state.month} defaultValue={moment()} onDateSelected={this.onChangeDate} />
+                    <DayPicker year={this.state.year} month={this.state.month} defaultValue={this.state.date} onDateSelected={this.onChangeDate} />
                 </div>
                 <div className="footer">
                     <div style={{ marginLeft: 6, marginRight: 6 }}><TotoIconButton image={<CloseSVG className="icon" />} onPress={this.cancel} /></div>

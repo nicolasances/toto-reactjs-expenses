@@ -76,6 +76,7 @@ export default class DateSelector extends Component {
                 >
 
                     <DatePicker
+                        initialValue={value}
                         onCancel={() => { this.setState({ openHelpPopup: false }) }}
                         onConfirm={this.onDateSelected}
                     />
