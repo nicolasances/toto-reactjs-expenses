@@ -4,6 +4,8 @@ export const APIS = {
   expcat: process.env.REACT_APP_EXPCAT_API_ENDPOINT
 }
 
+export const APP_VERSION = "1.5.0"
+
 
 export const EVENTS = {
   userInfoChanged: 'userInfoChanged', // User info received from Google
