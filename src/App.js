@@ -100,6 +100,8 @@ class App extends Component {
 
       console.log("Google API loaded!");
 
+      console.log("Initializing Google with Client ID " + googleClientID);
+
       window.google.accounts.id.initialize({
         client_id: googleClientID,
         auto_select: true,
@@ -109,7 +111,8 @@ class App extends Component {
 
           if (auth.credential) {
 
-            console.log("The user is signed in!");
+            console.log("Google Sign-in Successfull!");
+            console.log(auth.credential);
 
             this.getTotoToken(auth.credential).then((totoToken) => {
 

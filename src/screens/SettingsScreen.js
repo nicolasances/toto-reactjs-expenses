@@ -4,6 +4,7 @@ import { withRouter } from 'react-router-dom';
 import TitleBar from '../comp/TitleBar';
 import { ReactComponent as TickSVG } from '../img/tick.svg';
 import TotoIconButton from '../comp/TotoIconButton';
+import { APP_VERSION } from '../Config';
 
 import './SettingsScreen.css';
 import CurrencySwitcher from '../comp/CurrencySwitcher';
@@ -40,12 +41,12 @@ class SettingsScreen extends Component {
             <div className="screen settings-screen">
                 <TitleBar title="App Settings" back={true} />
 
-                <div className="setting-container">
-                    <div className="label">Default currency</div>
-                    <div className="currency-container">
-                        <CurrencySwitcher onCurrencyChange={(c) => {this.setState({currency: c})}} />
-                    </div>
-                </div>
+                <Setting label="Displayed Currency">
+                    <CurrencySwitcher onCurrencyChange={(c) => { this.setState({ currency: c }) }} />
+                </Setting>
+                <Setting label="App Version">
+                    <Text>{APP_VERSION}</Text>
+                </Setting>
 
                 <div style={{ display: 'flex', flex: 1 }}></div>
 
@@ -57,3 +58,22 @@ class SettingsScreen extends Component {
     }
 }
 export default withRouter(SettingsScreen);
+
+function Setting(props) {
+
+    return (
+        <div className="setting-container">
+            <div className="label">{props.label}</div>
+            <div className="currency-container">
+                {props.children}
+            </div>
+        </div>
+    )
+
+}
+
+function Text(props) {
+    return (
+        <div className="setting-text">{props.children}</div>
+    )
+}

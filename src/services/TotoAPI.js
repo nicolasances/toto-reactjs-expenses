@@ -25,12 +25,14 @@ export default class TotoAPI {
     if (options == null) options = { method: 'GET', headers: {} };
     if (options.headers == null) options.headers = {};
 
+    let idToken = cookies.get('user') ? cookies.get('user').idToken : null
+
     // Adding standard headers
     if (!noHeaderOverride) {
       options.headers['Accept'] = 'application/json';
       options.headers['x-correlation-id'] = newCid();
       options.headers['x-client'] = "totoMoneyWeb";
-      options.headers['Authorization'] = 'Bearer ' + cookies.get('user').idToken;
+      options.headers['Authorization'] = 'Bearer ' + idToken;
       options.headers['auth-provider'] = "toto";
     }
 

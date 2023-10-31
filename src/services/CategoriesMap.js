@@ -11,6 +11,8 @@ import {ReactComponent as USCITE} from '../img/cat/USCITE.svg';
 import {ReactComponent as VARIE} from '../img/cat/VARIE.svg';
 import {ReactComponent as VIAGGI} from '../img/cat/VIAGGI.svg';
 import {ReactComponent as XMAS} from '../img/cat/XMAS.svg';
+import {ReactComponent as CHILD} from '../img/cat/CHILD.svg';
+import {ReactComponent as PET} from '../img/cat/PET.svg';
 
 
 var categoriesMap = new Map([
@@ -26,7 +28,9 @@ var categoriesMap = new Map([
   ['USCITE', {image: (<USCITE/>), label: 'Night out'}],
   ['VARIE', {image: (<VARIE/>), label: 'Other'}],
   ['VIAGGI', {image: (<VIAGGI/>), label: 'Trips'}],
-  ['XMAS', {image:(< XMAS/>), label: 'Presents'}]
+  ['XMAS', {image:(< XMAS/>), label: 'Presents'}], 
+  ['CHILD', {image:(< CHILD/>), label: 'Noah'}], 
+  ['PET', {image:(< PET/>), label: 'Dog'}]
 ])
 
 export default categoriesMap;
