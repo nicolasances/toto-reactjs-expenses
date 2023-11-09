@@ -1,0 +1,27 @@
+.new-event-screen {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    justify-content: flex-start;
+    height: 100vh;
+}
+
+.new-event-screen .name-container {
+    margin: 48px 48px;
+}
+
+.new-event-screen .buttons-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    padding: 24px 0;
+}
+
+.new-event-screen .expenses-list-widget {
+    color: rgba(0, 0, 0, 0.7);
+    margin-top: 12px;
+    display: flex;
+    flex-direction: row;
+    flex: 1 1;
+    overflow-y: scroll;
+}

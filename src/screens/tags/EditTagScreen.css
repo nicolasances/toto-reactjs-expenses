@@ -1,0 +1,12 @@
+.edit-tag-screen .labeled-value-container {
+    display: flex;
+    justify-content: center;
+}
+
+.edit-tag-screen .buttons-container {
+    margin-bottom: 24px;
+}
+
+.edit-tag-screen .spacer {
+    margin: 12px 0;
+}

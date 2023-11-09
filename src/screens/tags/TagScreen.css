@@ -1,0 +1,12 @@
+
+.tag-screen {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    justify-content: flex-start;
+    height: 100vh;
+}
+
+.tag-screen .list-container {
+    margin-top: 24px;
+}

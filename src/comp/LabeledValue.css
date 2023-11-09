@@ -1,0 +1,16 @@
+
+.labeled-value {
+    display: flex;
+    flex-direction: column;
+}
+.labeled-value.center {
+    text-align: center;
+}
+
+.labeled-value .label {
+    font-size: 10px;
+    text-transform: uppercase;
+}
+.labeled-value .value {
+    font-size: 24px;
+}

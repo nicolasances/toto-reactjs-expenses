@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import TitleBar from '../comp/TitleBar';
-import MonthNavigator from '../comp/MonthNavigator';
 import Cookies from 'universal-cookie';
 import TotoList from '../comp/TotoList';
 import categoriesMap from '../services/CategoriesMap';

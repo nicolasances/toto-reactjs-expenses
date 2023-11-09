@@ -14,7 +14,8 @@ import './TotoList.css';
  *                          { avatar  :     {
  *                                            type :      the type of avatar: 'image', 'text', 'number', 'select' (selectable radio button)
  *                                            value:      the value to display in the avatar. Based on the type, can be an image, text, etc.
- *                                            size :      the size of the avatar. Can be 's', 'ms', 'm', 'l', 'xl'
+ *                                            size :      the size of the avatar. Can be 's', 'ms', 'm', 'l', 'xl', 
+ *                                            selected:   default false, pass true to show as a selected row
  *                                          },
  *                            date  :       a date, if any, to display. It's an {} in the following form: {
  *                                            yearMonth : a date in a yearMonth format
@@ -130,7 +131,7 @@ class Item extends Component {
       }
       // Image
       else if (data.avatar.type === 'image') {
-        avatar = (<TotoListAvatar image={data.avatar.value} size={avatarSize} onPress={this.onItemAvatarClick} />)
+        avatar = (<TotoListAvatar image={data.avatar.value} size={avatarSize} onPress={this.onItemAvatarClick} selected={data.avatar.selected} />)
       }
       // Select
       else if (data.avatar.type === 'select') {
