@@ -1,6 +1,7 @@
 import { useHistory } from 'react-router-dom/cjs/react-router-dom.min'
 import TouchableOpacity from '../TouchableOpacity'
 import './Tag.css'
+import CurrencyUtil from '../../util/CurrencyUtil'
 
 /**
  * Shows a tag component
@@ -18,11 +19,11 @@ export default function Tag(props) {
 
     const tag = props.tag
 
-    const openTagDetail = () =>  {
+    const openTagDetail = () => {
         history.push("/editTag", { tag: tag, currency: props.currency })
     }
 
-    if (!tag) return (<LoadingTag/>)
+    if (!tag) return (<LoadingTag />)
 
     return (
         <TouchableOpacity className="tag-box" onPress={openTagDetail}>
@@ -30,7 +31,12 @@ export default function Tag(props) {
                 {tag.name}
             </div>
             <div className="tag-amount">
-                {tag.localCurrencyAmount && tag.localCurrencyAmount.toLocaleString("it", { style: "currency", currency: props.currency, maximumFractionDigits: 2 })}
+                {tag.localCurrencyAmount &&
+                    <div>
+                        <span className="curr">{new CurrencyUtil().label(props.currency)}</span >
+                        <span className="amt">{tag.localCurrencyAmount.toLocaleString("it", { maximumFractionDigits: 2 })}</span>
+                    </div>
+                }
                 {!tag.localCurrencyAmount && "No data"}
             </div>
         </TouchableOpacity>

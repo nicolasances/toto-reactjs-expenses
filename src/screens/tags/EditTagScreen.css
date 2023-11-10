@@ -4,9 +4,20 @@
 }
 
 .edit-tag-screen .buttons-container {
-    margin-bottom: 24px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
 }
 
 .edit-tag-screen .spacer {
     margin: 12px 0;
+}
+.edit-tag-screen .hspace {
+    margin: 0 6px;
+}
+
+.edit-tag-screen .expenses-container {
+    display: flex;
+    flex: 1;
+    overflow: hidden;
 }

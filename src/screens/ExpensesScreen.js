@@ -52,8 +52,6 @@ class ExpensesScreen extends Component {
         let lastUsedMonth;
         let searchParams = this.props.location.search ? querystring.parse(this.props.location.search.substring(1)) : null;
 
-        console.log(this.props.location);
-
         // Check the cookies: they override everything
         if (cookies.get("expensesListYearMonth")) return moment(cookies.get("expensesListYearMonth") + "01", "YYYYMMDD");
         // Otherwise, check the navigation state

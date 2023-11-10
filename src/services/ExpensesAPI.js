@@ -260,6 +260,28 @@ export default class ExpensesAPI {
   }
 
   /**
+   * Retrieves the tag
+   */
+  async getTag(tagId, targetCurrency) {
+
+    const response = await new TotoAPI().fetch('expensesV2', `/tags/${tagId}?targetCurrency=${targetCurrency}`);
+
+    return await response.json();
+
+  }
+
+  /**
+   * Retrieves the expenses with the specified tag
+   */
+  async getTagExpenses(tagId) {
+
+    const response = await new TotoAPI().fetch('expensesV2', `/tags/${tagId}/expenses`);
+
+    return await response.json();
+
+  }
+
+  /**
    * Tags the expense
    * @param {string} expenseId id of the expense being tagged
    * @param {string} tagId tqg to add to the expense

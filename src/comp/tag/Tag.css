@@ -1,16 +1,16 @@
 .tag-box {
-    border: 1px solid var(--color-dark-primary);
-    /* box-shadow: 0px 0px 15px 0px rgba(0, 0, 0, 0.25); */
-    margin: 3px;
+    box-shadow: 2px 2px 3px 0px rgba(0, 0, 0, 0.25);
+    margin: 6px;
     display: flex;
-    flex: 1;
+    flex: 1 1;
     flex-direction: column;
     padding: 12px;
     border-radius: 5px;
     font-size: 12px;
     cursor: pointer;
-    border-top: 3px solid var(--color-dark-primary);
+    background: linear-gradient(90deg, #187a9f 0%, #1e80a6 100%);
 }
+
 .tag-box.loading {
     opacity: 0.5;
     background: linear-gradient(-45deg, var(--color-dark-primary), var(--color-primary));
@@ -29,6 +29,11 @@
     font-weight: bold;
     margin-top: 6px;
 }
+.tag-box .tag-amount .curr {
+    font-size: 11px;
+    font-weight: normal;
+}
+
 .tag-box.loading .tag-amount {
     min-height: 14px;
     background-color: var(--color-dark-primary);
