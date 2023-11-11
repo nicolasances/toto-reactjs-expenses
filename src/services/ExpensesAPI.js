@@ -301,5 +301,22 @@ export default class ExpensesAPI {
 
   }
 
+  /**
+   * Untags the expense
+   * @param {string} expenseId id of the expense being tagged
+   * @param {string} tagId tqg to add to the expense
+   */
+  async untagExpense(expenseId, tagId) {
+
+    // Post the data
+    return new TotoAPI().fetch('expensesV2', `/expenses/${expenseId}/tags/${tagId}`, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+    }).then((response => response.json()));
+
+  }
+
 
 }

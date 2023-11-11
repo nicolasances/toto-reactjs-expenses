@@ -74,9 +74,10 @@ export default function ExpensesPicker(props) {
      * Attaches the expense to the tag 
      * @param {object} expense the expense to attach to the tag
      */
-    const selectExpense = async (expense) => {
+    const toggleExpenseSelection = async (expense) => {
 
-        await new ExpensesAPI().tagExpense(expense.id, props.tagId);
+        if (expense.tags.includes(props.tagId)) await new ExpensesAPI().untagExpense(expense.id, props.tagId);
+        else await new ExpensesAPI().tagExpense(expense.id, props.tagId);
 
         loadExpenses()
     }
@@ -89,6 +90,10 @@ export default function ExpensesPicker(props) {
         history.goBack()
     }
 
+    const save = () => {
+        history.goBack();
+    }
+
     // Reload the expenses when the month changes
     useEffect(loadExpenses, [selectedMonth])
 
@@ -96,7 +101,7 @@ export default function ExpensesPicker(props) {
         <div className="tag-expenses-picker">
             <TitleBar
                 title="Add payments to tag"
-                rightButton={<TotoIconButton image={<TickSVG />} size="ms" />}
+                rightButton={<TotoIconButton image={<TickSVG />} size="ms" onPress={save} />}
                 back={props.noDelete}
                 leftButton={props.noDelete ? null : <TotoIconButton image={<TrashSVG />} size="ms" onPress={cancel} />}
             />
@@ -115,7 +120,8 @@ export default function ExpensesPicker(props) {
                 <TotoList
                     data={expenses}
                     dataExtractor={dataExtractor}
-                    onPress={selectExpense}
+                    onPress={toggleExpenseSelection}
+                    onAvatarClick={toggleExpenseSelection}
                 />
             </div>
 

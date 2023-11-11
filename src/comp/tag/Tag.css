@@ -1,5 +1,5 @@
 .tag-box {
-    box-shadow: 2px 2px 3px 0px rgba(0, 0, 0, 0.25);
+    box-shadow: 1px 1px 7px 0px rgba(0, 0, 0, 0.25);
     margin: 6px;
     display: flex;
     flex: 1 1;
@@ -8,7 +8,8 @@
     border-radius: 5px;
     font-size: 12px;
     cursor: pointer;
-    background: linear-gradient(90deg, #187a9f 0%, #1e80a6 100%);
+    /* background: linear-gradient(90deg, #187a9f 0%, #1e80a6 100%); */
+    background-color: #00d8f2;
 }
 
 .tag-box.loading {
@@ -20,17 +21,54 @@
 }
 
 .tag-box .tag-header {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
     white-space: nowrap;
+}
+.tag-box .tag-header .tag-name {
+    display: flex;
+    flex: 1;
+}
+.tag-box .tag-header .exp-count {
+    margin-left: 12px;
+    /* border: 1px solid var(--color-dark-primary); */
+    background-color:var(--color-background);
+    color: white;
+    border-radius: 50%;
+    font-size: 8px;
+    padding: 2px;
+    min-width: 10px;
+    min-height: 10px;
+    text-align: center;
+}
+
+.tag-box .tag-dates {
+    display: flex;
+    flex-direction: row;
+    font-size: 7px;
+    text-transform: uppercase;
+    opacity: 0.7;
+    margin-top: 3px;
+}
+.tag-box .tag-dates .from {
+    margin-right: 3px;
+}
+.tag-box .tag-dates .to {
+    margin-left: 3px;
 }
 
 .tag-box .tag-amount {
     white-space: nowrap;
     font-size: 14px;
     font-weight: bold;
-    margin-top: 6px;
+    margin-top: 12px;
 }
 .tag-box .tag-amount .curr {
     font-size: 11px;
+    font-weight: normal;
+}
+.tag-box .tag-amount .amt.no-value {
     font-weight: normal;
 }
 
