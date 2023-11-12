@@ -76,8 +76,11 @@ export default function ExpensesPicker(props) {
      */
     const toggleExpenseSelection = async (expense) => {
 
-        if (expense.tags.includes(props.tagId)) await new ExpensesAPI().untagExpense(expense.id, props.tagId);
-        else await new ExpensesAPI().tagExpense(expense.id, props.tagId);
+        if (!expense.tags) await new ExpensesAPI().tagExpense(expense.id, props.tagId);
+        else {
+            if (expense.tags.includes(props.tagId)) await new ExpensesAPI().untagExpense(expense.id, props.tagId);
+            else await new ExpensesAPI().tagExpense(expense.id, props.tagId);
+        }
 
         loadExpenses()
     }
