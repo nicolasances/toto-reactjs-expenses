@@ -5,7 +5,7 @@ export const APIS = {
   expcat: process.env.REACT_APP_EXPCAT_API_ENDPOINT
 }
 
-export const APP_VERSION = "1.5.0"
+export const APP_VERSION = "1.6.0"
 
 
 export const EVENTS = {
