@@ -37,16 +37,18 @@ export default function Tag(props) {
     return (
         <TouchableOpacity className="tag-box" onPress={openTagDetail}>
             <div className="tag-header">
-                <div className="tag-name">{tag.name}</div>
+                <div className="tag-core-info">
+                    <div className="tag-name">{tag.name}</div>
+                    {tag.minDate && tag.maxDate &&
+                        <div className="tag-dates">
+                            <div className="from">{formatDate(tag.minDate)}</div>
+                            <div className="">•</div>
+                            <div className="to">{formatDate(tag.maxDate)}</div>
+                        </div>
+                    }
+                </div>
                 <div className="exp-count">{tag.numExpenses}</div>
             </div>
-            {tag.minDate && tag.maxDate &&
-                <div className="tag-dates">
-                    <div className="from">{formatDate(tag.minDate)}</div>
-                    <div className="">•</div>
-                    <div className="to">{formatDate(tag.maxDate)}</div>
-                </div>
-            }
             <div className="vfiller"></div>
             <div className="tag-amount">
                 {tag.localCurrencyAmount &&

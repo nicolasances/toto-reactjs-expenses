@@ -3,6 +3,7 @@ import Tag from "./Tag";
 import './TagsList.css'
 import ExpensesAPI from "../../services/ExpensesAPI";
 import Cookies from "universal-cookie";
+import {ReactComponent as TagSVG} from '../../img/tag.svg'
 
 const cookies = new Cookies()
 
@@ -34,8 +35,6 @@ export default function TagsList(props) {
 
         setTags(data.tags)
 
-        console.log(data);
-
     }
 
     useEffect(loadSettings, [])
@@ -43,10 +42,19 @@ export default function TagsList(props) {
     return (
         <div className="tags-list">
             
-            {!loading && tags && tags.map((tag) => <Tag key={`tag-${Math.random()}`} tag={tag} currency={settings.currency ? settings.currency : "EUR"}/>)}
+            {!loading && tags && tags.length > 0 && tags.map((tag) => <Tag key={`tag-${Math.random()}`} tag={tag} currency={settings.currency ? settings.currency : "EUR"}/>)}
+
+            {!loading && tags && tags.length == 0 && 
+                <div className="no-tag">
+                    <div className="image-container">
+                        <TagSVG />
+                    </div>
+                    <div className="text">You don't have any tags yet!</div>
+                </div>
+            }
             
             {loading &&
-                [1, 2].map(() => {
+                [1, 2, 3, 4, 5].map(() => {
                     return <Tag key={`tag-${Math.random()}`} />
                 })
             }

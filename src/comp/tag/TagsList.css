@@ -4,3 +4,21 @@
     flex-wrap: wrap;
     padding: 0 24px;
 }
+.tags-list .no-tag {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    align-items: center;
+}
+.tags-list .no-tag .image-container {
+    display: flex;
+    flex: 1;
+    width: 48px;
+    height: 48px;
+}
+.tags-list .no-tag .image-container svg {
+    fill: var(--color-dark-primary);
+}
+.tags-list .no-tag .text {
+    margin-top: 24px;
+}

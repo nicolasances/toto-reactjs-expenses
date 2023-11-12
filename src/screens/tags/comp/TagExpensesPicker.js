@@ -54,14 +54,14 @@ export default function ExpensesPicker(props) {
             return category ? categoriesMap.get(category).image : null
         }
 
-        const avatarImage = item.event == props.event ? <TickSVG /> : getCategoryAvatar(item.category);
+        const avatarImage = getCategoryAvatar(item.category);
 
         return {
             avatar: {
                 type: 'image',
                 value: avatarImage,
                 size: 'l',
-                selected: item.tags && item.tags.includes(props.tagId)
+                selected: item.tags && item.tags.includes(props.tagId) ? true : null
             },
             date: { date: item.date },
             title: item.description,
