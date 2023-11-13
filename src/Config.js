@@ -1,10 +1,11 @@
 export const APIS = {
   expenses: process.env.REACT_APP_EXPENSES_API_ENDPOINT, 
+  expensesV2: process.env.REACT_APP_EXPENSES_V2_API_ENDPOINT, 
   auth: process.env.REACT_APP_AUTH_API_ENDPOINT,
   expcat: process.env.REACT_APP_EXPCAT_API_ENDPOINT
 }
 
-export const APP_VERSION = "1.5.0"
+export const APP_VERSION = "1.6.1"
 
 
 export const EVENTS = {

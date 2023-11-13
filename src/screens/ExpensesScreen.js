@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import TitleBar from '../comp/TitleBar';
-import MonthNavigator from '../comp/MonthNavigator';
 import Cookies from 'universal-cookie';
 import TotoList from '../comp/TotoList';
 import categoriesMap from '../services/CategoriesMap';
@@ -52,8 +51,6 @@ class ExpensesScreen extends Component {
 
         let lastUsedMonth;
         let searchParams = this.props.location.search ? querystring.parse(this.props.location.search.substring(1)) : null;
-
-        console.log(this.props.location);
 
         // Check the cookies: they override everything
         if (cookies.get("expensesListYearMonth")) return moment(cookies.get("expensesListYearMonth") + "01", "YYYYMMDD");

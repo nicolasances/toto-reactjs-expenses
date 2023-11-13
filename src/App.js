@@ -13,6 +13,10 @@ import ExpensesScreen from './screens/ExpensesScreen';
 import NewExpenseScreen from './screens/NewExpenseScreen';
 import ExpenseDetailScreen from './screens/ExpenseDetailScreen';
 import SettingsScreen from './screens/SettingsScreen';
+import TagScreen from './screens/tags/TagScreen';
+import NewTagScreen from './screens/tags/NewTagScreen';
+import EditTagScreen from './screens/tags/EditTagScreen';
+import EditTagExpensesScreen from './screens/tags/EditTagExpensesScreen';
 
 const cookies = new Cookies();
 const googleClientID = process.env.REACT_APP_GOOGLE_CLIENT_ID;
@@ -192,6 +196,18 @@ class App extends Component {
             </Route>
             <Route exact path="/settings">
               <SettingsScreen />
+            </Route>
+            <Route exact path="/tag">
+              <TagScreen />
+            </Route>
+            <Route exact path="/newTag">
+              <NewTagScreen />
+            </Route>
+            <Route exact path="/editTag">
+              <EditTagScreen/>
+            </Route>
+            <Route exact path="/editTagExpenses">
+              <EditTagExpensesScreen/>
             </Route>
           </Switch>
         </Router>

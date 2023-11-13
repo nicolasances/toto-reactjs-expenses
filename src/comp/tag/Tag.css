@@ -1,0 +1,82 @@
+.tag-box {
+    box-shadow: 1px 1px 7px 0px rgba(0, 0, 0, 0.25);
+    margin: 6px;
+    display: flex;
+    flex: 1 1;
+    flex-direction: column;
+    padding: 12px;
+    border-radius: 5px;
+    font-size: 12px;
+    cursor: pointer;
+    /* background: linear-gradient(90deg, #187a9f 0%, #1e80a6 100%); */
+    background-color: #00d8f2;
+}
+
+.tag-box.loading {
+    opacity: 0.5;
+    background: linear-gradient(-45deg, var(--color-dark-primary), var(--color-primary));
+    background-size: 400% 400%;
+    animation: gradient 2s ease infinite;
+    max-width: 30%;
+}
+
+.tag-box .tag-header {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    white-space: nowrap;
+}
+.tag-box .tag-header .tag-core-info {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+}
+.tag-box .tag-header .exp-count {
+    margin-left: 12px;
+    /* border: 1px solid var(--color-dark-primary); */
+    background-color:var(--color-background);
+    color: white;
+    border-radius: 50%;
+    font-size: 8px;
+    padding: 2px;
+    min-width: 20px;
+    min-height: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.tag-box .tag-dates {
+    display: flex;
+    flex-direction: row;
+    font-size: 7px;
+    text-transform: uppercase;
+    opacity: 0.7;
+    margin-top: 3px;
+}
+.tag-box .tag-dates .from {
+    margin-right: 3px;
+}
+.tag-box .tag-dates .to {
+    margin-left: 3px;
+}
+
+.tag-box .tag-amount {
+    white-space: nowrap;
+    font-size: 14px;
+    font-weight: bold;
+    margin-top: 12px;
+}
+.tag-box .tag-amount .curr {
+    font-size: 11px;
+    font-weight: normal;
+}
+.tag-box .tag-amount .amt.no-value {
+    font-weight: normal;
+}
+
+.tag-box.loading .tag-amount {
+    min-height: 14px;
+    background-color: var(--color-dark-primary);
+    opacity: 0.7;
+}

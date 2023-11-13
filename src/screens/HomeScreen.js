@@ -8,6 +8,7 @@ import LastDaysSpendingGraph from '../comp/LastDaysSpendingGraph';
 import { ReactComponent as SettingsSVG } from '../img/settings.svg';
 import { ReactComponent as AddSVG } from '../img/plus.svg';
 import { ReactComponent as ListSVG } from '../img/list.svg';
+import { ReactComponent as TagSVG } from '../img/tag.svg';
 
 import './Screen.css';
 import './HomeScreen.css';
@@ -46,6 +47,7 @@ export default class HomeScreen extends Component {
                     <div className="button-container"> <TotoIconButton image={(<SettingsSVG className="icon" />)} navigateTo="/settings" /></div>
                     <div className="button-container"> <TotoIconButton image={(<AddSVG className="icon" />)} navigateTo="/newExpense" /></div>
                     <div className="button-container"> <TotoIconButton image={(<ListSVG className="icon" />)} navigateTo="/expenses" navigationParams={{ selectedMonth: moment().format("YYYYMM") }} /></div>
+                    <div className="button-container"> <TotoIconButton image={(<TagSVG className="icon" />)} navigateTo="/tag"  /></div>
                 </div>
 
                 <div className="home-graph-container">

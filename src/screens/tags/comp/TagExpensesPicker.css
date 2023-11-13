@@ -1,0 +1,15 @@
+.tag-expenses-picker {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    justify-content: flex-start;
+    height: 100vh;
+}
+.tag-expenses-picker .expenses-list-widget {
+    color: rgba(0, 0, 0, 0.7);
+    margin-top: 12px;
+    display: flex;
+    flex-direction: row;
+    flex: 1 1;
+    overflow-y: scroll;
+}

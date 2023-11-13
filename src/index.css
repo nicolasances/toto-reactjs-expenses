@@ -6,10 +6,18 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   background: #00acc1;
+  --color-background: #00acc1;
   --color-accent: #ffeb3b;
+  --color-dark-primary: #004e6c;
+  --color-text-light: #d0d0d0
 }
 
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
+}
+
+.vfiller {
+  display: flex;
+  flex: 1;
 }

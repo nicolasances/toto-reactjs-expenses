@@ -12,7 +12,7 @@ export default class ExpensesAPI {
   getAppSettings(userEmail) {
 
     return new TotoAPI().fetch('expenses', '/settings?user=' + userEmail)
-        .then((response) => response.json());
+      .then((response) => response.json());
 
   }
 
@@ -38,8 +38,8 @@ export default class ExpensesAPI {
    */
   getExpenses(userEmail, yearMonth) {
 
-    return new TotoAPI().fetch('expenses', '/expenses?yearMonth=' + yearMonth + '&sortDate=true&sortDesc=true&user=' + userEmail)
-        .then((response) => response.json());
+    return new TotoAPI().fetch('expensesV2', '/expenses?yearMonth=' + yearMonth + '&sortDate=true&sortDesc=true&user=' + userEmail)
+      .then((response) => response.json());
 
   }
 
@@ -75,7 +75,7 @@ export default class ExpensesAPI {
   deleteExpense(exId) {
 
     // Post the data
-    return new TotoAPI().fetch('expenses', '/expenses/' + exId, {method: 'DELETE'}).then((response => response.json()));
+    return new TotoAPI().fetch('expenses', '/expenses/' + exId, { method: 'DELETE' }).then((response => response.json()));
 
   }
 
@@ -106,7 +106,7 @@ export default class ExpensesAPI {
       headers: {
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify({consolidated: true})
+      body: JSON.stringify({ consolidated: true })
     }).then((response => response.json()));
 
   }
@@ -121,7 +121,7 @@ export default class ExpensesAPI {
     if (targetCurrency) query = '&targetCurrency=' + targetCurrency;
 
     return new TotoAPI().fetch('expenses', '/expenses/' + yearMonth + '/total?user=' + userEmail + query)
-        .then((response) => response.json());
+      .then((response) => response.json());
 
   }
 
@@ -134,7 +134,7 @@ export default class ExpensesAPI {
     let currencyFilter = targetCurrency ? '&targetCurrency=' + targetCurrency : '';
 
     return new TotoAPI().fetch('expenses', '/stats/expensesPerDay?user=' + userEmail + '&dateFrom=' + dateFrom + dateToFilter + currencyFilter)
-        .then((response) => response.json());
+      .then((response) => response.json());
 
   }
 
@@ -146,7 +146,7 @@ export default class ExpensesAPI {
     let targetCurrencyFilter = targetCurrency ? '&targetCurrency=' + targetCurrency : ''
 
     return new TotoAPI().fetch('expenses', '/stats/expensesPerMonth?user=' + userEmail + '&yearMonthGte=' + yearMonthGte + targetCurrencyFilter)
-        .then((response) => response.json());
+      .then((response) => response.json());
 
   }
 
@@ -158,7 +158,7 @@ export default class ExpensesAPI {
     let targetCurrencyFilter = targetCurrency ? '&targetCurrency=' + targetCurrency : ''
 
     return new TotoAPI().fetch('expenses', '/stats/expensesPerYear?user=' + userEmail + targetCurrencyFilter)
-        .then((response) => response.json());
+      .then((response) => response.json());
 
   }
 
@@ -167,11 +167,11 @@ export default class ExpensesAPI {
    */
   getTopSpendingCategoriesOfMonth(userEmail, yearMonth, maxCategories, targetCurrency) {
 
-    let maxCatFilter = maxCategories ? '&maxCategories=' + maxCategories :'';
+    let maxCatFilter = maxCategories ? '&maxCategories=' + maxCategories : '';
     let targetCurrencyFilter = targetCurrency ? '&targetCurrency=' + targetCurrency : ''
 
     return new TotoAPI().fetch('expenses', '/stats/topCategoriesOfMonth?user=' + userEmail + '&yearMonth=' + yearMonth + maxCatFilter + targetCurrencyFilter)
-        .then((response) => response.json());
+      .then((response) => response.json());
 
   }
 
@@ -183,7 +183,7 @@ export default class ExpensesAPI {
     let targetCurrencyFilter = targetCurrency ? '&targetCurrency=' + targetCurrency : ''
 
     return new TotoAPI().fetch('expenses', '/stats/topCategoriesPerMonth?user=' + userEmail + '&yearMonthGte=' + yearMonthGte + targetCurrencyFilter)
-        .then((response) => response.json());
+      .then((response) => response.json());
 
   }
 
@@ -193,7 +193,7 @@ export default class ExpensesAPI {
   getSettings(userEmail) {
 
     return new TotoAPI().fetch('expenses', '/settings?user=' + userEmail)
-        .then((response) => response.json());
+      .then((response) => response.json());
 
   }
 
@@ -209,6 +209,111 @@ export default class ExpensesAPI {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify(settings)
+    }).then((response => response.json()));
+
+  }
+
+  /**
+   * Creates a new tag
+   * @param {string} tagName the name of the tag (e.g. "Paternity Trip")
+   */
+  postTag(tagName) {
+
+    // Post the data
+    return new TotoAPI().fetch('expensesV2', '/tags', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        tagName: tagName,
+      })
+    }).then((response => response.json()));
+
+  }
+
+  /**
+   * Delets a tag
+   * @param {string} tagId the id of the tag
+   */
+  deleteTag(tagId) {
+
+    // Post the data
+    return new TotoAPI().fetch('expensesV2', `/tags/${tagId}`, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+    }).then((response => response.json()));
+
+  }
+
+  /**
+   * Retrieves the tags
+   */
+  async getTags(targetCurrency) {
+
+    const response = await new TotoAPI().fetch('expensesV2', `/tags?targetCurrency=${targetCurrency}`);
+
+    return await response.json();
+
+  }
+
+  /**
+   * Retrieves the tag
+   */
+  async getTag(tagId, targetCurrency) {
+
+    const response = await new TotoAPI().fetch('expensesV2', `/tags/${tagId}?targetCurrency=${targetCurrency}`);
+
+    return await response.json();
+
+  }
+
+  /**
+   * Retrieves the expenses with the specified tag
+   */
+  async getTagExpenses(tagId) {
+
+    const response = await new TotoAPI().fetch('expensesV2', `/tags/${tagId}/expenses`);
+
+    return await response.json();
+
+  }
+
+  /**
+   * Tags the expense
+   * @param {string} expenseId id of the expense being tagged
+   * @param {string} tagId tqg to add to the expense
+   */
+  async tagExpense(expenseId, tagId) {
+
+    // Post the data
+    return new TotoAPI().fetch('expensesV2', `/expenses/${expenseId}/tags`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        tagId: tagId,
+      })
+    }).then((response => response.json()));
+
+  }
+
+  /**
+   * Untags the expense
+   * @param {string} expenseId id of the expense being tagged
+   * @param {string} tagId tqg to add to the expense
+   */
+  async untagExpense(expenseId, tagId) {
+
+    // Post the data
+    return new TotoAPI().fetch('expensesV2', `/expenses/${expenseId}/tags/${tagId}`, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json'
+      },
     }).then((response => response.json()));
 
   }

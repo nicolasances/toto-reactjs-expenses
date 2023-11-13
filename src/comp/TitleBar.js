@@ -33,6 +33,7 @@ class TitleBar extends Component {
                 <BackSVG className="icon" onClick={this.navigateBack} />
             </div>
         )
+        else if (this.props.leftButton) leftButton = this.props.leftButton
 
         // Right button
         let rightButton = (
@@ -40,6 +41,10 @@ class TitleBar extends Component {
                 {this.props.newExpenseEnabled &&
                     <TotoIconButton image={<PlusSVG />} size="s" navigateTo="newExpense" navigationParams={{ selectedMonth: this.props.selectedMonth }} />
                 }
+                {this.props.newEnabled &&
+                    <TotoIconButton image={<PlusSVG />} size="ms" navigateTo={this.props.navigateTo} />
+                }
+                {this.props.rightButton}
             </div>
         )
 
