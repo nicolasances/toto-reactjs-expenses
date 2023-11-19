@@ -318,5 +318,16 @@ export default class ExpensesAPI {
 
   }
 
+  /**
+   * Retrieves the expenses with the specified tag
+   */
+  async getUnconsolidatedMonths(targetCurrency) {
+
+    const response = await new TotoAPI().fetch('expensesV2', `/insights/unconsolidated?targetCurrency=${targetCurrency}`);
+
+    return await response.json();
+
+  }
+
 
 }

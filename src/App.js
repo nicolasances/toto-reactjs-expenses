@@ -17,6 +17,8 @@ import TagScreen from './screens/tags/TagScreen';
 import NewTagScreen from './screens/tags/NewTagScreen';
 import EditTagScreen from './screens/tags/EditTagScreen';
 import EditTagExpensesScreen from './screens/tags/EditTagExpensesScreen';
+import InsightsScreen from './screens/insights/InsightsScreen';
+import ConsolidationInsightsScreen from './screens/insights/consolidation/ConsolidationInsightsScreen';
 
 const cookies = new Cookies();
 const googleClientID = process.env.REACT_APP_GOOGLE_CLIENT_ID;
@@ -208,6 +210,12 @@ class App extends Component {
             </Route>
             <Route exact path="/editTagExpenses">
               <EditTagExpensesScreen/>
+            </Route>
+            <Route exact path="/insights">
+              <InsightsScreen/>
+            </Route>
+            <Route exact path="/insights/consolidation">
+              <ConsolidationInsightsScreen/>
             </Route>
           </Switch>
         </Router>
