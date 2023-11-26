@@ -34,4 +34,19 @@ export default class AuthAPI {
 
   }
 
+  verifyToken(totoToken) {
+
+    return new TotoAPI().fetch('auth', `/verify`, {
+      method: "POST",
+      headers: {
+        'Accept': 'application/json',
+        'x-correlation-id': newCid(),
+        'x-client': "totoMoneyWeb",
+        'Authorization': `Bearer ${totoToken}`
+      }
+    }, true).then((response) => response.json());
+
+
+  }
+
 }
