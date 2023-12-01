@@ -17,6 +17,8 @@ import TagScreen from './screens/tags/TagScreen';
 import NewTagScreen from './screens/tags/NewTagScreen';
 import EditTagScreen from './screens/tags/EditTagScreen';
 import EditTagExpensesScreen from './screens/tags/EditTagExpensesScreen';
+import InsightsScreen from './screens/insights/InsightsScreen';
+import ConsolidationInsightsScreen from './screens/insights/consolidation/ConsolidationInsightsScreen';
 
 const cookies = new Cookies();
 const googleClientID = process.env.REACT_APP_GOOGLE_CLIENT_ID;
@@ -26,7 +28,8 @@ class App extends Component {
     super(props);
 
     this.state = {
-      signedIn: false
+      signedIn: false,
+      loading: true
     };
 
     this.googleSignIn = this.googleSignIn.bind(this);
@@ -37,19 +40,40 @@ class App extends Component {
 
   }
 
-  componentDidMount() {
+  async componentDidMount() {
 
     // Pre-start APIs
     this.preStartAPIs();
 
-    if (!this.isTokenStored()) {
+    const user = this.isTokenStored()
+    let loginNeeded = false;
+
+    if (!user) {
+      console.log("No user or Id Token found. Login needed.");
+      loginNeeded = true;
+    }
+    else {
+      console.log("Verifying Id Token");
+
+      // Verify if the token is expired
+      const verificationResult = await new AuthAPI().verifyToken(user.idToken)
+
+      if (verificationResult.name == "TokenExpiredError") {
+        console.log("JWT Token Expired");
+        loginNeeded = true
+      }
+    }
+
+    if (loginNeeded) {
+
+      this.setState({ loading: false })
 
       this.googleSignIn();
 
     }
     else {
 
-      this.setState({ signedIn: true });
+      this.setState({ signedIn: true, loading: false });
 
     }
 
@@ -72,10 +96,12 @@ class App extends Component {
     const user = window.localStorage.getItem("user");
 
     console.log(`User found on local storage? [${user != null}]`);
-    
+
     if (user) {
       cookies.set('user', JSON.parse(user), { path: '/' });
       console.log(`User: ${user}`);
+
+      return JSON.parse(user);
     }
 
     return user;
@@ -165,6 +191,8 @@ class App extends Component {
   render() {
     let content;
 
+    if (this.state.loading) return (<div className="screen"></div>)
+
     if (this.state.signedIn) content = (
       <HomeScreen />
     );
@@ -204,10 +232,16 @@ class App extends Component {
               <NewTagScreen />
             </Route>
             <Route exact path="/editTag">
-              <EditTagScreen/>
+              <EditTagScreen />
             </Route>
             <Route exact path="/editTagExpenses">
-              <EditTagExpensesScreen/>
+              <EditTagExpensesScreen />
+            </Route>
+            <Route exact path="/insights">
+              <InsightsScreen />
+            </Route>
+            <Route exact path="/insights/consolidation">
+              <ConsolidationInsightsScreen />
             </Route>
           </Switch>
         </Router>

@@ -1,0 +1,49 @@
+
+.cons-insights-screen {
+    display: flex;
+    flex: 1;
+}
+
+.cons-insights-screen .unconsolidated-list {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    overflow-y: scroll;
+    margin-top: 24px;
+}
+
+.unconsolidated-month-bar-container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin: 3px 0;
+    cursor: pointer;
+}
+.unconsolidated-month-bar-container .unconsolidated-month-bar {
+    display: flex;
+    align-items: center;
+    background-color: var(--color-dark-primary);
+    border-top-right-radius: 22px;
+    border-bottom-right-radius: 22px;
+    color: white;
+    opacity: 0.8;
+    min-height: 32px;
+    min-width: 10vw;
+}
+.unconsolidated-amount {
+    display: flex;
+    align-items: flex-end;
+    flex: 1;
+    justify-content: flex-end;
+    font-size: 12px;
+    margin: 0 12px;
+}
+.unconsolidated-amount .currency {
+    font-size: 9px;
+    margin-right: 2px;
+    padding-bottom: 1px;
+}
+.unconsolidated-month-label {
+    padding: 6px 12px;
+    font-size: 12px;
+}
