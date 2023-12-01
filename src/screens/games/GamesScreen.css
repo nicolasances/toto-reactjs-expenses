@@ -1,0 +1,24 @@
+
+.games-screen {
+}
+.games-screen .games-container {
+    padding: 0 24px
+}
+.games-screen .game {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 90px;
+    height: 90px;
+    border: 2px solid var(--color-accent); 
+    border-radius: 5px;
+    /* color: var(--color-accent) */
+    font-size: 12px;
+    text-align: center;
+    cursor: pointer;
+}
+.games-screen .game .image-container svg {
+    width: 32px;
+    height: auto;
+}
