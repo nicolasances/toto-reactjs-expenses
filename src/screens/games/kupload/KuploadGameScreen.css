@@ -1,9 +1,14 @@
+.kupload-screen {
+    align-items: stretch;
+}
+
 .kupload-screen .game-body {
     display: flex;
     flex: 1;
     flex-direction: column;
     align-items: center;
     padding: 0 12px;
+    margin-top: 12px;
 }
 
 .kupload-screen .goal {
@@ -16,7 +21,11 @@
 
 .kupload-screen .goal .goal-date {
     font-size: 18px;
-    margin-top: 6px;
+    margin-top: 3px;
+}
+
+.kupload-screen .buttons-container {
+    margin-bottom: 24px;
 }
 
 /************************************************************************
@@ -48,6 +57,7 @@
 .kupload-screen .kud-upload-container.uploaded .kud-upload-border {
     border-style: solid;
 }
+
 .kupload-screen .kud-upload-container.uploading .kud-upload-border {
     border-style: dotted;
     border-color: var(--color-accent);
@@ -57,6 +67,7 @@
 .kupload-screen .kud-upload-container.uploading .kud-upload {
     animation: reversedBreathingAnimation 3s ease-in-out infinite;
 }
+
 .kupload-screen .kud-upload-container .kud-upload .upload-icon {
     background-color: var(--color-dark-primary);
     border-radius: 5px;
@@ -68,13 +79,21 @@
 }
 
 .kupload-screen .kud-upload-container.uploaded .kud-upload .upload-icon svg {
-    fill: var(--color-accent);
-    opacity: 0.9;
+    fill: white;
+    opacity: 0.8;
 }
+
 .kupload-screen .kud-upload-container .kud-upload .upload-icon svg {
     width: 64px;
     height: auto;
     fill: var(--color-background);
+}
+
+.kud-upload-area .upload-status {
+    font-size: 12px;
+    text-align: center;
+    margin-top: 12px;
+    opacity: 0.7;
 }
 
 @keyframes breathingAnimation {
@@ -89,13 +108,15 @@
     100% {
         transform: scale(1);
     }
-}@keyframes reversedBreathingAnimation {
+}
+
+@keyframes reversedBreathingAnimation {
     0% {
         transform: scale(1);
     }
 
     50% {
-        transform: scale(0.85);
+        transform: scale(0.7);
     }
 
     100% {
@@ -104,6 +125,63 @@
 }
 
 
+
+/************************************************************************
+ * Next game?
+ ************************************************************************/
+.kupload-screen .next {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.kupload-screen .next .congrats {
+    font-size: 16px;
+    text-transform: uppercase;
+}
+.kupload-screen .next .points {
+    font-size: 10px;
+    text-transform: uppercase;
+    margin-top: 3px;
+}
+.kupload-screen .next .question {
+    margin: 24px 0;
+}
+.kupload-screen .next .actions-box {
+    display: flex;
+}
+.kupload-screen .next .actions-box .toto-icon-button-container {
+    margin: 0px 12px;
+    cursor: pointer;
+}
+
+/************************************************************************
+ * Game Goal
+ ************************************************************************/
+ .game-goal {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 12px 24px;
+    text-align: center;
+ }
+.game-goal .goal-label {
+    display: flex;
+    align-items: flex-start;
+    font-size: 12px;
+    opacity: 0.8;
+    text-transform: uppercase;
+    margin-bottom: 3px;
+}
+.game-goal .goal-label svg {
+    width: 12px;
+    height: 12px;
+    fill: var(--color-dark-primary);
+    margin-right: 6px;
+}
+.game-goal .desc {
+    font-size: 10px;
+}
 
 /************************************************************************
  * Instructions

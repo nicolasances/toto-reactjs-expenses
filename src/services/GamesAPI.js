@@ -21,5 +21,11 @@ export default class GamesAPI {
 
   }
 
+  getKuploadGameStatus() {
+
+    return new TotoAPI().fetch('games', `/games/kupload`)
+      .then((response) => response.json());
+
+  }
 
 }
