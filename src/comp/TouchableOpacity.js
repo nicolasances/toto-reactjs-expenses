@@ -45,7 +45,7 @@ export default class TouchableOpacity extends Component {
     if (this.state.pressed) style += ' pressed';
 
     return (
-      <div className={style} onClick={this.handleClick}>
+      <div className={style} style={this.props.style} onClick={this.handleClick}>
         {this.props.children}
       </div>
     )

@@ -1,0 +1,51 @@
+
+.player-level-widget {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin: 24px;
+}
+
+.player-level-widget .icon-border {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+    border: 1px dotted var(--color-dark-primary);
+    width: 52px;
+    height: 52px;
+    margin-right: 24px;
+}
+
+.player-level-widget .icon {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+    width: 48px;
+    height: 48px;
+    background-color: var(--color-dark-primary);
+}
+
+.player-level-widget .icon svg {
+    width: 32px;
+    height: 32px;
+    fill: var(--color-accent);
+}
+
+.player-level-widget .text-container {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.player-level-widget .title {
+    font-size: 14px;
+    font-weight: bold;
+    color: white;
+    text-transform: uppercase;
+}
+.player-level-widget .desc {
+    font-size: 10px;
+    margin-top: 3px;
+}
