@@ -28,4 +28,14 @@ export default class GamesAPI {
 
   }
 
+  /**
+   * Retrieves the overview of all games and the player's level
+   * @returns the Games Overview
+   */
+  getGamesOverview() {
+
+    return new TotoAPI().fetch('games', `/games`).then((response) => response.json());
+
+  }
+
 }
