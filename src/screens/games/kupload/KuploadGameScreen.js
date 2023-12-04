@@ -188,7 +188,7 @@ export default function KuploadGameScreen(props) {
                     <div style={{ flex: 1 }}></div>
 
                     <div className="buttons-container">
-                        {uploadStatus == Status.notUploaded && <TotoIconButton image={<QuestionSVG />} size="ms" label="How" />}
+                        {/* {uploadStatus == Status.notUploaded && <TotoIconButton image={<QuestionSVG />} size="ms" label="How" />} */}
                     </div>
 
                 </div>
