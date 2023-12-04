@@ -7,6 +7,7 @@ import { useHistory } from 'react-router-dom/cjs/react-router-dom.min';
 import PlayerLevelWidget from './widgets/PlayerLevelWidget';
 import GamesAPI from '../../services/GamesAPI';
 import { useEffect, useState } from 'react';
+import PlayerProgressWidget from './widgets/PlayerProgressWidget';
 
 const COLORS = [
     {bck: "#FFCC70", color: "#22668D"}, 
@@ -36,7 +37,10 @@ export default function GamesScreen(props) {
 
             {overview != null &&
                 <div className="content">
+
                     <PlayerLevelWidget playerLevel={overview.playerLevel} />
+
+                    <PlayerProgressWidget progress={overview.playerLevel.progress} />
 
                     <div className="games-container">
                         <Game gamePage="kupload"  />
