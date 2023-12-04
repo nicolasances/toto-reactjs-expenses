@@ -21,7 +21,24 @@ export default class GamesAPI {
 
   }
 
-  getKuploadGameStatus() {
+  /**
+   * Signals that a KUD is missing and that the user won't be able to upload it
+   * @param {string} year the year
+   * @param {string} month the last month of the KUD
+   */
+  async signalMissingKud(year, month) {
+
+    return new TotoAPI().fetch('games', '/games/kuddoc/missing', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ year: year, month: month })
+    }).then((response) => response.json());
+
+  }
+
+  async getKuploadGameStatus() {
 
     return new TotoAPI().fetch('games', `/games/kupload`)
       .then((response) => response.json());
@@ -32,7 +49,7 @@ export default class GamesAPI {
    * Retrieves the overview of all games and the player's level
    * @returns the Games Overview
    */
-  getGamesOverview() {
+  async getGamesOverview() {
 
     return new TotoAPI().fetch('games', `/games`).then((response) => response.json());
 

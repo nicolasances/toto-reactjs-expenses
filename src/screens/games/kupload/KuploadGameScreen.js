@@ -5,7 +5,7 @@ import GamesAPI from "../../../services/GamesAPI"
 import { ReactComponent as UploadSVG } from '../../../img/upload-cloud.svg'
 import { ReactComponent as TickSVG } from '../../../img/tick.svg'
 import { ReactComponent as StopSVG } from '../../../img/stop.svg'
-import { ReactComponent as QuestionSVG } from '../../../img/question.svg'
+import { ReactComponent as ConfusedSVG } from '../../../img/confused.svg'
 import { ReactComponent as FlagSVG } from '../../../img/goal.svg'
 import TouchableOpacity from '../../../comp/TouchableOpacity'
 import { useEffect, useRef, useState } from 'react';
@@ -124,6 +124,20 @@ export default function KuploadGameScreen(props) {
 
     }
 
+    /**
+     * When the user cannot find the Kud for that month
+     * Move to the next available month, and tell the backend that this one is not available.
+     */
+    const onMissingKud = async () => {
+
+        // Signal that the KUD is missing
+        await new GamesAPI().signalMissingKud(kudDate.year, kudDate.month);
+
+        // Load the next game round
+        loadNextRound();
+
+    }
+
     const onUploadPressed = () => {
 
         // Only allow the upload when the doc is not being uploaded or already uploaded
@@ -172,6 +186,12 @@ export default function KuploadGameScreen(props) {
                         <input type="file" ref={fileInputRef} style={{ display: 'none' }} onChange={onFileChange} />
                         <KudUpload onPress={onUploadPressed} status={uploadStatus} />
                     </div>
+
+                    {uploadStatus == Status.notUploaded && 
+                            <div className="actions-box">
+                                <TotoIconButton image={<ConfusedSVG />} size="ms" label="It's missing" onPress={onMissingKud}/>
+                            </div>
+                    }
 
                     {uploadStatus == Status.uploaded &&
                         <div className="next">
