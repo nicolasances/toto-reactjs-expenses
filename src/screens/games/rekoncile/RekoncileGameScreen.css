@@ -1,0 +1,71 @@
+.rekoncile-screen {
+    align-items: stretch;
+}
+
+.rekoncile-screen .game-body {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    align-items: stretch;
+    padding: 0 12px;
+    margin-top: 12px;
+}
+
+.rekoncile-screen .goal {
+    text-align: center;
+    font-size: 12px;
+    margin-bottom: 24px;
+}
+
+.rekoncile-screen .buttons-container {
+    margin-bottom: 24px;
+}
+
+.rekoncile-screen .candidates-container {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    margin-top: 24px;
+}
+.rekoncile-screen .candidates-container .title {
+    display: flex;
+    flex: 0;
+    font-size: 12px;
+    margin-bottom: 24px;
+    text-align: center;
+    justify-content: center;
+}
+.rekoncile-screen .candidates-container .list-container {
+    display: flex;
+    flex: 1;
+}
+
+
+/************************************************************************
+ * Next game?
+ ************************************************************************/
+.rekoncile-screen .next {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.rekoncile-screen .next .congrats {
+    font-size: 16px;
+    text-transform: uppercase;
+}
+.rekoncile-screen .next .points {
+    font-size: 10px;
+    text-transform: uppercase;
+    margin-top: 3px;
+}
+.rekoncile-screen .next .question {
+    margin: 24px 0;
+}
+.rekoncile-screen .next .actions-box {
+    display: flex;
+}
+.rekoncile-screen .next .actions-box .toto-icon-button-container {
+    margin: 0px 12px;
+    cursor: pointer;
+}

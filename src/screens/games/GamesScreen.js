@@ -1,19 +1,21 @@
 import './GamesScreen.css'
-import TitleBar from "../../comp/TitleBar";
-
-import { ReactComponent as UploadSVG } from '../../img/upload.svg'
-import TouchableOpacity from '../../comp/TouchableOpacity';
-import { useHistory } from 'react-router-dom/cjs/react-router-dom.min';
-import PlayerLevelWidget from './widgets/PlayerLevelWidget';
-import GamesAPI from '../../services/GamesAPI';
 import { useEffect, useState } from 'react';
+import { useHistory } from 'react-router-dom/cjs/react-router-dom.min';
+
+import { ReactComponent as UploadSVG } from '../../img/games/games/kupload.svg'
+import { ReactComponent as RekoncileSVG } from '../../img/games/games/rekoncile.svg'
+
+import GamesAPI from '../../services/GamesAPI';
+import TitleBar from "../../comp/TitleBar";
+import TouchableOpacity from '../../comp/TouchableOpacity';
+import PlayerLevelWidget from './widgets/PlayerLevelWidget';
 import PlayerProgressWidget from './widgets/PlayerProgressWidget';
 
 const COLORS = [
-    {bck: "#FFCC70", color: "#22668D"}, 
-    {bck: "#FFFADD", color: "#22668D"}, 
-    {bck: "#8ECDDD", color :"#22668D"}, 
-    {bck: "#22668D", color: "#FFCC70"}
+    { bck: "#FFCC70", color: "#22668D" },
+    { bck: "#FFFADD", color: "#22668D" },
+    { bck: "#8ECDDD", color: "#22668D" },
+    { bck: "#22668D", color: "#FFCC70" }
 ]
 
 export default function GamesScreen(props) {
@@ -42,8 +44,13 @@ export default function GamesScreen(props) {
 
                     <PlayerProgressWidget progress={overview.playerLevel.progress} />
 
-                    <div className="games-container">
-                        <Game gamePage="kupload"  />
+                    <div className="games-section">
+                        <div className="title">Available Games</div>
+
+                        <div className="games-container">
+                            <Game gamePage="kupload" gameName="The Kupload" image={<UploadSVG />} />
+                            <Game gamePage="rekoncile" gameName="The Rekoncile" image={<RekoncileSVG />} />
+                        </div>
                     </div>
                 </div>
             }
@@ -67,12 +74,12 @@ function Game(props) {
     return (
         <TouchableOpacity className="game" onPress={onPress}  >
 
-            <div className="image-container" style={{color: front, backgroundColor: bck}}>
-                <UploadSVG />
+            <div className="image-container" style={{ color: front, backgroundColor: bck }}>
+                {props.image}
             </div>
 
             <div className="title-container" >
-                <b>The Kupload</b> Game
+                <b>{props.gameName}</b> Game
             </div>
 
         </TouchableOpacity>

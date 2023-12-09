@@ -3,6 +3,14 @@
     flex-direction: column;
     flex: 1;
 }
+.games-screen .games-section {
+    margin-top: 32px;
+}
+.games-screen .games-section .title {
+    font-size: 14px;
+    text-transform: uppercase;
+    color: var(--color-text-light);
+}
 .games-screen .games-container {
     display: flex;
     flex: 1;
@@ -17,6 +25,7 @@
     align-items: center;
     cursor: pointer;
     width: 90px;
+    margin: 0 auto;
 }
 .games-screen .game .image-container {
     display: flex;

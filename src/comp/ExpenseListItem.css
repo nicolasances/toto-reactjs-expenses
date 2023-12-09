@@ -1,0 +1,29 @@
+
+  .expense-list-item {
+    display: flex;
+    flex-direction: row;
+    margin: 3px 12px 3px 12px;
+    align-items: center;
+  }
+  
+  .expense-list-item .yearMonth { margin-left: 12px; width: 50px; }
+  .expense-list-item .dayMonth { margin-left: 12px; text-align: center; }
+  .expense-list-item .dayMonth .day { font-size: 16px;}
+  .expense-list-item .dayMonth .month { font-size: 10px; text-transform: uppercase;}
+  .expense-list-item .item-recurrance {font-size: 12px; text-transform: uppercase; font-weight: bold; color: white}
+  
+  .expense-list-item .item-title {
+    display: flex;
+    flex: 1;
+    margin-left: 12px;
+    font-size: 13px;
+  }
+  .expense-list-item .item-amount {
+    margin-left: 12px;
+    font-size: 14px;
+  }
+  
+  .expense-list-item .highlights { display: flex; flex-direction: row; }
+  .expense-list-item .highlights svg { width: 18px; height: 18px; margin-left: 12px; fill: #ffeb3b; }
+  .expense-list-item .highlights .disabled svg { fill: currentColor; opacity: 0.7; }
+  

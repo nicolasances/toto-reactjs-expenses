@@ -45,6 +45,44 @@ export default class GamesAPI {
 
   }
 
+  async getRekoncileGameStatus() {
+
+    return new TotoAPI().fetch('games', `/games/rekoncile`).then((response) => response.json());
+    
+  }
+  
+  /**
+   * Gets the next round for the Rekoncile Game
+   * @returns 
+   */
+  async getRekoncileNextRound() {
+    
+    return new TotoAPI().fetch('games', `/games/rekoncile/next`).then((response) => response.json());
+
+  }
+
+  /**
+   * Posts a reconciliation to the Rekoncile Game
+   * 
+   * @param {*} kudPayment the kud payment  
+   * @param {*} totoTransaction the toto transaction
+   * @returns 
+   */
+  async postRekonciliation(kudPayment, totoTransaction) {
+
+    return new TotoAPI().fetch('games', '/games/rekoncile/reconciliations', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ 
+        kudPayment: kudPayment, 
+        totoTransaction: totoTransaction
+      })
+    }).then((response) => response.json());
+
+  }
+
   /**
    * Retrieves the overview of all games and the player's level
    * @returns the Games Overview
