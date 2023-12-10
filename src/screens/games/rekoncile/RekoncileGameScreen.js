@@ -2,10 +2,7 @@ import TitleBar from '../../../comp/TitleBar'
 import './RekoncileGameScreen.css'
 import GamesAPI from "../../../services/GamesAPI"
 
-import { ReactComponent as UploadSVG } from '../../../img/upload-cloud.svg'
-import { ReactComponent as TickSVG } from '../../../img/tick.svg'
-import { ReactComponent as StopSVG } from '../../../img/stop.svg'
-import { ReactComponent as ConfusedSVG } from '../../../img/confused.svg'
+import { ReactComponent as AddSVG } from '../../../img/plus.svg'
 import { ReactComponent as QuestionSVG } from '../../../img/question.svg'
 
 import TouchableOpacity from '../../../comp/TouchableOpacity'
@@ -17,6 +14,8 @@ import { useHistory } from 'react-router-dom/cjs/react-router-dom.min'
 import ExpenseListItem from '../../../comp/ExpenseListItem'
 import categoriesMap from '../../../services/CategoriesMap'
 import TotoList from '../../../comp/TotoList'
+import TotoButton from '../../../comp/TotoButton'
+import MonkeyLoader from '../../../comp/MonkeyLoader'
 
 const Status = {
     notUploaded: "not-uploaded",
@@ -33,8 +32,10 @@ export default function RekoncileGameScreen(props) {
 
     // State variable: status of the upload
     const [loading, setLoading] = useState(false);
+    const [creatingExpense, setCreatingExpense] = useState(false)
     const [gameStatus, setGameStatus] = useState({ score: 0, maxScore: 0, percCompletion: 0, missingKuds: [], numMissingKuds: 0 })
     const [roundData, setRoundData] = useState()
+    const [roundsToSkip, setRoundsToSkip] = useState(0)
 
     const history = useHistory();
 
@@ -67,7 +68,10 @@ export default function RekoncileGameScreen(props) {
     }
 
     /**
-     * Loads the next round of this game
+     * Loads the next round of this game. 
+     * 
+     * If there are rounds to skip, it will pass that number to the backend
+     * in order to skip all the Kud Transactions that the user can't reconcile
      */
     const loadNextRound = async () => {
 
@@ -75,7 +79,7 @@ export default function RekoncileGameScreen(props) {
         const loadingTimer = setTimeout(() => { setLoading(true) }, 300)
 
         // Load the game status
-        const nextRound = await new GamesAPI().getRekoncileNextRound()
+        const nextRound = await new GamesAPI().getRekoncileNextRound(roundsToSkip)
 
         // Clear the timeout if it hasn't triggered yet
         clearTimeout(loadingTimer)
@@ -87,7 +91,7 @@ export default function RekoncileGameScreen(props) {
         setLoading(false)
 
     }
-    
+
     /**
      * When the candidate is selected, this method will send the information back to
      * the Game backend and move to the next round.
@@ -101,41 +105,50 @@ export default function RekoncileGameScreen(props) {
         // Pass the candidate to the backend
         await gamesAPI.postRekonciliation(roundData.kudPayment, candidate)
 
-        // Get the updated status
-        const status = await gamesAPI.getRekoncileGameStatus()
-
-        // Update the status
-        setGameStatus(status)
+        // Update the score
+        updateScore()
 
         // Move to the next round
-        const nextRound = await gamesAPI.getRekoncileNextRound();
-
-        // Set the new round data
-        setRoundData(nextRound);
+        loadNextRound()
     }
 
     /**
-     * When the user has successfully completed a game and wants to keep playing.
-     * This method loads the next Kud to upload
+     * When the user cannot reconcile, and wants to pass this round to go to the next one
      */
-    const onContinue = () => {
+    const onPass = () => {
 
-        // Load the next game round
-        loadNextRound();
+        // Increase the number of rounds to skip
+        setRoundsToSkip((prev) => prev + 1);
 
     }
 
     /**
-     * When the user decides to stop playing
-     * Go back
+     * When the user decides to create a Toto Expense because of missing candidates
      */
-    const onStop = () => {
+    const onCreateExpense = async () => {
 
-        history.goBack();
+        // Set Loading only if the loading is slower than 300ms 
+        const loadingTimer = setTimeout(() => { setCreatingExpense(true) }, 200)
+
+        // Create the expense, passing the Kud Payment
+        await new GamesAPI().createTotoExpenseAndReconcile(roundData.kudPayment)
+
+        // Stop loading
+        setCreatingExpense(false);
+
+        // Clear the timeout if it hasn't triggered yet
+        clearTimeout(loadingTimer)
+
+        // Update the score
+        updateScore();
+
+        // Move to the next round
+        loadNextRound()
 
     }
 
     useEffect(initialLoad, [])
+    useEffect(loadNextRound, [roundsToSkip])
 
     /**
      * Extractor
@@ -188,8 +201,20 @@ export default function RekoncileGameScreen(props) {
                     }} />
 
                     <div className="candidates-container">
-                        <div className="title">Choose among these candidates</div>
-                        
+                        <div className="title">{roundData.candidates.length > 0 ? "Choose among these candidates" : (creatingExpense ? "Creating the Toto Expense..." : "No candidates, but ask me to create the Toto Expense!")}</div>
+
+                        {roundData.candidates.length == 0 && !creatingExpense &&
+                            <div className="buttons-container">
+                                <TotoIconButton image={<AddSVG />} label="Create" onPress={onCreateExpense} />
+                            </div>
+                        }
+
+                        {creatingExpense &&
+                            <div className="buttons-container">
+                                <MonkeyLoader fill="var(--color-dark-primary)" />
+                            </div>
+                        }
+
                         <div className="list-container">
 
                             <TotoList
@@ -199,6 +224,11 @@ export default function RekoncileGameScreen(props) {
                             />
 
                         </div>
+
+                        <div className="buttons-container">
+                            {!creatingExpense && <TotoButton title="Pass" onPress={onPass} />}
+                        </div>
+
                     </div>
 
                 </div>

@@ -26,7 +26,7 @@
     text-align: right;
 }
 .player-progress-widget .bar .progress-text {
-    color: rgba(255, 255, 255, 0.87);
+    color: var(--color-text-light);
     margin-left: 6px;
     text-align: left;
 }
@@ -40,4 +40,6 @@
     justify-content: flex-end;
     margin-right: 6px;
     align-items: flex-end;
+    color: var(--color-text-light);
+    z-index: 2;
 }

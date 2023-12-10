@@ -48,16 +48,19 @@ export default class GamesAPI {
   async getRekoncileGameStatus() {
 
     return new TotoAPI().fetch('games', `/games/rekoncile`).then((response) => response.json());
-    
+
   }
-  
+
   /**
    * Gets the next round for the Rekoncile Game
+   * 
+   * @param roundsToSkip (default null) pass a number, if you want to skip some expenses
+   * 
    * @returns 
    */
-  async getRekoncileNextRound() {
-    
-    return new TotoAPI().fetch('games', `/games/rekoncile/next`).then((response) => response.json());
+  async getRekoncileNextRound(roundsToSkip) {
+
+    return new TotoAPI().fetch('games', `/games/rekoncile/next?roundsToSkip=${roundsToSkip}`).then((response) => response.json());
 
   }
 
@@ -75,10 +78,29 @@ export default class GamesAPI {
       headers: {
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify({ 
-        kudPayment: kudPayment, 
+      body: JSON.stringify({
+        kudPayment: kudPayment,
         totoTransaction: totoTransaction
       })
+    }).then((response) => response.json());
+
+  }
+
+  /**
+   * Creates a TotoExpense with the proivded Kud Payment and 
+   * reconciles the two automatically
+   * 
+   * @param {*} kudPayment the kud payment  
+   * @returns 
+   */
+  async createTotoExpenseAndReconcile(kudPayment) {
+
+    return new TotoAPI().fetch('games', '/games/rekoncile/expenses', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ kudPayment: kudPayment })
     }).then((response) => response.json());
 
   }
