@@ -4,6 +4,7 @@ import GamesAPI from "../../../services/GamesAPI"
 
 import { ReactComponent as AddSVG } from '../../../img/plus.svg'
 import { ReactComponent as QuestionSVG } from '../../../img/question.svg'
+import { ReactComponent as NextSVG } from '../../../img/next.svg'
 
 import TouchableOpacity from '../../../comp/TouchableOpacity'
 import { useEffect, useRef, useState } from 'react';
@@ -73,10 +74,10 @@ export default function RekoncileGameScreen(props) {
      * If there are rounds to skip, it will pass that number to the backend
      * in order to skip all the Kud Transactions that the user can't reconcile
      */
-    const loadNextRound = async () => {
+    const loadNextRound = async (loaderSensitivity) => {
 
         // Set Loading only if the loading is slower than 300ms 
-        const loadingTimer = setTimeout(() => { setLoading(true) }, 300)
+        const loadingTimer = setTimeout(() => { setLoading(true) }, loaderSensitivity ? loaderSensitivity : 300)
 
         // Load the game status
         const nextRound = await new GamesAPI().getRekoncileNextRound(roundsToSkip)
@@ -133,17 +134,17 @@ export default function RekoncileGameScreen(props) {
         // Create the expense, passing the Kud Payment
         await new GamesAPI().createTotoExpenseAndReconcile(roundData.kudPayment)
 
-        // Stop loading
-        setCreatingExpense(false);
-
         // Clear the timeout if it hasn't triggered yet
         clearTimeout(loadingTimer)
+
+        // Stop loading
+        setCreatingExpense(false);
 
         // Update the score
         updateScore();
 
         // Move to the next round
-        loadNextRound()
+        loadNextRound(700)
 
     }
 
@@ -203,12 +204,6 @@ export default function RekoncileGameScreen(props) {
                     <div className="candidates-container">
                         <div className="title">{roundData.candidates.length > 0 ? "Choose among these candidates" : (creatingExpense ? "Creating the Toto Expense..." : "No candidates, but ask me to create the Toto Expense!")}</div>
 
-                        {roundData.candidates.length == 0 && !creatingExpense &&
-                            <div className="buttons-container">
-                                <TotoIconButton image={<AddSVG />} label="Create" onPress={onCreateExpense} />
-                            </div>
-                        }
-
                         {creatingExpense &&
                             <div className="buttons-container">
                                 <MonkeyLoader fill="var(--color-dark-primary)" />
@@ -216,18 +211,29 @@ export default function RekoncileGameScreen(props) {
                         }
 
                         <div className="list-container">
-
-                            <TotoList
-                                data={roundData.candidates}
-                                dataExtractor={dataExtractor}
-                                onPress={onCandidateSelected}
-                            />
-
+                            {!creatingExpense &&
+                                <TotoList
+                                    data={roundData.candidates}
+                                    dataExtractor={dataExtractor}
+                                    onPress={onCandidateSelected}
+                                />
+                            }
                         </div>
 
-                        <div className="buttons-container">
-                            {!creatingExpense && <TotoButton title="Pass" onPress={onPass} />}
-                        </div>
+                        {!creatingExpense &&
+                            <div className="options-container">
+                                <TouchableOpacity className="option" onPress={onCreateExpense}>
+                                    <div className="text">
+                                        {roundData.candidates.length > 0 ? "If none fit, I can create a Toto Expense for you" : "Create automatically a Toto Expense"}
+                                    </div>
+                                    <div className="image"><TotoIconButton image={<AddSVG />} size="s" /></div>
+                                </TouchableOpacity>
+                                <TouchableOpacity className="option" onPress={onPass}>
+                                    <div className="text">If you're not sure, you can pass for now..</div>
+                                    <div className="image"><TotoIconButton image={<NextSVG />} size="s" /></div>
+                                </TouchableOpacity>
+                            </div>
+                        }
 
                     </div>
 

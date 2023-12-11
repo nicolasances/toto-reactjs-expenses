@@ -5,6 +5,7 @@
     margin: 0 24px;
 }
 .player-progress-widget .progress-bar {
+    position: relative;
     display: flex;
     flex: 1;
     flex-direction: row;
