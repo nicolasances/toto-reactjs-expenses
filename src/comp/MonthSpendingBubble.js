@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, useEffect, useState } from 'react';
 import moment from 'moment';
 import Cookies from 'universal-cookie';
 
@@ -6,53 +6,63 @@ import ExpensesAPI from '../services/ExpensesAPI';
 
 import './MonthSpendingBubble.css'
 
-const cookies = new Cookies();
+const cookies = new Cookies()
 
-export default class MonthSpendingBubble extends Component {
+export default function MonthSpendingBubble(props) {
 
-    constructor(props) {
-        super(props);
+    const [yearMonth, setYearMonth] = useState(moment().format("YYYYMM"))
+    const [total, setTotal] = useState({total: 0, scale: ''})
+    const [currency, setCurrency] = useState()
 
-        this.state = {
-            yearMonth: moment().format('YYYYMM'),
-            month: moment().format('MMM'),
-            spending: 0,
-            currency: 'EUR'
-        }
-
-        // Bindings
-        this.loadSpending = this.loadSpending.bind(this);
-    }
-
-    componentDidMount() {
-        this.loadSpending();
-    }
-
-    /*
-     * Loads the current month spending
+    /**
+     * Loads the user settings
      */
-    loadSpending() {
+    const loadSettings = async () => {
 
-        let targetCurrency = this.state.settings ? this.state.settings.currency : null;
+        // Get the settings
+        const settings = await new ExpensesAPI().getSettings(cookies.get("user").email);
 
-        new ExpensesAPI().getMonthTotalSpending(cookies.get('user').email, this.state.yearMonth, targetCurrency).then((data) => {
+        // Update the settings
+        setCurrency(settings.currency)
+    }
 
-            // Animate
-            if (data != null && data.total != null) this.setState({spending: data.total});
+    /**
+     * Loads the year month spend
+     */
+    const loadSpending = () => {
+
+        if (!currency) return;
+
+        new ExpensesAPI().getMonthTotalSpending(yearMonth, currency).then((data) => {
+
+            let tot = data.total;
+            let scale = ''
+
+            // Rescale total if too big
+            if (tot > 100000) {
+                tot = tot / 1000
+                scale = 'k';
+            }
+
+            setTotal({
+                total: tot,
+                scale: scale
+            })
 
         });
     }
 
-    render() {
-        return (
-            <div className="month-spending-bubble container">
+    useEffect(loadSettings, [])
+    useEffect(loadSpending, [currency])
 
-                <div className="currency-container"><div className="currency">{this.state.currency}</div></div>
-                <div className="amount-container"><div className="amount">{this.state.spending.toFixed(0)}</div></div>
-                <div className="month-container"><div className="month">{this.state.month}</div></div>
+    return (
+        <div className="month-spending-bubble container">
 
-            </div>
-        )
-    }
+            <div className="currency-container"><div className="currency">{currency}</div></div>
+            <div className="amount-container"><div className="amount">{total.total.toLocaleString("it", { maximumFractionDigits: 0 })}{total.scale}</div></div>
+            <div className="month-container"><div className="month">{moment(`${yearMonth}01`, "YYYYMMDD").format("MMM")}</div></div>
+
+        </div>
+    )
 
 }

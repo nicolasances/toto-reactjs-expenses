@@ -115,12 +115,12 @@ export default class ExpensesAPI {
    * Retrieves the month total spending
    * - yearMonth : the ym to consider
    */
-  getMonthTotalSpending(userEmail, yearMonth, targetCurrency) {
+  getMonthTotalSpending(yearMonth, targetCurrency) {
 
-    let query = '';
-    if (targetCurrency) query = '&targetCurrency=' + targetCurrency;
+    let currency = "EUR"
+    if (targetCurrency) currency = targetCurrency;
 
-    return new TotoAPI().fetch('expenses', '/expenses/' + yearMonth + '/total?user=' + userEmail + query)
+    return new TotoAPI().fetch('expensesV2', `/expenses/${yearMonth}/total?currency=${currency}`)
       .then((response) => response.json());
 
   }
@@ -192,8 +192,7 @@ export default class ExpensesAPI {
    */
   getSettings(userEmail) {
 
-    return new TotoAPI().fetch('expenses', '/settings?user=' + userEmail)
-      .then((response) => response.json());
+    return new TotoAPI().fetch('expenses', '/settings?user=' + userEmail).then((response) => response.json());
 
   }
 

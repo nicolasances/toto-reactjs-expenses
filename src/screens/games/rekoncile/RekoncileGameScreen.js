@@ -129,7 +129,7 @@ export default function RekoncileGameScreen(props) {
     const onCreateExpense = async () => {
 
         // Set Loading only if the loading is slower than 300ms 
-        const loadingTimer = setTimeout(() => { setCreatingExpense(true) }, 200)
+        const loadingTimer = setTimeout(() => { setCreatingExpense(true) }, 400)
 
         // Create the expense, passing the Kud Payment
         await new GamesAPI().createTotoExpenseAndReconcile(roundData.kudPayment)
