@@ -105,7 +105,7 @@ class NewExpenseScreen extends Component {
   async saveIncome() { 
 
     let income = {
-      amount: this.state.amount,
+      amount: parseFloat(this.state.amount),
       date: this.state.date,
       description: this.state.description,
       currency: this.state.currency,

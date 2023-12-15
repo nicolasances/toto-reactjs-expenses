@@ -36,10 +36,20 @@ export default class ExpensesAPI {
   /**
    * Retrieves the month's expenses
    */
-  getExpenses(userEmail, yearMonth) {
+  async getExpenses(userEmail, yearMonth) {
 
-    return new TotoAPI().fetch('expensesV2', '/expenses?yearMonth=' + yearMonth + '&sortDate=true&sortDesc=true&user=' + userEmail)
-      .then((response) => response.json());
+    return new TotoAPI().fetch('expensesV2', '/expenses?yearMonth=' + yearMonth + '&sortDate=true&sortDesc=true&user=' + userEmail).then((response) => response.json());
+
+  }
+
+  /**
+   * Retrieves the incomes for the specified yearMonth
+   * 
+   * @param {string} yearMonth the yearmonth to consider
+  */
+  async getIncomes(yearMonth) {
+
+    return new TotoAPI().fetch('expensesV2', `/incomes?yearMonth=${yearMonth}`).then((response) => response.json());
 
   }
 
