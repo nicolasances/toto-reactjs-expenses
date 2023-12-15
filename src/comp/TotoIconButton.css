@@ -32,6 +32,14 @@
 .toto-icon-button.s .icon, .toto-icon-button.s .icon svg, .toto-icon-button.s svg {width: 12px; height: 12px;}
 .toto-icon-button.ss .icon, .toto-icon-button.ss .icon svg, .toto-icon-button.ss svg {width:8px; height: 8px;}
 
+/* No Border styles */
+.toto-icon-button.no-border.xl svg {width: 60px; height: auto;}
+.toto-icon-button.no-border.l .svg {width: 48px; height: auto;}
+.toto-icon-button.no-border.m svg {width: 32px; height: auto;}
+.toto-icon-button.no-border.ms svg {width: 26px; height: auto;}
+.toto-icon-button.no-border.s svg {width: 20px; height: auto;}
+.toto-icon-button.no-border.ss svg {width: 12px; height: auto;}
+
 .toto-icon-button-container .label {
   margin-top: 9px;
   color: #ffeb3b;

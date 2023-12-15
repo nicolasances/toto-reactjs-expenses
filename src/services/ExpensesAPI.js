@@ -70,6 +70,23 @@ export default class ExpensesAPI {
   }
 
   /**
+   * Posts an income
+   */
+  postIncome(income) {
+
+    // Post the data
+    return new TotoAPI().fetch('expensesV2', '/incomes', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(income)
+    }).then((response => response.json()));
+
+  }
+
+
+  /**
    * Deletes an expense
    */
   deleteExpense(exId) {
