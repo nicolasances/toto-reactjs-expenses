@@ -58,9 +58,20 @@ export default class ExpensesAPI {
    * @param {string} id the id of the expense to get
    * @returns the expense 
    */
-  getExpense(id) {
+  async getExpense(id) {
 
     return new TotoAPI().fetch('expenses', '/expenses/' + id).then((response) => response.json());
+  }
+
+  /**
+   * Retrieves the specified income
+   * 
+   * @param {string} id the id of the income to get
+   * @returns the income
+   */
+  async getIncome(id) {
+
+    return new TotoAPI().fetch('expensesV2', '/incomes/' + id).then((response) => response.json());
   }
 
   /**
@@ -109,7 +120,7 @@ export default class ExpensesAPI {
   /**
    * Updates an expense
    */
-  putExpense(exId, ex) {
+  async putExpense(exId, ex) {
 
     // Post the data
     return new TotoAPI().fetch('expenses', '/expenses/' + exId, {
@@ -118,6 +129,22 @@ export default class ExpensesAPI {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify(ex)
+    }).then((response => response.json()));
+
+  }
+
+  /**
+   * Updates an income
+   */
+  async putIncome(id, income) {
+
+    // Post the data
+    return new TotoAPI().fetch('expensesV2', '/incomes/' + id, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(income)
     }).then((response => response.json()));
 
   }

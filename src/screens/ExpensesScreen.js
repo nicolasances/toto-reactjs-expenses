@@ -193,8 +193,8 @@ class ExpensesScreen extends Component {
         new ExpensesAPI().consolidateExpense(expense.id).then(this.loadExpenses);
     }
 
-    selectExpense(expense) {
-        this.props.history.push('/expenses/' + expense.id);
+    selectExpense(transaction) {
+        this.props.history.push('/expenses/' + transaction.id, { income: transaction.income });
     }
 
     /**
@@ -221,14 +221,15 @@ class ExpensesScreen extends Component {
         return {
             avatar: {
                 type: 'image',
-                value: item.category ? categoriesMap.get(item.category).image : (item.income ? <IncomeSVG/> : null),
+                value: item.category ? categoriesMap.get(item.category).image : (item.income ? <IncomeSVG /> : null),
                 size: 'l'
             },
             date: { date: item.date },
             title: item.description,
             monthly: item.monthly,
             amount: (item.income ? "+ " : '') + currency + ' ' + item.amount.toLocaleString('it'),
-            highlights: highlights
+            highlights: highlights,
+            style: item.income ? "income" : "payment"
         }
 
     }

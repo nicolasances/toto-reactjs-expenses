@@ -26,7 +26,8 @@ class ExpenseDetailScreen extends Component {
         this.state = {}
 
         this.loadExpense = this.loadExpense.bind(this);
-        this.saveExpense = this.saveExpense.bind(this);
+        this.loadIncome = this.loadIncome.bind(this);
+        this.saveTransaction = this.saveTransaction.bind(this);
         this.deleteExpense = this.deleteExpense.bind(this);
         this.loadAmount = this.loadAmount.bind(this);
         this.loadDate = this.loadDate.bind(this);
@@ -38,42 +39,70 @@ class ExpenseDetailScreen extends Component {
 
     componentDidMount() {
 
-        this.loadExpense();
+        // Extract the Transaction Id
+        const id = this.props.match.params.id;
+
+        // Check if there is any additional data
+        const data = this.props.location.state;
+
+        // If the transaction is an income, load it as income
+        if (data && data.income == true) this.loadIncome(id)
+        else this.loadExpense(id);
 
     }
 
-    componentWillUnmount() {
+    /**
+     * Loads the income
+     * 
+     * @param {string} id the id of the transaction
+     */
+    async loadIncome(id) {
+
+        // Get the income
+        const income = await new ExpensesAPI().getIncome(id);
+
+        // Set the state
+        this.setState({
+            transaction: income,
+            date: moment(income.date, 'YYYYMMDD'),
+            amount: income.amount,
+            currency: income.currency,
+            monthly: false,
+            income: true
+        })
 
     }
 
     /**
      * Loads the expense from the REST API
      */
-    loadExpense() {
+    async loadExpense(id) {
 
-        let id = this.props.match.params.id;
+        const expense = await new ExpensesAPI().getExpense(id);
 
-        new ExpensesAPI().getExpense(id).then((expense) => {
-
-            this.setState({
-                expense: expense,
-                date: moment(expense.date, 'YYYYMMDD'),
-                amount: expense.amount,
-                currency: expense.currency,
-                monthly: expense.monthly
-            })
-
+        // Update the state
+        this.setState({
+            transaction: expense,
+            date: moment(expense.date, 'YYYYMMDD'),
+            amount: expense.amount,
+            currency: expense.currency,
+            monthly: expense.monthly,
+            income: false
         })
+
     }
 
     /**
-     * Saves the updated expense
+     * Saves the updated transaction
      */
-    saveExpense() {
+    async saveTransaction() {
 
-        new ExpensesAPI().putExpense(this.state.expense.id, this.state.expense).then((data) => {
-            this.props.history.goBack();
-        })
+        // Update the transaction
+        if (this.state.income == true) await new ExpensesAPI().putIncome(this.state.transaction.id, this.state.transaction)
+        else await new ExpensesAPI().putExpense(this.state.transaction.id, this.state.expense)
+
+        // Go back 
+        this.props.history.goBack();
 
     }
 
@@ -84,8 +113,8 @@ class ExpenseDetailScreen extends Component {
 
         this.setState((prevState) => {
             return {
-                expense: {
-                    ...prevState.expense, 
+                transaction: {
+                    ...prevState.transaction,
                     monthly: !prevState.monthly
                 }
             }
@@ -111,7 +140,7 @@ class ExpenseDetailScreen extends Component {
     loadCurrency() {
 
         var waitForData = (success) => {
-            if (this.state.expense != null) return success(this.state.expense.currency);
+            if (this.state.transaction != null) return success(this.state.transaction.currency);
             setTimeout(() => { waitForData(success) }, 50);
         }
 
@@ -127,7 +156,7 @@ class ExpenseDetailScreen extends Component {
     loadAmount() {
 
         var waitForData = (success) => {
-            if (this.state.expense != null) return success(this.state.expense.amount);
+            if (this.state.transaction != null) return success(this.state.transaction.amount);
             setTimeout(() => { waitForData(success) }, 50);
         }
 
@@ -143,7 +172,7 @@ class ExpenseDetailScreen extends Component {
     loadDate() {
 
         var waitForData = (success) => {
-            if (this.state.expense != null) return success(moment(this.state.expense.date, 'YYYYMMDD'));
+            if (this.state.transaction != null) return success(moment(this.state.transaction.date, 'YYYYMMDD'));
             setTimeout(() => { waitForData(success) }, 50);
         }
 
@@ -160,7 +189,7 @@ class ExpenseDetailScreen extends Component {
     loadDescription() {
 
         var waitForData = (success) => {
-            if (this.state.expense != null) return success(this.state.expense.description);
+            if (this.state.transaction != null) return success(this.state.transaction.description);
             setTimeout(() => { waitForData(success) }, 50);
         }
 
@@ -177,7 +206,7 @@ class ExpenseDetailScreen extends Component {
     loadCategory() {
 
         var waitForData = (success) => {
-            if (this.state.expense != null) return success(this.state.expense.category);
+            if (this.state.transaction != null) return success(this.state.transaction.category);
             setTimeout(() => { waitForData(success) }, 50);
         }
 
@@ -189,37 +218,37 @@ class ExpenseDetailScreen extends Component {
 
     render() {
 
-        if (!this.state.expense) return <div className="screen expense-detail-screen"></div>
+        if (!this.state.transaction) return <div className="screen expense-detail-screen"></div>
 
         return (
             <div className="screen expense-detail-screen">
-                <TitleBar title="Payment Detail" back={true} />
+                <TitleBar title="Transaction Detail" back={true} />
 
                 <div className="line1">
                     <div className="dateContainer">
                         <DateSelector initialValueLoader={this.loadDate}
                             onDateChange={(date) => {
-                                let expense = this.state.expense;
-                                expense.date = date.format('YYYYMMDD');
-                                this.setState({ expense: expense });
+                                let transaction = this.state.transaction;
+                                transaction.date = date.format('YYYYMMDD');
+                                this.setState({ transaction: transaction });
                             }}
                         />
                     </div>
                     <div className="amountContainer">
                         <AmountSelector initialValueLoader={this.loadAmount}
                             onAmountChange={(amt) => {
-                                let expense = this.state.expense;
-                                expense.amount = amt;
-                                this.setState({ expense: expense });
+                                let transaction = this.state.transaction;
+                                transaction.amount = amt;
+                                this.setState({ transaction: transaction });
                             }}
                         />
                     </div>
                     <div className="currencyContainer">
                         <CurrencySwitcher initialValueLoader={this.loadCurrency}
                             onCurrencyChange={(c) => {
-                                let expense = this.state.expense;
-                                expense.currency = c;
-                                this.setState({ expense: expense });
+                                let transaction = this.state.transaction;
+                                transaction.currency = c;
+                                this.setState({ transaction: transaction });
                             }}
                             loadFromSettings={false}
                         />
@@ -227,38 +256,42 @@ class ExpenseDetailScreen extends Component {
                 </div>
 
                 <div className="line2">
-                    <TextInput placeholder="What was this payment for?"
+                    <TextInput placeholder={this.state.income == true ? "What was this income for?" : "What was this payment for?"}
                         initialValueLoader={this.loadDescription}
                         align="center"
                         onTextChange={(t) => {
-                            let expense = this.state.expense;
-                            expense.description = t;
-                            this.setState({ expense: expense });
+                            let transaction = this.state.transaction;
+                            transaction.description = t;
+                            this.setState({ transaction: transaction });
                         }}
                     />
                 </div>
 
-                <div className="line3">
-                    <CategoryPicker initialValueLoader={this.loadCategory}
-                        category={this.state.expense.category}
-                        onCategoryChange={(cat) => {
-                            let expense = this.state.expense;
-                            expense.category = cat;
-                            this.setState({ expense: expense });
-                        }}
-                    />
-                </div>
+                {this.state.income == false &&
+                    <div className="line3">
+                        <CategoryPicker initialValueLoader={this.loadCategory}
+                            category={this.state.transaction.category}
+                            onCategoryChange={(cat) => {
+                                let transaction = this.state.transaction;
+                                transaction.category = cat;
+                                this.setState({ transaction: transaction });
+                            }}
+                        />
+                    </div>
+                }
 
-                <div className="line4">
-                    <Checkbox onToggleFlag={this.onToggleMonthly} flag={this.state.expense && this.state.expense.monthly} />
-                </div>
+                {this.state.income == false &&
+                    <div className="line4">
+                        <Checkbox onToggleFlag={this.onToggleMonthly} flag={this.state.transaction && this.state.transaction.monthly} />
+                    </div>
+                }
 
                 <div style={{ flex: 1 }}>
                 </div>
 
                 <div className="line5">
-                    <div style={{ marginLeft: 6, marginRight: 6 }}><TotoIconButton image={(<TickSVG className="icon" />)} onPress={this.saveExpense} /></div>
-                    <div style={{ marginLeft: 6, marginRight: 6 }}><TotoIconButton image={(<DeleteSVG className="icon" />)} onPress={this.deleteExpense} /></div>
+                    <div style={{ marginLeft: 6, marginRight: 6 }}><TotoIconButton image={(<TickSVG className="icon" />)} onPress={this.saveTransaction} /></div>
+                    {this.state.income == false && <div style={{ marginLeft: 6, marginRight: 6 }}><TotoIconButton image={(<DeleteSVG className="icon" />)} onPress={this.deleteExpense} /></div>}
                 </div>
             </div>
         )
