@@ -195,14 +195,21 @@ export default class ExpensesAPI {
   /**
    * Retrieves the spending (total) for each month after yearMonthGte
    */
-  getExpensesPerMonth(userEmail, yearMonthGte, targetCurrency) {
+  async getExpensesPerMonth(yearMonthGte, targetCurrency) {
 
-    let targetCurrencyFilter = targetCurrency ? '&targetCurrency=' + targetCurrency : ''
-
-    return new TotoAPI().fetch('expenses', '/stats/expensesPerMonth?user=' + userEmail + '&yearMonthGte=' + yearMonthGte + targetCurrencyFilter)
-      .then((response) => response.json());
+    return new TotoAPI().fetch('expensesV2', `/stats/expensesPerMonth?yearMonthGte=${yearMonthGte}&currency=${targetCurrency}`).then((response) => response.json());
 
   }
+
+  /**
+   * Retrieves the incomes (total) for each month after yearMonthGte
+  */
+  async getIncomesPerMonth(yearMonthGte, targetCurrency) {
+
+    return new TotoAPI().fetch('expensesV2', `/stats/incomesPerMonth?yearMonthGte=${yearMonthGte}&currency=${targetCurrency}`).then((response) => response.json());
+
+  }
+
 
   /**
    * Retrieves the spending (total) for each year

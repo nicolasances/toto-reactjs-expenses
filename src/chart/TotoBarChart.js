@@ -52,6 +52,7 @@ export default class TotoBarChart extends Component {
 
         // Bindings
         this.createGraph = this.createGraph.bind(this);
+        this.createLine = this.createLine.bind(this);
         this.createBars = this.createBars.bind(this);
         this.createXAxis = this.createXAxis.bind(this);
         this.onBarClick = this.onBarClick.bind(this);
@@ -84,7 +85,8 @@ export default class TotoBarChart extends Component {
             background: '#00acc1',
             bar: '#007c91',
             value: 'rgba(0,0,0,0.7)',
-            xLabel: '#5ddef4'
+            xLabel: '#5ddef4',
+            line: '#5ddef4'
         }
         if (this.props.theme) this.theme = this.props.theme;
 
@@ -93,7 +95,7 @@ export default class TotoBarChart extends Component {
     /**
      * Creates the whole graph
      */
-    createGraph(data) {
+    createGraph(data, lineData) {
 
         if (!data) return;
 
@@ -111,12 +113,49 @@ export default class TotoBarChart extends Component {
         this.y = d3.scaleLinear().range([this.textPaddingV, this.height - this.textPaddingV]).domain([0, this.yMax]);
         this.fontScale = d3.scaleLinear().range([6, 11]).domain([24, 4]);
 
-        // Lines
+        // Bars
         this.createBars(data);
+
+        // Lines 
+        this.createLine(lineData);
+
         // Text
         if (this.props.valueLabelTransform) this.createValueLabels(data);
+
         // X Labels
         if (this.props.xAxisTransform) this.createXAxis(data);
+
+    }
+
+    /**
+     * Creates a line with line data, if any
+     */
+    createLine(data) {
+
+        // It could be that there is no line data
+        if (!data) return;
+
+        // Properties
+        let fill = 'none';
+
+        // Create the line
+        var line = d3.line()
+            .x((d) => { return this.x(d.x) + this.x.bandwidth() / 2 })
+            .y((d) => { return this.height - this.y(d.y) })
+
+        this.svg.append('g').append('path').datum(data)
+            .attr('d', line)
+            .attr('fill', fill)
+            .attr('stroke-width', 2)
+            .attr('stroke', this.theme.line);
+
+        // Add a point 
+        this.svg.selectAll('.point').data(data).enter().append('circle')
+            .attr('class', 'point')
+            .attr('cx', (d) => { return this.x(d.x) + this.x.bandwidth() / 2 })
+            .attr('cy', (d) => { return this.height - this.y(d.y) })
+            .attr('r', 4)
+            .attr('fill', this.theme.line)
 
     }
 
@@ -223,15 +262,15 @@ export default class TotoBarChart extends Component {
                     // Call the callback
                     this.props.onBarClick(data);
                 }, 10);
-                
+
             }, 10)
-            
+
         }
     }
 
     render() {
 
-        this.createGraph(this.props.data);
+        this.createGraph(this.props.data, this.props.lineData);
 
         let images;
         if (this.props.valueImage) images = this.createImages(this.props.data);

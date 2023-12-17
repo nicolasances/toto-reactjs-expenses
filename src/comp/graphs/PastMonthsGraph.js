@@ -27,8 +27,10 @@ class PastMonthsGraph extends Component {
     // Binding
     this.load = this.load.bind(this);
     this.prepareData = this.prepareData.bind(this);
-    // this.valueLabel = this.valueLabel.bind(this);
+    this.prepareExpensesData = this.prepareExpensesData.bind(this);
+    this.prepareIncomesData = this.prepareIncomesData.bind(this);
     this.loadExpenses = this.loadExpenses.bind(this);
+    this.loadIncomes = this.loadIncomes.bind(this);
     this.xAxisTransform = this.xAxisTransform.bind(this);
     this.onBarClick = this.onBarClick.bind(this);
 
@@ -47,34 +49,61 @@ class PastMonthsGraph extends Component {
   /**
    * Load everything
    */
-  load() {
+  async load() {
 
-    new ExpensesAPI().getSettings(this.state.user.email).then((data) => {
-      // Set state
-      this.setState({settings: data}, this.loadExpenses);
+    this.setState({ loaded: false });
+
+    // Load the settings
+    const settings = await new ExpensesAPI().getSettings(this.state.user.email)
+
+    // Set state
+    this.setState({ settings: settings });
+
+    // Extract the target currency
+    const targetCurrency = (settings && settings.currency) ? settings.currency : "EUR"
+
+    // Load the expenses
+    const expensesMonths = await this.loadExpenses(targetCurrency)
+
+    // Load the incomes
+    const incomesMonths = await this.loadIncomes(targetCurrency)
+
+    // Update the state and Prepare the data
+    this.setState({ months: null }, () => {
+
+      this.setState({ loaded: true, months: expensesMonths, incomeMonths: incomesMonths }, this.prepareData);
+
     })
+
 
   }
 
   /**
-   * Loads the last x days of spending (just the totals)
+   * Loads the last x months of spending (just the totals)
    */
-  loadExpenses() {
+  async loadExpenses(targetCurrency) {
 
     // Define how many days in the past
-    let maxMonths = this.state.maxMonths;
-    let yearMonthFrom = moment().startOf('month').subtract(maxMonths, 'months').format('YYYYMM');
-    let targetCurrency = this.state.settings ? this.state.settings.currency : null;
+    let yearMonthFrom = moment().startOf('month').subtract(this.state.maxMonths, 'months').format('YYYYMM');
 
-    new ExpensesAPI().getExpensesPerMonth(this.state.user.email, yearMonthFrom, targetCurrency).then((data) => {
+    const data = await new ExpensesAPI().getExpensesPerMonth(yearMonthFrom, targetCurrency)
 
-      if (data == null || data.months == null) {this.setState({loaded: true}); return;}
+    return data && data.months ? data.months.months : []
 
-      this.setState({months: null}, () => {
-        this.setState({loaded: true, months: data.months}, this.prepareData);
-      })
+  }
 
-    });
+  /**
+   * Loads the last x months of incomes (just the totals)
+   */
+  async loadIncomes(targetCurrency) {
+
+    // Define how many days in the past
+    let yearMonthFrom = moment().startOf('month').subtract(this.state.maxMonths, 'months').format('YYYYMM');
+
+    // Get the data
+    const data = await new ExpensesAPI().getIncomesPerMonth(yearMonthFrom, targetCurrency)
+
+    return data && data.months ? data.months.months : []
 
   }
 
@@ -99,11 +128,27 @@ class PastMonthsGraph extends Component {
    */
   prepareData() {
 
+    // Update the list of months to use as index
+    const months = this.state.months.map((item) => { return item.yearMonth })
+
+    // Prepare the expenses graph data
+    this.prepareExpensesData(months);
+
+    // Prepare the incomes graph data
+    this.prepareIncomesData(months);
+
+  }
+
+  /**
+   * Prepares the data for the graph to display
+   */
+  prepareExpensesData(months) {
+
     let preparedData = [];
 
     if (!this.state.months) return;
 
-    for (var i = 0; i < this.state.months.length; i++) {
+    for (var i = 0; i < months.length; i++) {
 
       let month = this.state.months[i];
 
@@ -113,8 +158,54 @@ class PastMonthsGraph extends Component {
       })
     }
 
-    this.setState({preparedData: null, yLines: null}, () => {
-      this.setState({preparedData: preparedData});
+    this.setState({ preparedData: null, yLines: null }, () => {
+      this.setState({ preparedData: preparedData });
+    })
+
+  }
+
+  /**
+   * Prepares the data for the income graph to display
+   */
+  prepareIncomesData(months) {
+
+    let preparedData = [];
+
+    if (!this.state.months || !this.state.incomeMonths) return;
+
+    if (this.state.incomeMonths.length == 0) return;
+
+    // Function used to find an income month with the given yearmonth
+    const findCorrespondingIncomeMonth = (incomeMonths, yearMonth) => {
+
+      for (let incomeMonth of incomeMonths) {
+
+        if (incomeMonth.yearMonth == yearMonth) return incomeMonth
+
+      }
+
+      return null;
+
+    }
+
+    let i = 0;
+    for (let month of months) {
+
+      // Find the income month for that specific month
+      const incomeMonth = findCorrespondingIncomeMonth(this.state.incomeMonths, month)
+
+      // If it doesn't exist AND IT'S NOT THE LAST MONTH, add a 0
+      if (!incomeMonth && i < months.length - 1) preparedData.push({ x: i++, y: 0 })
+      // Otherwise, add the month's total income
+      else if (incomeMonth != null) preparedData.push({
+        x: i++,
+        y: incomeMonth.amount
+      })
+
+    }
+
+    this.setState({ preparedIncomeData: null, yIncomeLines: null }, () => {
+      this.setState({ preparedIncomeData: preparedData });
     })
 
   }
@@ -126,7 +217,7 @@ class PastMonthsGraph extends Component {
 
     if (value == null) return '';
 
-    return Math.round(value,0).toLocaleString('it');
+    return Math.round(value, 0).toLocaleString('it');
   }
 
   /**
@@ -134,8 +225,8 @@ class PastMonthsGraph extends Component {
    * @param {object} data the data object (as created in the prepareData() function)
    */
   onBarClick(data) {
-      // Navigate to the expenses of that month
-      this.props.history.push('/expenses?yearMonth=' + this.state.months[data.x].yearMonth)
+    // Navigate to the expenses of that month
+    this.props.history.push('/expenses?yearMonth=' + this.state.months[data.x].yearMonth)
   }
 
   render() {
@@ -143,12 +234,13 @@ class PastMonthsGraph extends Component {
       <div className='graph-past-months-expenses'>
         <TotoBarChart
           data={this.state.preparedData}
+          lineData={this.state.preparedIncomeData}
           xAxisTransform={this.xAxisTransform}
           valueLabelTransform={this.valueLabel}
           maxHeight={this.props.maxHeight}
-          margins={{horizontal: 24, vertical: 12}}
+          margins={{ horizontal: 24, vertical: 12 }}
           onBarClick={this.onBarClick}
-          />
+        />
       </div>
     )
   }

@@ -143,7 +143,7 @@ class ExpensesScreen extends Component {
     onMonthChange(newMonth) {
         this.setState({ selectedMonth: newMonth }, () => {
             this.updateLastSelectedMonth(newMonth);
-            this.loadExpenses();
+            this.loadTransactions();
         });
     }
 
@@ -190,7 +190,7 @@ class ExpensesScreen extends Component {
      */
     onReconcilePress(expense) {
 
-        new ExpensesAPI().consolidateExpense(expense.id).then(this.loadExpenses);
+        new ExpensesAPI().consolidateExpense(expense.id).then(this.loadTransactions);
     }
 
     selectExpense(transaction) {
