@@ -1,11 +1,14 @@
 import './PlayerProgressWidget.css'
 import TotoIconButton from '../../../comp/TotoIconButton';
 import { ReactComponent as HelpSVG } from '../../../img/question.svg';
-import { useEffect, useRef } from 'react';
+import { useEffect, useImperativeHandle, useRef } from 'react';
+import Lottie from "lottie-react";
+import animationHearts from "../../../lottie/anim-hearts.json"
 
-export default function PlayerProgressWidget(props) {
+export default function PlayerProgressWidget(props, ref) {
 
     const progressRef = useRef(null)
+    const animationRef = useRef(null)
 
     let progress = props.progress;
     if (!progress) progress = { score: 0, maxScore: 0, percCompletion: 0 }
@@ -27,15 +30,25 @@ export default function PlayerProgressWidget(props) {
      */
     const triggerAnimation = () => {
 
+        // Trigger the Lottie animation
+        triggerLottie();
+
         progressRef.current.style.backgroundColor = '#588e17'
-        
+
         setTimeout(() => {
             progressRef.current.style.width = `${completionPerc}%`;
         }, 100)
-        
+
         setTimeout(() => {
             progressRef.current.style.backgroundColor = 'var(--color-dark-primary)'
-        }, 1100)
+        }, 500)
+    }
+
+    /**
+     * Triggers the Lottie animation
+     */
+    const triggerLottie = () => {
+        animationRef.current.goToAndPlay(0)
     }
 
     useEffect(triggerAnimation, [props.progress])
@@ -43,8 +56,12 @@ export default function PlayerProgressWidget(props) {
 
     return (
         <div className="player-progress-widget-container">
-            
+
             {props.label && <div className="label">{props.label}</div>}
+
+            <div className="lottie-container">
+                <Lottie animationData={animationHearts} loop={false} lottieRef={animationRef} autoplay={false} />
+            </div>
 
             <div className="player-progress-widget">
 
