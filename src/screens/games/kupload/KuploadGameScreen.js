@@ -14,6 +14,7 @@ import moment from 'moment-timezone'
 import TotoIconButton from '../../../comp/TotoIconButton'
 import GameSummary from '../widgets/GameStatusWidget'
 import { useHistory } from 'react-router-dom/cjs/react-router-dom.min'
+import PlayerProgressWidget from '../widgets/PlayerProgressWidget'
 
 const Status = {
     notUploaded: "not-uploaded",
@@ -31,6 +32,7 @@ export default function KuploadGameScreen(props) {
     // State variable: status of the upload
     const [uploadStatus, setUploadStatus] = useState(Status.notUploaded)
     const [loading, setLoading] = useState(false);
+    const [overview, setOverview] = useState();
     const [kudDate, setKudDate] = useState({ year: "", month: "", firstDate: moment(), lastDate: moment() })
     const [gameStatus, setGameStatus] = useState({ score: 0, maxScore: 0, percCompletion: 0, missingKuds: [], numMissingKuds: 0 })
     const [finished, setFinished] = useState(false)
@@ -45,6 +47,9 @@ export default function KuploadGameScreen(props) {
      */
     const initialLoad = async () => {
 
+        // Load the score
+        updateScore();
+
         // Load the game and the next round
         loadNextRound();
 
@@ -56,11 +61,9 @@ export default function KuploadGameScreen(props) {
      */
     const updateScore = async () => {
 
-        // Load the game status
-        const status = await new GamesAPI().getKuploadGameStatus();
+        const overview = await new GamesAPI().getGamesOverview();
 
-        // Update the status
-        setGameStatus(status);
+        setOverview(overview)
 
     }
 
@@ -176,9 +179,11 @@ export default function KuploadGameScreen(props) {
 
             <TitleBar title="The Kupload Game" back={true}></TitleBar>
 
-            <GameSummary loading={loading} score={gameStatus.score} total={gameStatus.maxScore} goal={`You have ${gameStatus.numMissingKuds} documents to upload!`} />
-
-            {/* <GameGoal/> */}
+            {overview && overview.playerLevel &&
+                <div className="progress-container">
+                    <PlayerProgressWidget label="Your Overall Score" progress={overview.playerLevel.progress} levelPoints={overview.playerLevel.levelPoints} />
+                </div>
+            }
 
             {!loading &&
                 <div className="game-body">

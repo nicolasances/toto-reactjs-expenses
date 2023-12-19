@@ -1,8 +1,17 @@
+.player-progress-widget-container {
+    display: flex;
+    flex-direction: column;
+    margin: 0 24px;
+}
+.player-progress-widget-container .label {
+    font-size: 10px;
+    text-transform: uppercase;
+    margin: 0 0 3px 12px;
+}
 .player-progress-widget {
     display: flex;
     flex-direction: row;
     justify-content: flex-start;
-    margin: 0 24px;
 }
 .player-progress-widget .progress-bar {
     position: relative;
@@ -18,8 +27,8 @@
 .player-progress-widget .bar {
     position: absolute;
     display: flex;
-    background-color: var(--color-dark-primary);
     border-radius: 3px;
+    transition: width 1s cubic-bezier(.68,-0.55,.27,1.55), background-color 0.7s ease;
 }
 .player-progress-widget .progress-text {
     font-size: 10px;

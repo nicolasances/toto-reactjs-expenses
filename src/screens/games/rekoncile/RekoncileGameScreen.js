@@ -17,6 +17,7 @@ import categoriesMap from '../../../services/CategoriesMap'
 import TotoList from '../../../comp/TotoList'
 import TotoButton from '../../../comp/TotoButton'
 import MonkeyLoader from '../../../comp/MonkeyLoader'
+import PlayerProgressWidget from '../widgets/PlayerProgressWidget'
 
 const Status = {
     notUploaded: "not-uploaded",
@@ -34,11 +35,9 @@ export default function RekoncileGameScreen(props) {
     // State variable: status of the upload
     const [loading, setLoading] = useState(false);
     const [creatingExpense, setCreatingExpense] = useState(false)
-    const [gameStatus, setGameStatus] = useState({ score: 0, maxScore: 0, percCompletion: 0, missingKuds: [], numMissingKuds: 0 })
+    const [overview, setOverview] = useState();
     const [roundData, setRoundData] = useState()
     const [roundsToSkip, setRoundsToSkip] = useState(0)
-
-    const history = useHistory();
 
     /**
      * Load the game
@@ -46,8 +45,8 @@ export default function RekoncileGameScreen(props) {
      */
     const initialLoad = async () => {
 
-        // Update the Game Status
-        updateScore();
+        // Get the Overall Player Level
+        loadOverview();
 
         // Load the game and the next round
         loadNextRound();
@@ -55,16 +54,13 @@ export default function RekoncileGameScreen(props) {
     }
 
     /**
-     * Update the game score
-     * To do that, the method reloads the game and update the score
+     * Loads the games overview, including the player's level
      */
-    const updateScore = async () => {
+    const loadOverview = async () => {
 
-        // Load the game status
-        const status = await new GamesAPI().getRekoncileGameStatus();
+        const overview = await new GamesAPI().getGamesOverview();
 
-        // Update the status
-        setGameStatus(status);
+        setOverview(overview)
 
     }
 
@@ -107,7 +103,7 @@ export default function RekoncileGameScreen(props) {
         await gamesAPI.postRekonciliation(roundData.kudPayment, candidate)
 
         // Update the score
-        updateScore()
+        loadOverview()
 
         // Move to the next round
         loadNextRound()
@@ -141,15 +137,12 @@ export default function RekoncileGameScreen(props) {
         setCreatingExpense(false);
 
         // Update the score
-        updateScore();
+        loadOverview();
 
         // Move to the next round
         loadNextRound(700)
 
     }
-
-    useEffect(initialLoad, [])
-    useEffect(loadNextRound, [roundsToSkip])
 
     /**
      * Extractor
@@ -178,12 +171,19 @@ export default function RekoncileGameScreen(props) {
 
     }
 
+    useEffect(initialLoad, [])
+    useEffect(loadNextRound, [roundsToSkip])
+
     return (
         <div className="screen rekoncile-screen">
 
             <TitleBar title="The ReKoncile Game" back={true}></TitleBar>
 
-            <GameSummary loading={loading} score={gameStatus.score} total={gameStatus.maxScore} goal={`Keep reKonciling transactions!`} />
+            {overview && overview.playerLevel &&
+                <div className="progress-container">
+                    <PlayerProgressWidget label="Your Overall Score" progress={overview.playerLevel.progress} levelPoints={overview.playerLevel.levelPoints} />
+                </div>
+            }
 
             {!loading && roundData &&
                 <div className="game-body">

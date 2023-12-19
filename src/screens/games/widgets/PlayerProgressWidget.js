@@ -22,31 +22,42 @@ export default function PlayerProgressWidget(props) {
     // Calculate the completion in percentage relative to the Level
     const completionPerc = Math.floor((100 * relativeScore) / levelNumPoints)
 
-    // Animate the progress bar
-    useEffect(() => {
+    /**
+     * Animation for a change in the score
+     */
+    const triggerAnimation = () => {
 
-        const timeoutId = setTimeout(() => {
-            if (progressRef.current) {
-                progressRef.current.style.width = `${completionPerc}%`;
-            }
-        }, 100);
+        progressRef.current.style.backgroundColor = '#588e17'
+        
+        setTimeout(() => {
+            progressRef.current.style.width = `${completionPerc}%`;
+        }, 100)
+        
+        setTimeout(() => {
+            progressRef.current.style.backgroundColor = 'var(--color-dark-primary)'
+        }, 1100)
+    }
 
-        return () => clearTimeout(timeoutId);
-    })
+    useEffect(triggerAnimation, [props.progress])
 
 
     return (
-        <div className="player-progress-widget">
+        <div className="player-progress-widget-container">
+            
+            {props.label && <div className="label">{props.label}</div>}
 
-            <div className="progress-bar">
-                <div className="bar" ref={progressRef} style={{ width: `0%`, transition: 'width 1s ease-in-out' }}>
-                    <div className="progress-text">{progress.score}<span>pts.</span></div>
+            <div className="player-progress-widget">
+
+                <div className="progress-bar">
+                    <div className="bar" ref={progressRef} style={{ width: `0%` }}>
+                        <div className="progress-text">{progress.score}<span>pts.</span></div>
+                    </div>
+                    <div className="progress-text target">{levelPoints.passScore}<span>pts.</span></div>
                 </div>
-                <div className="progress-text target">{levelPoints.passScore}<span>pts.</span></div>
+
+                <TotoIconButton image={<HelpSVG />} size="ss" />
+
             </div>
-
-            <TotoIconButton image={<HelpSVG />} size="ss" />
-
         </div>
     )
 }
