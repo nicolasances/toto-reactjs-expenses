@@ -28,6 +28,8 @@ import './TotoList.css';
  *                                            image     : image url (svg)
  *                                            onPress   : an onPress() callback function
  *                                          }
+ *                            style:        a string that is used to differentiate the style of the single item compared to others. 
+ *                                          accepted values are : "income", "payment"
  *                          }
  * - onAvatarClick        : (optional) function(item, selected) invoked when the avatar is clicked.
  *                          The function will receive the item clicked and the indication if it is selected or unselected
@@ -191,7 +193,7 @@ class Item extends Component {
     }
 
     return (
-      <div className='item' onClick={this.onPress}>
+      <div className={`item ${data.style ? data.style : ""}`} onClick={this.onPress}>
         {avatar}
         {date}
         {title}

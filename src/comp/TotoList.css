@@ -36,3 +36,7 @@
 .toto-list .item .highlights { display: flex; flex-direction: row; }
 .toto-list .item .highlights svg { width: 18px; height: 18px; margin-left: 12px; fill: #ffeb3b; }
 .toto-list .item .highlights .disabled svg { fill: currentColor; opacity: 0.7; }
+
+.toto-list .item.income {
+  color: #1bffff;
+}

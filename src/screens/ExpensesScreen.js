@@ -5,6 +5,7 @@ import TotoList from '../comp/TotoList';
 import categoriesMap from '../services/CategoriesMap';
 import { ReactComponent as BankSVG } from '../img/bank.svg';
 import { ReactComponent as ReconcileSVG } from '../img/reconcile.svg';
+import { ReactComponent as IncomeSVG } from '../img/income.svg';
 import moment from 'moment-timezone';
 import './ExpensesScreen.css';
 import ExpensesAPI from '../services/ExpensesAPI';
@@ -29,6 +30,8 @@ class ExpensesScreen extends Component {
 
         this.onMonthChange = this.onMonthChange.bind(this);
         this.loadExpenses = this.loadExpenses.bind(this);
+        this.loadIncomes = this.loadIncomes.bind(this);
+        this.loadTransactions = this.loadTransactions.bind(this);
         this.selectExpense = this.selectExpense.bind(this);
         this.onCategoryChange = this.onCategoryChange.bind(this);
         this.changeExpenseCategory = this.changeExpenseCategory.bind(this);
@@ -37,7 +40,7 @@ class ExpensesScreen extends Component {
     }
 
     componentDidMount() {
-        this.loadExpenses();
+        this.loadTransactions();
     }
 
 
@@ -57,7 +60,7 @@ class ExpensesScreen extends Component {
         // Otherwise, check the navigation state
         else if (this.props.location && this.props.location.state && this.props.location.state.selectedMonth) return moment(this.props.location.state.selectedMonth + '01', "YYYYMMDD");
         // Otherwise, check if there's a query param in the URL
-        else if (searchParams && searchParams.yearMonth) return moment (searchParams.yearMonth + '01', 'YYYYMMDD');
+        else if (searchParams && searchParams.yearMonth) return moment(searchParams.yearMonth + '01', 'YYYYMMDD');
         // Otherwise, current month
         else return moment();
 
@@ -84,10 +87,53 @@ class ExpensesScreen extends Component {
         cookies.remove("expensesListYearMonth")
     }
 
-    loadExpenses() {
-        new ExpensesAPI().getExpenses(cookies.get('user').email, this.state.selectedMonth.format('YYYYMM')).then((data) => {
-            this.setState({ expenses: data.expenses });
-        })
+    /**
+     * Loads all transaction of the currently selected year month
+     * 
+     * That is :
+     *  - the expenses
+     *  - the incomes
+     */
+    async loadTransactions() {
+
+        // Load the expenses
+        const expenses = await this.loadExpenses()
+
+        // Load the incomes
+        const incomes = await this.loadIncomes()
+
+        // Set the incomes as "incomes"
+        for (let income of incomes) income.income = true
+
+        // Merge the two lists
+        let transactions = [...expenses, ...incomes]
+
+        // Sort the transactions
+        transactions.sort((a, b) => { return a.date < b.date })
+
+        // Update the state
+        this.setState({ transactions: transactions })
+    }
+
+    /**
+     * Loads all incomes of the currently selected YearMonth
+     */
+    async loadIncomes() {
+
+        const data = await new ExpensesAPI().getIncomes(this.state.selectedMonth.format("YYYYMM"));
+
+        return data.incomes
+
+    }
+
+    /**
+     * Loads all payments of the currently selected YearMonth
+     */
+    async loadExpenses() {
+
+        const data = await new ExpensesAPI().getExpenses(cookies.get('user').email, this.state.selectedMonth.format('YYYYMM'))
+
+        return data.expenses
     }
 
     /**
@@ -97,7 +143,7 @@ class ExpensesScreen extends Component {
     onMonthChange(newMonth) {
         this.setState({ selectedMonth: newMonth }, () => {
             this.updateLastSelectedMonth(newMonth);
-            this.loadExpenses();
+            this.loadTransactions();
         });
     }
 
@@ -124,9 +170,9 @@ class ExpensesScreen extends Component {
      */
     onCategoryChange(newCategory) {
 
-        this.setState({ categoryPopupOpen : false });
+        this.setState({ categoryPopupOpen: false });
 
-        let expense = this.state.selectedExpense; 
+        let expense = this.state.selectedExpense;
 
         if (!expense) return;
 
@@ -144,11 +190,11 @@ class ExpensesScreen extends Component {
      */
     onReconcilePress(expense) {
 
-        new ExpensesAPI().consolidateExpense(expense.id).then(this.loadExpenses);
+        new ExpensesAPI().consolidateExpense(expense.id).then(this.loadTransactions);
     }
 
-    selectExpense(expense) {
-        this.props.history.push('/expenses/' + expense.id);
+    selectExpense(transaction) {
+        this.props.history.push('/expenses/' + transaction.id, { income: transaction.income });
     }
 
     /**
@@ -175,14 +221,15 @@ class ExpensesScreen extends Component {
         return {
             avatar: {
                 type: 'image',
-                value: item.category ? categoriesMap.get(item.category).image : null,
+                value: item.category ? categoriesMap.get(item.category).image : (item.income ? <IncomeSVG /> : null),
                 size: 'l'
             },
             date: { date: item.date },
             title: item.description,
-            monthly: item.monthly, 
-            amount: currency + ' ' + item.amount.toLocaleString('it'),
-            highlights: highlights
+            monthly: item.monthly,
+            amount: (item.income ? "+ " : '') + currency + ' ' + item.amount.toLocaleString('it'),
+            highlights: highlights,
+            style: item.income ? "income" : "payment"
         }
 
     }
@@ -201,7 +248,7 @@ class ExpensesScreen extends Component {
                 </div>
                 <div className="expenses-list-widget">
                     <TotoList
-                        data={this.state.expenses}
+                        data={this.state.transactions}
                         dataExtractor={this.dataExtractor}
                         onPress={this.selectExpense}
                         onAvatarClick={this.changeExpenseCategory}
@@ -216,10 +263,10 @@ class ExpensesScreen extends Component {
                     closeOnEscape={false}
                 >
 
-                    <CategorySelectionPopup 
-                        onCategoryChange={this.onCategoryChange} 
-                        onPressClose={() => {this.setState({categoryPopupOpen: false})}}
-                        />
+                    <CategorySelectionPopup
+                        onCategoryChange={this.onCategoryChange}
+                        onPressClose={() => { this.setState({ categoryPopupOpen: false }) }}
+                    />
 
                 </Popup>
             </div>

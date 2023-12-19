@@ -21,10 +21,87 @@ export default class GamesAPI {
 
   }
 
-  getKuploadGameStatus() {
+  /**
+   * Signals that a KUD is missing and that the user won't be able to upload it
+   * @param {string} year the year
+   * @param {string} month the last month of the KUD
+   */
+  async signalMissingKud(year, month) {
+
+    return new TotoAPI().fetch('games', '/games/kuddoc/missing', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ year: year, month: month })
+    }).then((response) => response.json());
+
+  }
+
+  async getKuploadGameStatus() {
 
     return new TotoAPI().fetch('games', `/games/kupload`)
       .then((response) => response.json());
+
+  }
+
+  async getRekoncileGameStatus() {
+
+    return new TotoAPI().fetch('games', `/games/rekoncile`).then((response) => response.json());
+
+  }
+
+  /**
+   * Gets the next round for the Rekoncile Game
+   * 
+   * @param roundsToSkip (default null) pass a number, if you want to skip some expenses
+   * 
+   * @returns 
+   */
+  async getRekoncileNextRound(roundsToSkip) {
+
+    return new TotoAPI().fetch('games', `/games/rekoncile/next?roundsToSkip=${roundsToSkip}`).then((response) => response.json());
+
+  }
+
+  /**
+   * Posts a reconciliation to the Rekoncile Game
+   * 
+   * @param {*} kudPayment the kud payment  
+   * @param {*} totoTransaction the toto transaction
+   * @returns 
+   */
+  async postRekonciliation(kudPayment, totoTransaction) {
+
+    return new TotoAPI().fetch('games', '/games/rekoncile/reconciliations', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        kudPayment: kudPayment,
+        totoTransaction: totoTransaction
+      })
+    }).then((response) => response.json());
+
+  }
+
+  /**
+   * Creates a TotoExpense with the proivded Kud Payment and 
+   * reconciles the two automatically
+   * 
+   * @param {*} kudPayment the kud payment  
+   * @returns 
+   */
+  async createTotoExpenseAndReconcile(kudPayment) {
+
+    return new TotoAPI().fetch('games', '/games/rekoncile/expenses', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ kudPayment: kudPayment })
+    }).then((response) => response.json());
 
   }
 
@@ -32,7 +109,7 @@ export default class GamesAPI {
    * Retrieves the overview of all games and the player's level
    * @returns the Games Overview
    */
-  getGamesOverview() {
+  async getGamesOverview() {
 
     return new TotoAPI().fetch('games', `/games`).then((response) => response.json());
 

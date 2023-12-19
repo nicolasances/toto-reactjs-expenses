@@ -42,7 +42,7 @@
 .player-level-widget .title {
     font-size: 14px;
     font-weight: bold;
-    color: white;
+    color: var(--color-text-light);
     text-transform: uppercase;
 }
 .player-level-widget .desc {

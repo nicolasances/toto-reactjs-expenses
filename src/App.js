@@ -21,6 +21,7 @@ import InsightsScreen from './screens/insights/InsightsScreen';
 import ConsolidationInsightsScreen from './screens/insights/consolidation/ConsolidationInsightsScreen';
 import GamesScreen from './screens/games/GamesScreen';
 import KuploadGameScreen from './screens/games/kupload/KuploadGameScreen';
+import RekoncileGameScreen from './screens/games/rekoncile/RekoncileGameScreen';
 
 const cookies = new Cookies();
 const googleClientID = process.env.REACT_APP_GOOGLE_CLIENT_ID;
@@ -250,6 +251,9 @@ class App extends Component {
             </Route>
             <Route exact path="/games/kupload">
               <KuploadGameScreen />
+            </Route>
+            <Route exact path="/games/rekoncile">
+              <RekoncileGameScreen/>
             </Route>
           </Switch>
         </Router>

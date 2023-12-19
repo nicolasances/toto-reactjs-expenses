@@ -1,0 +1,11 @@
+.toto-button {
+    display: flex;
+}
+.toto-button .button-container {
+    border: 2px solid var(--color-accent);
+    border-radius: 20px;
+    padding: 6px 12px;
+    color: var(--color-accent);
+    text-align: center;
+    cursor: pointer;
+}

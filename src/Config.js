@@ -6,7 +6,7 @@ export const APIS = {
   games: process.env.REACT_APP_GAMES_API_ENDPOINT, 
 }
 
-export const APP_VERSION = "1.6.1"
+export const APP_VERSION = "1.10.0"
 
 
 export const EVENTS = {

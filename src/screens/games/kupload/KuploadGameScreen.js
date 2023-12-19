@@ -5,7 +5,8 @@ import GamesAPI from "../../../services/GamesAPI"
 import { ReactComponent as UploadSVG } from '../../../img/upload-cloud.svg'
 import { ReactComponent as TickSVG } from '../../../img/tick.svg'
 import { ReactComponent as StopSVG } from '../../../img/stop.svg'
-import { ReactComponent as QuestionSVG } from '../../../img/question.svg'
+import { ReactComponent as ConfusedSVG } from '../../../img/confused.svg'
+import { ReactComponent as PartySVG } from '../../../img/party.svg'
 import { ReactComponent as FlagSVG } from '../../../img/goal.svg'
 import TouchableOpacity from '../../../comp/TouchableOpacity'
 import { useEffect, useRef, useState } from 'react';
@@ -32,7 +33,8 @@ export default function KuploadGameScreen(props) {
     const [loading, setLoading] = useState(false);
     const [kudDate, setKudDate] = useState({ year: "", month: "", firstDate: moment(), lastDate: moment() })
     const [gameStatus, setGameStatus] = useState({ score: 0, maxScore: 0, percCompletion: 0, missingKuds: [], numMissingKuds: 0 })
-    
+    const [finished, setFinished] = useState(false)
+
     const history = useHistory();
 
     const fileInputRef = useRef(null);
@@ -99,6 +101,9 @@ export default function KuploadGameScreen(props) {
                 lastDate: fmkDate,
             })
         }
+        else {
+            setFinished(true)
+        }
 
 
     }
@@ -121,6 +126,20 @@ export default function KuploadGameScreen(props) {
     const onStop = () => {
 
         history.goBack();
+
+    }
+
+    /**
+     * When the user cannot find the Kud for that month
+     * Move to the next available month, and tell the backend that this one is not available.
+     */
+    const onMissingKud = async () => {
+
+        // Signal that the KUD is missing
+        await new GamesAPI().signalMissingKud(kudDate.year, kudDate.month);
+
+        // Load the next game round
+        loadNextRound();
 
     }
 
@@ -164,22 +183,38 @@ export default function KuploadGameScreen(props) {
             {!loading &&
                 <div className="game-body">
                     <div className="goal">
-                        <div className="goal-title">Upload your Kontoudskfrift for the period</div>
-                        <div className="goal-date">{kudDate.firstDate.format("MMMM")} - {kudDate.lastDate.format("MMMM")} {kudDate.year}</div>
+                        {!finished && <div className="goal-title">Upload your Kontoudskfrift for the period</div>}
+                        {!finished && <div className="goal-date">{kudDate.firstDate.format("MMMM")} - {kudDate.lastDate.format("MMMM")} {kudDate.year}</div>}
+                        {finished && <div className="goal-date">Well done!</div>}
+                        {finished && <div className="goal-date">You don't have any more documents to upload for now!</div>}
                     </div>
 
-                    <div className={`kud-upload-container ${uploadStatus}`}>
-                        <input type="file" ref={fileInputRef} style={{ display: 'none' }} onChange={onFileChange} />
-                        <KudUpload onPress={onUploadPressed} status={uploadStatus} />
-                    </div>
+                    {finished && 
+                        <div className='finished'>
+                            <PartySVG/>
+                        </div>
+                    }
 
-                    {uploadStatus == Status.uploaded &&
+                    {!finished &&
+                        <div className={`kud-upload-container ${uploadStatus}`}>
+                            <input type="file" ref={fileInputRef} style={{ display: 'none' }} onChange={onFileChange} />
+                            <KudUpload onPress={onUploadPressed} status={uploadStatus} />
+                        </div>
+                    }
+
+                    {!finished && uploadStatus == Status.notUploaded &&
+                        <div className="actions-box">
+                            <TotoIconButton image={<ConfusedSVG />} size="ms" label="It's missing" onPress={onMissingKud} />
+                        </div>
+                    }
+
+                    {!finished && uploadStatus == Status.uploaded &&
                         <div className="next">
                             <div className="congrats">Congratulations!</div>
                             <div className="points">You scored 20 pts!</div>
                             <div className="question">Do you want to continue playing?</div>
                             <div className="actions-box">
-                                <TotoIconButton image={<StopSVG />} size="ms" label="I'm done" onPress={onStop}/>
+                                <TotoIconButton image={<StopSVG />} size="ms" label="I'm done" onPress={onStop} />
                                 <TotoIconButton image={<TickSVG />} size="ms" label="Yeah!" onPress={onContinue} />
                             </div>
                         </div>
@@ -202,7 +237,7 @@ function GameGoal(props) {
 
     return (
         <div className="game-goal">
-            <div className="goal-label"><FlagSVG/><div>The Game Goal</div></div>
+            <div className="goal-label"><FlagSVG /><div>The Game Goal</div></div>
             <div className="desc">Upload all the Kontoudskfrift documents you received on eboks so that Toto can make sure you're not missing anything!</div>
         </div>
     )

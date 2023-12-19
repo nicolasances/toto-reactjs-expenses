@@ -4,6 +4,8 @@ import { withRouter } from 'react-router-dom';
 import TotoIconButton from '../comp/TotoIconButton';
 import { ReactComponent as TickSVG } from '../img/tick.svg';
 import { ReactComponent as CloseSVG } from '../img/close.svg';
+import { ReactComponent as IncomeSVG } from '../img/income.svg';
+import { ReactComponent as PaymentSVG } from '../img/payment.svg';
 import './NewExpenseScreen.css';
 import ExpensesAPI from '../services/ExpensesAPI';
 import Cookies from 'universal-cookie';
@@ -17,6 +19,7 @@ import * as config from '../Config';
 import ExpCatAPI from '../services/ExpCatAPI';
 import categoriesMap from '../services/CategoriesMap';
 import Checkbox from '../comp/Checkbox';
+import TitleBar from '../comp/TitleBar';
 
 const cookies = new Cookies();
 
@@ -38,6 +41,7 @@ class NewExpenseScreen extends Component {
       currency: 'DKK',
       date: date,
       category: 'VARIE',
+      payment: true       // If we set it to payment = false, it's an income
     }
 
     // Bindings
@@ -45,11 +49,14 @@ class NewExpenseScreen extends Component {
     this.setCurrency = this.setCurrency.bind(this);
     this.setAmount = this.setAmount.bind(this);
     this.setCategory = this.setCategory.bind(this);
+    this.saveTransaction = this.saveTransaction.bind(this);
     this.saveExpense = this.saveExpense.bind(this);
+    this.saveIncome = this.saveIncome.bind(this);
     this.setDescription = this.setDescription.bind(this);
     this.predictCategory = this.predictCategory.bind(this);
     this.cancel = this.cancel.bind(this);
     this.onToggleMonthly = this.onToggleMonthly.bind(this);
+    this.toggleTransactionType = this.toggleTransactionType.bind(this);
 
   }
 
@@ -67,9 +74,9 @@ class NewExpenseScreen extends Component {
   }
 
   /**
-   * Save th expense
+   * Save an expense
    */
-  saveExpense() {
+  async saveExpense() {
 
     let expense = {
       amount: this.state.amount,
@@ -79,20 +86,54 @@ class NewExpenseScreen extends Component {
       yearMonth: this.state.date.substring(0, 6),
       consolidated: false,
       currency: this.state.currency,
-      user: this.user.email, 
+      user: this.user.email,
       monthly: this.state.monthly
     }
+  
+    const data = await new ExpensesAPI().postExpense(expense);
+  
+    expense.id = data.id;
+  
+    // Publish an event
+    eventBus.publishEvent({ name: config.EVENTS.expenseCreated, context: { expense: expense } });
 
-    new ExpensesAPI().postExpense(expense).then((data) => {
+  }
 
-      expense.id = data.id;
+  /**
+   * Save an income
+   */
+  async saveIncome() { 
 
-      // Publish an event
-      eventBus.publishEvent({ name: config.EVENTS.expenseCreated, context: { expense: expense } });
+    let income = {
+      amount: parseFloat(this.state.amount),
+      date: this.state.date,
+      description: this.state.description,
+      currency: this.state.currency,
+    }
 
-      // Return back
-      this.props.history.goBack();
+    await new ExpensesAPI().postIncome(income);
+    
+  }
 
+  /**
+   * Save the transaction
+   */
+  async saveTransaction() {
+
+    // If it's a payment, save it as expense
+    if (this.state.payment == true) await this.saveExpense()
+    // Otherwise save it as an income
+    else await this.saveIncome();
+
+    // Return back
+    this.props.history.goBack();
+
+  }
+
+  toggleTransactionType() {
+
+    this.setState((prev) => {
+      return { payment: !prev.payment }
     })
 
   }
@@ -178,14 +219,17 @@ class NewExpenseScreen extends Component {
     if (this.state.amount != null && this.state.description != null) saveButton = (
       <TotoIconButton
         image={<TickSVG className="icon" />}
-        onPress={this.saveExpense}
+        onPress={this.saveTransaction}
       />
     )
 
     return (
       <div className="screen new-expense">
 
-        <div className="header">New payment</div>
+        <TitleBar title={this.state.payment === true ? "New payment" : "New income"}
+          rightButton={
+            <TotoIconButton image={this.state.payment == true ? <IncomeSVG /> : <PaymentSVG />} borders={false} size="ms" onPress={this.toggleTransactionType} />
+          } />
 
         <div className="line1">
           <div className="dateContainer">
@@ -200,19 +244,23 @@ class NewExpenseScreen extends Component {
         </div>
 
         <div className="line2">
-          <TextInput placeholder="What was this payment for?"
+          <TextInput placeholder={this.state.payment == true ? "What was this payment for?" : "What was this income for?"}
             align="center"
             onTextChange={this.setDescription}
           />
         </div>
 
-        <div className="line3">
-          <CategoryPicker category={this.state.category} onCategoryChange={this.setCategory} />
-        </div>
+        {this.state.payment == true &&
+          <div className="line3">
+            <CategoryPicker category={this.state.category} onCategoryChange={this.setCategory} />
+          </div>
+        }
 
-        <div className="line4">
-          <Checkbox onToggleFlag={this.onToggleMonthly} flag={this.state.monthly} />
-        </div>
+        {this.state.payment == true &&
+          <div className="line4">
+            <Checkbox onToggleFlag={this.onToggleMonthly} flag={this.state.monthly} />
+          </div>
+        }
 
         <div style={{ flex: 1 }}>
         </div>
