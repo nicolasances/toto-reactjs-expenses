@@ -5,6 +5,14 @@ import { useEffect, useImperativeHandle, useRef } from 'react';
 import Lottie from "lottie-react";
 import animationHearts from "../../../lottie/anim-hearts.json"
 
+/**
+ * 
+ * Properties that can be passed: 
+ * -----------------------------------------------------
+ *  - lottieOn:         (boolean, default true). Activates the lottie animation
+ * 
+ * 
+ */
 export default function PlayerProgressWidget(props, ref) {
 
     const progressRef = useRef(null)
@@ -31,7 +39,7 @@ export default function PlayerProgressWidget(props, ref) {
     const triggerAnimation = () => {
 
         // Trigger the Lottie animation
-        triggerLottie();
+        if (props.lottieOn == null || props.lottieOn === true) triggerLottie();
 
         progressRef.current.style.backgroundColor = '#588e17'
 

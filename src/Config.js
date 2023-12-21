@@ -6,8 +6,7 @@ export const APIS = {
   games: process.env.REACT_APP_GAMES_API_ENDPOINT, 
 }
 
-export const APP_VERSION = "1.11.0.2"
-
+export const APP_VERSION = "1.11.0.3"
 
 export const EVENTS = {
   userInfoChanged: 'userInfoChanged', // User info received from Google

@@ -18,6 +18,7 @@ import TotoList from '../../../comp/TotoList'
 import TotoButton from '../../../comp/TotoButton'
 import MonkeyLoader from '../../../comp/MonkeyLoader'
 import PlayerProgressWidget from '../widgets/PlayerProgressWidget'
+import { LevelUpWidget } from '../widgets/LevelUpWidget'
 
 const Status = {
     notUploaded: "not-uploaded",
@@ -38,6 +39,10 @@ export default function RekoncileGameScreen(props) {
     const [overview, setOverview] = useState();
     const [roundData, setRoundData] = useState()
     const [roundsToSkip, setRoundsToSkip] = useState(0)
+    const [playerLevelId, setPlayerLevelId] = useState(null)
+    const [levelUp, setLevelUp] = useState(false)
+
+    const previousPlayerLevelId = useRef()
 
     /**
      * Load the game
@@ -61,6 +66,10 @@ export default function RekoncileGameScreen(props) {
         const overview = await new GamesAPI().getGamesOverview();
 
         setOverview(overview)
+
+        previousPlayerLevelId.current = playerLevelId
+
+        setPlayerLevelId(overview.playerLevel.level.id)
 
     }
 
@@ -171,13 +180,34 @@ export default function RekoncileGameScreen(props) {
 
     }
 
+    /**
+     * This method checks whether a level up animation is needed and controls it
+     */
+    const levelUpAnimation = () => {
+
+        // If we just loaded for the first time the current status, no level up occurred
+        if (previousPlayerLevelId.current == null) return;
+
+        // If the player level did not change, no animation is needed
+        if (previousPlayerLevelId.current == playerLevelId) return;
+
+        console.log("Level Up occurred!");
+
+        // Trigger the animation
+        setLevelUp(true)
+
+    }
+
     useEffect(initialLoad, [])
     useEffect(loadNextRound, [roundsToSkip])
+    useEffect(levelUpAnimation, [playerLevelId])
 
     return (
         <div className="screen rekoncile-screen">
 
             <TitleBar title="The ReKoncile Game" back={true}></TitleBar>
+
+            <LevelUpWidget show={levelUp} onClose={() => { setLevelUp(false) }} />
 
             {overview && overview.playerLevel &&
                 <div className="progress-container">
