@@ -42,7 +42,7 @@ export default function GamesScreen(props) {
 
                     <PlayerLevelWidget playerLevel={overview.playerLevel} />
 
-                    <PlayerProgressWidget progress={overview.playerLevel.progress} levelPoints={overview.playerLevel.levelPoints} />
+                    <PlayerProgressWidget progress={overview.playerLevel.progress} levelPoints={overview.playerLevel.levelPoints} lottieOn={false} />
 
                     <div className="games-section">
                         <div className="title">Available Games</div>

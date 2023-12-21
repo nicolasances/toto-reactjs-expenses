@@ -1,0 +1,34 @@
+
+.level-up-widget {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    width: 100vw;
+    height: 100vh;
+    z-index: 3; 
+    background-color: #00acc1cc;
+}
+.level-up-widget .lup {
+    font-size: 32px; 
+    text-transform: capitalize;
+    color: var(--color-accent);
+    text-align: center;
+    font-weight: bold;
+    transition: fontSize 1s ease-in-out;
+}
+.level-up-widget p {
+    margin: 6px;
+}
+.level-up-widget .desc {
+    margin-top: 6px;
+    font-size: 12px;
+    text-align: center;
+    color: var(--color-text-light);
+}
+.level-up-widget .desc .big {
+    font-size: 23px;
+    font-weight: bold;
+}
+.level-up-widget .buttons {
+    margin-bottom: 24px;
+}
