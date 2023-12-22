@@ -38,16 +38,14 @@ export default class GamesAPI {
 
   }
 
-  async getKuploadGameStatus() {
+  /**
+   * Gets any Game status
+   * 
+   * @param {string} gameId the id of the game (e.g. rekoncile, cattie, kupload...)
+   */
+  async getGameStatus(gameId) {
 
-    return new TotoAPI().fetch('games', `/games/kupload`)
-      .then((response) => response.json());
-
-  }
-
-  async getRekoncileGameStatus() {
-
-    return new TotoAPI().fetch('games', `/games/rekoncile`).then((response) => response.json());
+    return new TotoAPI().fetch('games', `/games/${gameId}`).then((response) => response.json());
 
   }
 
@@ -114,5 +112,33 @@ export default class GamesAPI {
     return new TotoAPI().fetch('games', `/games`).then((response) => response.json());
 
   }
+
+  /**
+   * Retrieves the next round of Cattie Game
+   */
+  async getCattieNextRound() {
+
+    return new TotoAPI().fetch('games', `/games/cattie/next`).then((response) => response.json());
+
+  }
+
+  /**
+   * Submit a chosen category in the Cattie game
+   * 
+   * @param totoExpense the toto expense, as received from the backend
+   * @param chosenCategory the user-chosen category
+   */
+  async submitCattieChoice(totoExpense, chosenCategory) {
+
+    return new TotoAPI().fetch('games', '/games/cattie/selections', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ expense: totoExpense, chosenCategory: chosenCategory })
+    }).then((response) => response.json());
+
+  }
+
 
 }

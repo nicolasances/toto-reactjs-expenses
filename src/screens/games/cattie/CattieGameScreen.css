@@ -1,0 +1,24 @@
+.cattie {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+}
+
+.cattie .goal {
+    text-align: center;
+    font-size: 12px;
+    margin-bottom: 24px;
+}
+.cattie .goal {
+    text-align: center;
+    font-size: 12px;
+    margin-bottom: 24px;
+}
+.cattie .detach-from-top {
+    margin-top: 24px;
+}
+.cattie .suggestions {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+}

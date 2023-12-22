@@ -4,6 +4,7 @@ import Popup from 'reactjs-popup';
 import CategorySelectionPopup from './CategorySelectionPopup';
 import categoriesMap from '../../services/CategoriesMap';
 import { variance } from 'd3-array';
+import TouchableOpacity from '../TouchableOpacity';
 
 /**
  * Form component to pick a payment category
@@ -14,6 +15,11 @@ import { variance } from 'd3-array';
  *  - initialValueLoader        :   (OPT) a function that will load the initial value. 
  *  - category                  :   (MAND) the category (this is a managed component)
  *  - onCategoryChange          :   (OPT) callback to receive changes of selected category
+ *  - onPress                   :   (OPT) callback to react to when the user clicks on the category
+ *  - label                     :   (OPT) a label to override the default
+ *  - size                      :   (OPT, default "m") supported: "s", "m"
+ *  - color                     :   (OPT) pass a different color for the widget. Admitted values: "accent"
+ *  - disableSelection          :   (OPT, default false) pass true to disable the selection of a category
  */
 export default class CategoryPicker extends React.Component {
 
@@ -26,6 +32,7 @@ export default class CategoryPicker extends React.Component {
         }
 
         this.onCategoryChange = this.onCategoryChange.bind(this);
+        this.onCategoryPress = this.onCategoryPress.bind(this);
 
     }
 
@@ -49,20 +56,42 @@ export default class CategoryPicker extends React.Component {
         })
     }
 
+    /**
+     * Reacts to the user clicking on the category
+     */
+    onCategoryPress() {
+
+        // Define if selection is enabled
+        let selectionEnabled = this.props.selectionDisabled == true ? false : true
+
+        // If selection is enabled, open the popup
+        if (selectionEnabled) this.setState({ openPopup: true })
+
+        // If there's a callback, use it
+        if (this.props.onPress) this.props.onPress()
+
+    }
+
     render() {
 
         let categoryComponent = categoriesMap.get(this.props.category);
 
+        // Define the size
+        let size = this.props.size ? this.props.size : "m"
+
+        // Define the color
+        let color = this.props.color ? this.props.color : "grey"
+
         return (
             <div className="category-picker">
 
-                <div className="label">
-                    Payment category
+                <div className={`label ${size}`}>
+                    {this.props.label ? this.props.label : "Payment category"}
                 </div>
 
-                <div className="category-container" onClick={() => { this.setState({ openPopup: true }) }}>
+                <TouchableOpacity className={`category-container ${size} ${color}`} onPress={this.onCategoryPress}>
                     {categoryComponent.image}
-                </div>
+                </TouchableOpacity>
 
                 <Popup
                     on='click'
@@ -75,6 +104,7 @@ export default class CategoryPicker extends React.Component {
                     <CategorySelectionPopup onCategoryChange={this.onCategoryChange} />
 
                 </Popup>
+
             </div>
         )
     }

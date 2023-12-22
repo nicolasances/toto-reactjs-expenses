@@ -1,0 +1,17 @@
+.game-screen {
+    align-items: stretch;
+}
+
+.game-screen .progress-container {
+    margin: 12px 0;
+}
+
+.game-screen .game-body {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    align-items: stretch;
+    padding: 0 12px;
+    margin-top: 12px;
+}
+

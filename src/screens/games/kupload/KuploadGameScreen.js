@@ -76,7 +76,7 @@ export default function KuploadGameScreen(props) {
         const loadingTimer = setTimeout(() => { setLoading(true) }, 300)
 
         // Load the game status
-        const status = await new GamesAPI().getKuploadGameStatus();
+        const status = await new GamesAPI().getGameStatus("kupload");
 
         // Clear the timeout if it hasn't triggered yet
         clearTimeout(loadingTimer)

@@ -22,6 +22,7 @@ import ConsolidationInsightsScreen from './screens/insights/consolidation/Consol
 import GamesScreen from './screens/games/GamesScreen';
 import KuploadGameScreen from './screens/games/kupload/KuploadGameScreen';
 import RekoncileGameScreen from './screens/games/rekoncile/RekoncileGameScreen';
+import { CattieGameScreen } from './screens/games/cattie/CattieGameScreen';
 
 const cookies = new Cookies();
 const googleClientID = process.env.REACT_APP_GOOGLE_CLIENT_ID;
@@ -254,6 +255,9 @@ class App extends Component {
             </Route>
             <Route exact path="/games/rekoncile">
               <RekoncileGameScreen/>
+            </Route>
+            <Route exact path="/games/cattie">
+              <CattieGameScreen/>
             </Route>
           </Switch>
         </Router>

@@ -59,4 +59,5 @@
 .player-progress-widget-container .lottie-container {
     position: absolute;
     bottom: 0;
+    right: 0;
 }
