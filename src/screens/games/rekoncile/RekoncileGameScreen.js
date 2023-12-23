@@ -226,7 +226,10 @@ export default function RekoncileGameScreen(props) {
                             value: <QuestionSVG />,
                             size: 'l'
                         },
-                        date: { date: roundData.kudPayment.date },
+                        date: {
+                            date: roundData.kudPayment.date, 
+                            showYear: true
+                        },
                         title: roundData.kudPayment.text,
                         amount: roundData.kudPayment.amount
                     }} />
