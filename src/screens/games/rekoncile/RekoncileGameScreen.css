@@ -2,6 +2,10 @@
     align-items: stretch;
 }
 
+.rekoncile-screen .progress-container {
+    margin: 12px 0;
+}
+
 .rekoncile-screen .game-body {
     display: flex;
     flex: 1;

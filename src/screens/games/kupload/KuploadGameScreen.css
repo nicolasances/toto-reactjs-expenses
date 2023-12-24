@@ -1,6 +1,9 @@
 .kupload-screen {
     align-items: stretch;
 }
+.kupload-screen .progress-container {
+    margin: 12px 0;
+}
 
 .kupload-screen .game-body {
     display: flex;

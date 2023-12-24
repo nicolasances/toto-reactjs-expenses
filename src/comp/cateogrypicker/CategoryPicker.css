@@ -14,18 +14,23 @@
     justify-content: center;
     align-items: center;
 }
+.category-picker .category-container.s { width: 56px; height: 56px; }
+.category-picker .category-container.accent { border-color: var(--color-accent); }
 
 .category-picker .category-container svg {
-    width: 40px;
-    height: 40px;
-    fill: rgba(0,0,0,0.7);
+  width: 40px;
+  height: auto;
+  fill: rgba(0,0,0,0.7);
 }
+.category-picker .category-container.s svg { width: 26px;  }
+.category-picker .category-container.accent svg { fill: var(--color-accent)  }
 
 .category-picker .label {
     font-size: medium;
     color: rgba(0,0,0,0.7);
     margin-bottom: 16px;
 }
+.category-picker .label.s {font-size: x-small}
 
 
 

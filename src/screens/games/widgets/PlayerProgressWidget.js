@@ -1,11 +1,22 @@
 import './PlayerProgressWidget.css'
 import TotoIconButton from '../../../comp/TotoIconButton';
 import { ReactComponent as HelpSVG } from '../../../img/question.svg';
-import { useEffect, useRef } from 'react';
+import { useEffect, useImperativeHandle, useRef } from 'react';
+import Lottie from "lottie-react";
+import animationHearts from "../../../lottie/anim-hearts.json"
 
-export default function PlayerProgressWidget(props) {
+/**
+ * 
+ * Properties that can be passed: 
+ * -----------------------------------------------------
+ *  - lottieOn:         (boolean, default true). Activates the lottie animation
+ * 
+ * 
+ */
+export default function PlayerProgressWidget(props, ref) {
 
     const progressRef = useRef(null)
+    const animationRef = useRef(null)
 
     let progress = props.progress;
     if (!progress) progress = { score: 0, maxScore: 0, percCompletion: 0 }
@@ -22,31 +33,56 @@ export default function PlayerProgressWidget(props) {
     // Calculate the completion in percentage relative to the Level
     const completionPerc = Math.floor((100 * relativeScore) / levelNumPoints)
 
-    // Animate the progress bar
-    useEffect(() => {
+    /**
+     * Animation for a change in the score
+     */
+    const triggerAnimation = () => {
 
-        const timeoutId = setTimeout(() => {
-            if (progressRef.current) {
-                progressRef.current.style.width = `${completionPerc}%`;
-            }
-        }, 100);
+        // Trigger the Lottie animation
+        if (props.lottieOn == null || props.lottieOn === true) triggerLottie();
 
-        return () => clearTimeout(timeoutId);
-    })
+        progressRef.current.style.backgroundColor = '#588e17'
+
+        setTimeout(() => {
+            progressRef.current.style.width = `${completionPerc}%`;
+        }, 100)
+
+        setTimeout(() => {
+            progressRef.current.style.backgroundColor = 'var(--color-dark-primary)'
+        }, 500)
+    }
+
+    /**
+     * Triggers the Lottie animation
+     */
+    const triggerLottie = () => {
+        animationRef.current.goToAndPlay(0)
+    }
+
+    useEffect(triggerAnimation, [props.progress])
 
 
     return (
-        <div className="player-progress-widget">
+        <div className="player-progress-widget-container">
 
-            <div className="progress-bar">
-                <div className="bar" ref={progressRef} style={{ width: `0%`, transition: 'width 1s ease-in-out' }}>
-                    <div className="progress-text">{progress.score}<span>pts.</span></div>
-                </div>
-                <div className="progress-text target">{levelPoints.passScore}<span>pts.</span></div>
+            {props.label && <div className="label">{props.label}</div>}
+
+            <div className="lottie-container">
+                <Lottie animationData={animationHearts} loop={false} lottieRef={animationRef} autoplay={false} />
             </div>
 
-            <TotoIconButton image={<HelpSVG />} size="ss" />
+            <div className="player-progress-widget">
 
+                <div className="progress-bar">
+                    <div className="bar" ref={progressRef} style={{ width: `0%` }}>
+                        <div className="progress-text">{progress.score}<span>pts.</span></div>
+                    </div>
+                    <div className="progress-text target">{levelPoints.passScore}<span>pts.</span></div>
+                </div>
+
+                <TotoIconButton image={<HelpSVG />} size="ss" />
+
+            </div>
         </div>
     )
 }

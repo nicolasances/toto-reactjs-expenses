@@ -4,6 +4,7 @@ import { useHistory } from 'react-router-dom/cjs/react-router-dom.min';
 
 import { ReactComponent as UploadSVG } from '../../img/games/games/kupload.svg'
 import { ReactComponent as RekoncileSVG } from '../../img/games/games/rekoncile.svg'
+import { ReactComponent as CattieSVG } from '../../img/cat.svg'
 
 import GamesAPI from '../../services/GamesAPI';
 import TitleBar from "../../comp/TitleBar";
@@ -42,7 +43,7 @@ export default function GamesScreen(props) {
 
                     <PlayerLevelWidget playerLevel={overview.playerLevel} />
 
-                    <PlayerProgressWidget progress={overview.playerLevel.progress} levelPoints={overview.playerLevel.levelPoints} />
+                    <PlayerProgressWidget progress={overview.playerLevel.progress} levelPoints={overview.playerLevel.levelPoints} lottieOn={false} />
 
                     <div className="games-section">
                         <div className="title">Available Games</div>
@@ -50,6 +51,7 @@ export default function GamesScreen(props) {
                         <div className="games-container">
                             <Game gamePage="kupload" gameName="The Kupload" image={<UploadSVG />} />
                             <Game gamePage="rekoncile" gameName="The Rekoncile" image={<RekoncileSVG />} />
+                            <Game gamePage="cattie" gameName="The Cattie" image={<CattieSVG />} />
                         </div>
                     </div>
                 </div>
