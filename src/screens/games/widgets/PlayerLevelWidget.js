@@ -4,6 +4,9 @@ import { ReactComponent as MonkeySVG } from '../../../img/games/monkey.svg'
 import { ReactComponent as CakeSVG } from '../../../img/games/cake.svg'
 import { ReactComponent as BirdieSVG } from '../../../img/games/bird.svg'
 import { ReactComponent as RobotSVG } from '../../../img/games/robot.svg'
+import { ReactComponent as RocketSVG } from '../../../img/games/rocket.svg'
+import { ReactComponent as GalaxySVG } from '../../../img/games/galaxy.svg'
+import { ReactComponent as HeavenlySVG } from '../../../img/games/heavenly.svg'
 
 const IMAGES = {
     fishy: { img: <FishSVG /> },
@@ -11,6 +14,9 @@ const IMAGES = {
     cake: { img: <CakeSVG /> },
     birdie: { img: <BirdieSVG /> },
     robot: { img: <RobotSVG /> },
+    rocket: { img: <RocketSVG /> },
+    galaxy: { img: <GalaxySVG /> },
+    heavenly: { img: <HeavenlySVG /> },
 }
 
 export default function PlayerLevelWidget(props) {
