@@ -25,12 +25,19 @@ const COLORS = [
 export default function GamesScreen(props) {
 
     const [overview, setOverview] = useState();
+    const [loading, setLoading] = useState(false)
 
     const initialLoad = async () => {
 
+        const timer = setTimeout(() => { setLoading(true) }, 700)
+
         const overview = await new GamesAPI().getGamesOverview();
 
+        clearTimeout(timer);
+
         setOverview(overview)
+
+        setLoading(false)
 
     }
 
@@ -41,7 +48,7 @@ export default function GamesScreen(props) {
 
             <TitleBar title="Toto Games" back={true} />
 
-            {overview == null && 
+            {overview == null && loading &&
                 <div className="content">
                     <div className="loading-container">
                         <Lottie animationData={monkeyZenAnimation} loop={true} autoplay={true} />
