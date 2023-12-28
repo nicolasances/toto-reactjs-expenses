@@ -104,6 +104,24 @@ export default class GamesAPI {
   }
 
   /**
+   * Invalidates the kud payment
+   * @param {*} kudPayment the kyd pyament
+   * @returns 
+   */
+  async invalidateKudPayment(kudPayment) {
+
+    return new TotoAPI().fetch('games', '/games/rekoncile/invalidate', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ kudTransactionId: kudPayment.id })
+    }).then((response) => response.json());
+
+
+  }
+
+  /**
    * Retrieves the overview of all games and the player's level
    * @returns the Games Overview
    */

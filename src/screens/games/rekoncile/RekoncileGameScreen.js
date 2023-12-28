@@ -5,6 +5,7 @@ import GamesAPI from "../../../services/GamesAPI"
 import { ReactComponent as AddSVG } from '../../../img/plus.svg'
 import { ReactComponent as QuestionSVG } from '../../../img/question.svg'
 import { ReactComponent as NextSVG } from '../../../img/next.svg'
+import { ReactComponent as TrashSVG } from '../../../img/trash.svg'
 
 import TouchableOpacity from '../../../comp/TouchableOpacity'
 import { useEffect, useRef, useState } from 'react';
@@ -154,6 +155,22 @@ export default function RekoncileGameScreen(props) {
     }
 
     /**
+     * Invalidates the current kud payment
+     */
+    const onInvalidate = async () => {
+
+        // Create the expense, passing the Kud Payment
+        await new GamesAPI().invalidateKudPayment(roundData.kudPayment)
+
+        // Update the score
+        loadOverview();
+
+        // Move to the next round
+        loadNextRound(700)
+
+    }
+
+    /**
      * Extractor
      */
     const dataExtractor = (item) => {
@@ -227,7 +244,7 @@ export default function RekoncileGameScreen(props) {
                             size: 'l'
                         },
                         date: {
-                            date: roundData.kudPayment.date, 
+                            date: roundData.kudPayment.date,
                             showYear: true
                         },
                         title: roundData.kudPayment.text,
@@ -255,7 +272,27 @@ export default function RekoncileGameScreen(props) {
 
                         {!creatingExpense &&
                             <div className="options-container">
-                                <TouchableOpacity className="option" onPress={onCreateExpense}>
+                                <RekoncileOption
+                                    title="Create it"
+                                    text="None of the candidates fits. Create a new one."
+                                    image={<AddSVG/>}
+                                    onPress={onCreateExpense}
+                                />
+                                <RekoncileOption
+                                    title="Skip"
+                                    text="I'm not really sure, just skip it for now."
+                                    image={<NextSVG/>}
+                                    secondary={true}
+                                    onPress={onPass}
+                                />
+                                <RekoncileOption
+                                    title="Invalid"
+                                    text="I don't want this payment to be tracked."
+                                    image={<TrashSVG/>}
+                                    tertiary={true}
+                                    onPress={onInvalidate}
+                                />
+                                {/* <TouchableOpacity className="option" onPress={onCreateExpense}>
                                     <div className="text">
                                         {roundData.candidates.length > 0 ? "If none fit, I can create a Toto Expense for you" : "Create automatically a Toto Expense"}
                                     </div>
@@ -264,7 +301,7 @@ export default function RekoncileGameScreen(props) {
                                 <TouchableOpacity className="option" onPress={onPass}>
                                     <div className="text">If you're not sure, you can pass for now..</div>
                                     <div className="image"><TotoIconButton image={<NextSVG />} size="s" /></div>
-                                </TouchableOpacity>
+                                </TouchableOpacity> */}
                             </div>
                         }
 
@@ -275,4 +312,48 @@ export default function RekoncileGameScreen(props) {
 
         </div>
     )
+}
+
+
+const COLORS = [
+    { bck: "#FFCC70", color: "#22668D" },
+    { bck: "#FFFADD", color: "#22668D" },
+    { bck: "#8ECDDD", color: "#104D71" },
+    { bck: "#22668D", color: "#FFCC70" },
+    { bck: "#264653", color: "#e9c46a" },
+    { bck: "#efd3d7", color: "#912c3b" },
+    { bck: "#faa307", color: "#370617" },
+    { bck: "#335c67", color: "#fff3b0" },
+    { bck: "#136f63", color: "#f7dba7" }
+]
+
+const PRIMARY_COLOR = { bck: "#FFCC70", color: "#22668D" }
+const SECONDARY_COLOR = { bck: "#264653", color: "#e9c46a" }
+const TERTIARY_COLOR = { bck: "#22668D", color: "#FFCC70" }
+
+/**
+ * An Option box
+ */
+function RekoncileOption(props) {
+
+    let color = PRIMARY_COLOR; 
+    if (props.secondary) color = SECONDARY_COLOR;
+    else if (props.tertiary) color = TERTIARY_COLOR;
+
+    const bck = color.bck
+    const front = color.color;
+
+    return (
+        <TouchableOpacity className="rekoncile-option" style={{ backgroundColor: bck, color: front }} onPress={props.onPress}>
+
+            <div className="icon-container">
+                {props.image}
+            </div>
+
+            <div className="option-title">{props.title}</div>
+            <div className="option-text">{props.text}</div>
+
+        </TouchableOpacity>
+    )
+
 }
