@@ -6,6 +6,9 @@ import { ReactComponent as UploadSVG } from '../../img/games/games/kupload.svg'
 import { ReactComponent as RekoncileSVG } from '../../img/games/games/rekoncile.svg'
 import { ReactComponent as CattieSVG } from '../../img/cat.svg'
 
+import monkeyZenAnimation from '../../lottie/anim-zen-monkey.json'
+
+import Lottie from "lottie-react";
 import GamesAPI from '../../services/GamesAPI';
 import TitleBar from "../../comp/TitleBar";
 import TouchableOpacity from '../../comp/TouchableOpacity';
@@ -37,6 +40,15 @@ export default function GamesScreen(props) {
         <div className="screen games-screen">
 
             <TitleBar title="Toto Games" back={true} />
+
+            {overview == null && 
+                <div className="content">
+                    <div className="loading-container">
+                        <Lottie animationData={monkeyZenAnimation} loop={true} autoplay={true} />
+                    </div>
+                    <div className="loading-title">Your games are loading..</div>
+                </div>
+            }
 
             {overview != null &&
                 <div className="content">
