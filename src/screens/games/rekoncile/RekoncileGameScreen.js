@@ -224,7 +224,7 @@ export default function RekoncileGameScreen(props) {
 
             <TitleBar title="The ReKoncile Game" back={true}></TitleBar>
 
-            <LevelUpWidget show={levelUp} onClose={() => { setLevelUp(false) }} />
+            <LevelUpWidget level={overview.playerLevel.level.title} show={levelUp} onClose={() => { setLevelUp(false) }} />
 
             {overview && overview.playerLevel &&
                 <div className="progress-container">
