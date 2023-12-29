@@ -127,7 +127,9 @@ class ExpenseDetailScreen extends Component {
      */
     async deleteExpense() {
 
-        await new ExpensesAPI().deleteExpense(this.state.expense.id);
+        console.log(this.state.transaction);
+
+        await new ExpensesAPI().deleteExpense(this.state.transaction.id);
 
         this.props.history.goBack();
 

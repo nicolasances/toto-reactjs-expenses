@@ -60,7 +60,7 @@ export default class ExpensesAPI {
    */
   async getExpense(id) {
 
-    return new TotoAPI().fetch('expenses', '/expenses/' + id).then((response) => response.json());
+    return new TotoAPI().fetch('expensesV2', '/expenses/' + id).then((response) => response.json());
   }
 
   /**
