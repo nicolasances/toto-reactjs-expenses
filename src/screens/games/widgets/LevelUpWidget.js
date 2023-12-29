@@ -11,6 +11,7 @@ import { ReactComponent as CloseSVG } from '../../../img/close.svg'
  * Properties: 
  * 
  *  - show           : (boolean, default false). Shows the animation
+ *  - level          : (string, mandatory). The name (label) of the level that the player just reached
  * 
  *  - onClose        : (callback, mandatory). Called when the close button is pressed
  * 
@@ -38,7 +39,7 @@ export function LevelUpWidget(props, ref) {
             <div className="desc">
                 <p>Congratulations!</p>
                 <p>You have leveled up your Data Quality!<br/> You have now reached level </p>
-                <p className="big">Cake</p>
+                <p className="big">{props.level}</p>
             </div>
 
             <div style={{ flex: 1 }}></div>

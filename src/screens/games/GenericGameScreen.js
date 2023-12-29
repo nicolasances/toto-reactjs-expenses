@@ -94,7 +94,7 @@ export const GenericGameScreen = forwardRef(function GenericGameScreen(props, re
 
             <TitleBar title={props.title} back={true}></TitleBar>
 
-            <LevelUpWidget show={levelUp} onClose={() => { setLevelUp(false) }} />
+            <LevelUpWidget level={overview ? overview.playerLevel.level.title : ""} show={levelUp} onClose={() => { setLevelUp(false) }} />
 
             {overview && overview.playerLevel &&
                 <div className="progress-container">

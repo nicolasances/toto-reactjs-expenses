@@ -45,3 +45,21 @@
     height: auto;
     fill: currentColor;
 }
+
+/*******************************************************
+ * Monkey Zen Animation
+ ******************************************************/
+.games-screen .content .loading-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+.games-screen .content .loading-container div {
+    width: 70vw;
+    height: auto;
+}
+.games-screen .content .loading-title {
+    font-size: large;
+    text-align: center;
+    opacity: 0.8;
+}

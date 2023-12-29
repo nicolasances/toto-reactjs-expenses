@@ -91,7 +91,7 @@ export default function KuploadGameScreen(props) {
         setUploadStatus(Status.notUploaded);
 
         // Get the new date for missing kuds
-        if (status && status.missingKuds && status.missingKuds.length > 1) {
+        if (status && status.missingKuds && status.missingKuds.length > 0) {
 
             const firstMissingKud = status.missingKuds[0];
             const paddedMonth = padMonth(firstMissingKud.month);

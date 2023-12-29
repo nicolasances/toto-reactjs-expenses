@@ -99,7 +99,7 @@ class ExpenseDetailScreen extends Component {
 
         // Update the transaction
         if (this.state.income == true) await new ExpensesAPI().putIncome(this.state.transaction.id, this.state.transaction)
-        else await new ExpensesAPI().putExpense(this.state.transaction.id, this.state.expense)
+        else await new ExpensesAPI().putExpense(this.state.transaction.id, this.state.transaction)
 
         // Go back 
         this.props.history.goBack();

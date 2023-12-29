@@ -55,7 +55,8 @@
  ************************************************************************/
 .options-container {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
+    justify-content: space-around;
     margin: 0 0 24px 0;
 }
 .options-container .option {
@@ -101,4 +102,41 @@
 .rekoncile-screen .next .actions-box .toto-icon-button-container {
     margin: 0px 12px;
     cursor: pointer;
+}
+
+
+/******************************************************
+ * Rekoncile Option
+ ******************************************************/
+ .rekoncile-option {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 30vw;
+    height: 40vw;
+    padding: 12px;
+    box-sizing: border-box;
+    cursor: pointer;
+    border-radius: 5px;
+    margin: 6px 0;
+}
+.rekoncile-option .icon-container {
+    display: flex;
+    flex: 1;
+    justify-content: center;
+    align-items: center;
+}
+.rekoncile-option .icon-container svg {
+    width: 7vw;
+    height: auto;
+    fill :currentColor;
+}
+.rekoncile-option .option-title {
+    font-size: 14px;
+    font-weight: bold;
+}
+.rekoncile-option .option-text {
+    font-size: 10px;
+    text-align: center;
+    margin-top: 3px;
 }
