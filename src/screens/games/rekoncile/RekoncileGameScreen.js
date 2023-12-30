@@ -9,14 +9,9 @@ import { ReactComponent as TrashSVG } from '../../../img/trash.svg'
 
 import TouchableOpacity from '../../../comp/TouchableOpacity'
 import { useEffect, useRef, useState } from 'react';
-import moment from 'moment-timezone'
-import TotoIconButton from '../../../comp/TotoIconButton'
-import GameSummary from '../widgets/GameStatusWidget'
-import { useHistory } from 'react-router-dom/cjs/react-router-dom.min'
 import ExpenseListItem from '../../../comp/ExpenseListItem'
 import categoriesMap from '../../../services/CategoriesMap'
 import TotoList from '../../../comp/TotoList'
-import TotoButton from '../../../comp/TotoButton'
 import MonkeyLoader from '../../../comp/MonkeyLoader'
 import PlayerProgressWidget from '../widgets/PlayerProgressWidget'
 import { LevelUpWidget } from '../widgets/LevelUpWidget'
@@ -101,7 +96,7 @@ export default function RekoncileGameScreen(props) {
         clearTimeout(loadingTimer)
 
         // Set the Round Data
-        setRoundData(nextRound);
+        if (nextRound && nextRound.kudPayment) setRoundData(nextRound);
 
         // Stop the loading 
         setLoading(false)
