@@ -12,9 +12,11 @@ import TouchableOpacity from '../../../comp/TouchableOpacity'
 import { useEffect, useRef, useState } from 'react';
 import moment from 'moment-timezone'
 import TotoIconButton from '../../../comp/TotoIconButton'
-import GameSummary from '../widgets/GameStatusWidget'
 import { useHistory } from 'react-router-dom/cjs/react-router-dom.min'
 import PlayerProgressWidget from '../widgets/PlayerProgressWidget'
+import Lottie from 'lottie-react'
+import monkeyDanceAnimation from '../../../lottie/anim-happy.json'
+import { GameFinished } from '../widgets/GameFinished'
 
 const Status = {
     notUploaded: "not-uploaded",
@@ -190,14 +192,10 @@ export default function KuploadGameScreen(props) {
                     <div className="goal">
                         {!finished && <div className="goal-title">Upload your Kontoudskfrift for the period</div>}
                         {!finished && <div className="goal-date">{kudDate.firstDate.format("MMMM")} - {kudDate.lastDate.format("MMMM")} {kudDate.year}</div>}
-                        {finished && <div className="goal-date">Well done!</div>}
-                        {finished && <div className="goal-date">You don't have any more documents to upload for now!</div>}
                     </div>
 
-                    {finished && 
-                        <div className='finished'>
-                            <PartySVG/>
-                        </div>
+                    {finished &&
+                        <GameFinished />
                     }
 
                     {!finished &&
@@ -224,12 +222,6 @@ export default function KuploadGameScreen(props) {
                             </div>
                         </div>
                     }
-
-                    <div style={{ flex: 1 }}></div>
-
-                    <div className="buttons-container">
-                        {/* {uploadStatus == Status.notUploaded && <TotoIconButton image={<QuestionSVG />} size="ms" label="How" />} */}
-                    </div>
 
                 </div>
             }

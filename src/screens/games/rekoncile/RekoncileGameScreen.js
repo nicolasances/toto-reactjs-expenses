@@ -20,6 +20,7 @@ import TotoButton from '../../../comp/TotoButton'
 import MonkeyLoader from '../../../comp/MonkeyLoader'
 import PlayerProgressWidget from '../widgets/PlayerProgressWidget'
 import { LevelUpWidget } from '../widgets/LevelUpWidget'
+import { GameFinished } from '../widgets/GameFinished'
 
 const Status = {
     notUploaded: "not-uploaded",
@@ -42,6 +43,7 @@ export default function RekoncileGameScreen(props) {
     const [roundsToSkip, setRoundsToSkip] = useState(0)
     const [playerLevelId, setPlayerLevelId] = useState(null)
     const [levelUp, setLevelUp] = useState(false)
+    const [finished, setFinished] = useState(false)
 
     const previousPlayerLevelId = useRef()
 
@@ -71,6 +73,13 @@ export default function RekoncileGameScreen(props) {
         previousPlayerLevelId.current = playerLevelId
 
         setPlayerLevelId(overview.playerLevel.level.id)
+
+        // Check if the game is finished
+        for (let game of overview.gamesStatuses) {
+
+            if (game.gameKey == 'rekoncile') setFinished(game.gameStatus.finished)
+
+        }
 
     }
 
@@ -232,7 +241,9 @@ export default function RekoncileGameScreen(props) {
                 </div>
             }
 
-            {!loading && roundData &&
+            {!loading && finished && <GameFinished />}
+
+            {!loading && !finished && roundData &&
                 <div className="game-body">
 
                     <div className="goal">Find a match for the following transaction</div>
@@ -275,20 +286,20 @@ export default function RekoncileGameScreen(props) {
                                 <RekoncileOption
                                     title="Create it"
                                     text="None of the candidates fits. Create a new one."
-                                    image={<AddSVG/>}
+                                    image={<AddSVG />}
                                     onPress={onCreateExpense}
                                 />
                                 <RekoncileOption
                                     title="Skip"
                                     text="I'm not really sure, just skip it for now."
-                                    image={<NextSVG/>}
+                                    image={<NextSVG />}
                                     secondary={true}
                                     onPress={onPass}
                                 />
                                 <RekoncileOption
                                     title="Invalid"
                                     text="I don't want this payment to be tracked."
-                                    image={<TrashSVG/>}
+                                    image={<TrashSVG />}
                                     tertiary={true}
                                     onPress={onInvalidate}
                                 />
@@ -336,7 +347,7 @@ const TERTIARY_COLOR = { bck: "#22668D", color: "#FFCC70" }
  */
 function RekoncileOption(props) {
 
-    let color = PRIMARY_COLOR; 
+    let color = PRIMARY_COLOR;
     if (props.secondary) color = SECONDARY_COLOR;
     else if (props.tertiary) color = TERTIARY_COLOR;
 
