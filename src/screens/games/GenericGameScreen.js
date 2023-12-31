@@ -6,6 +6,7 @@ import { LevelUpWidget } from './widgets/LevelUpWidget'
 import GamesAPI from '../../services/GamesAPI'
 import TitleBar from '../../comp/TitleBar'
 import PlayerProgressWidget from './widgets/PlayerProgressWidget'
+import { GameFinished } from './widgets/GameFinished'
 
 /**
  * Generic Game Screen
@@ -27,6 +28,7 @@ import PlayerProgressWidget from './widgets/PlayerProgressWidget'
  * Properties: 
  * 
  *  - title:        (string, mandatory) the title to put in the TitleBar
+ *  - gameKey:      (string, mandatory) the id of the game (e.g. "rekoncile", or "cattie")
  * 
  */
 export const GenericGameScreen = forwardRef(function GenericGameScreen(props, ref) {
@@ -35,6 +37,7 @@ export const GenericGameScreen = forwardRef(function GenericGameScreen(props, re
     const [overview, setOverview] = useState()
     const [playerLevelId, setPlayerLevelId] = useState(null)
     const [levelUp, setLevelUp] = useState()
+    const [finished, setFinished] = useState(false)
 
     const previousPlayerLevelId = useRef()
 
@@ -65,6 +68,17 @@ export const GenericGameScreen = forwardRef(function GenericGameScreen(props, re
         previousPlayerLevelId.current = playerLevelId
 
         setPlayerLevelId(overview.playerLevel.level.id)
+
+        // Check if the game is finished
+        for (let game of overview.gamesStatuses) {
+
+            if (game.gameKey == props.gameKey) {
+                
+                setFinished(game.gameStatus.finished);
+
+                break;
+            }
+        }
 
     }
 
@@ -105,7 +119,9 @@ export const GenericGameScreen = forwardRef(function GenericGameScreen(props, re
             {!loading &&
                 <div className="game-body">
 
-                    {props.children}
+                    {!finished && props.children}
+
+                    {finished && <GameFinished/>}
 
                 </div>
             }

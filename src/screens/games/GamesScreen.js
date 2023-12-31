@@ -19,8 +19,21 @@ const COLORS = [
     { bck: "#FFCC70", color: "#22668D" },
     { bck: "#FFFADD", color: "#22668D" },
     { bck: "#8ECDDD", color: "#22668D" },
-    { bck: "#22668D", color: "#FFCC70" }
+    { bck: "#22668D", color: "#FFCC70" },
+    { bck: "#FFCC70", color: "#22668D" },
 ]
+
+const GAME_LABELS = {
+    kupload: "The Kupload",
+    rekoncile: "Rekoncile",
+    cattie: "The Cattie"
+}
+
+const GAME_IMAGES = {
+    kupload: <UploadSVG />,
+    rekoncile: <RekoncileSVG />,
+    cattie: <CattieSVG />
+}
 
 export default function GamesScreen(props) {
 
@@ -29,7 +42,7 @@ export default function GamesScreen(props) {
 
     const initialLoad = async () => {
 
-        const timer = setTimeout(() => { setLoading(true) }, 700)
+        const timer = setTimeout(() => { setLoading(true) }, 600)
 
         const overview = await new GamesAPI().getGamesOverview();
 
@@ -68,9 +81,13 @@ export default function GamesScreen(props) {
                         <div className="title">Available Games</div>
 
                         <div className="games-container">
-                            <Game gamePage="kupload" gameName="The Kupload" image={<UploadSVG />} />
-                            <Game gamePage="rekoncile" gameName="The Rekoncile" image={<RekoncileSVG />} />
-                            <Game gamePage="cattie" gameName="The Cattie" image={<CattieSVG />} />
+                            {overview && overview.gamesStatuses.map((game) => {
+                                if (!game.gameStatus.finished) {
+                                    return (
+                                        <Game gamePage={game.gameKey} gameName={GAME_LABELS[game.gameKey]} image={GAME_IMAGES[game.gameKey]} key={Math.random()} />
+                                    )
+                                }
+                            })}
                         </div>
                     </div>
                 </div>
