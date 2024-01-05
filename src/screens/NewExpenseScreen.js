@@ -185,8 +185,8 @@ class NewExpenseScreen extends Component {
 
     const prediction = await new ExpCatAPI().predictCategory(this.state.description, this.user.email);
 
-    if (prediction && prediction.prediction && prediction.prediction.length > 0 && categoriesMap.get(prediction.prediction[0])) {
-      this.setState({ category: prediction.prediction[0] })
+    if (prediction && prediction.category && categoriesMap.get(prediction.category)) {
+      this.setState({ category: prediction.category })
     }
 
   }
