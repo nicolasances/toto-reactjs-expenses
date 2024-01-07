@@ -1,10 +1,20 @@
 import React, { Component } from 'react';
 import categoriesMap from '../../services/CategoriesMap';
+import { incomeCategoriesMap } from '../../services/IncomeCategoriesMap';
 import './CategoryPicker.css';
 import TouchableOpacity from '../TouchableOpacity';
-import {ReactComponent as CloseSVG} from '../../img/close.svg';
+import { ReactComponent as CloseSVG } from '../../img/close.svg';
 import TotoIconButton from '../../comp/TotoIconButton';
 
+/**
+ * Popup to select a category
+ * 
+ * Now differentiates between Payment categories and Income categories.
+ * 
+ * Parameters: 
+ * 
+ *  - income          : (OPT, default false) Pass true if you're picking Income categories 
+ */
 export default class CategorySelectionPopup extends Component {
 
   constructor(props) {
@@ -37,21 +47,26 @@ export default class CategorySelectionPopup extends Component {
 
     // Categories buttons
     let categoryButtons = [];
-    categoriesMap.forEach((value, key) => {
+
+    // Define which category map should be used: income or payment categories map
+    let targetCategoryMap = this.props.income == true ? incomeCategoriesMap : categoriesMap;
+
+    targetCategoryMap.forEach((value, key) => {
 
       let k = 'CatNewEx' + Math.random();
 
       let cat = (
-        <Category key={k} image={value.image} label={value.label} selected={this.props.category === key} onPress={() => {this.onCategoryChange(key);}} />
+        <Category key={k} image={value.image} label={value.label} selected={this.props.category === key} onPress={() => { this.onCategoryChange(key); }} />
       )
 
       categoryButtons.push(cat);
     })
 
+
     // Close button
-    let closeButton; 
+    let closeButton;
     if (this.props.onPressClose) closeButton = (
-      <div style={{marginBottom: 24}}>
+      <div style={{ marginBottom: 24 }}>
         <TotoIconButton image={<CloseSVG class="icon" />} onPress={this.props.onPressClose} />
       </div>
     )
@@ -63,7 +78,7 @@ export default class CategorySelectionPopup extends Component {
         <div className='buttons-container'>
           {categoryButtons}
         </div>
-        <div style={{display: 'flex', flex: 1}}></div>
+        <div style={{ display: 'flex', flex: 1 }}></div>
         {closeButton}
       </div>
     )

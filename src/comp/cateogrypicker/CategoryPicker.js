@@ -3,7 +3,7 @@ import './CategoryPicker.css';
 import Popup from 'reactjs-popup';
 import CategorySelectionPopup from './CategorySelectionPopup';
 import categoriesMap from '../../services/CategoriesMap';
-import { variance } from 'd3-array';
+import { incomeCategoriesMap } from '../../services/IncomeCategoriesMap';
 import TouchableOpacity from '../TouchableOpacity';
 
 /**
@@ -20,6 +20,7 @@ import TouchableOpacity from '../TouchableOpacity';
  *  - size                      :   (OPT, default "m") supported: "s", "m"
  *  - color                     :   (OPT) pass a different color for the widget. Admitted values: "accent"
  *  - disableSelection          :   (OPT, default false) pass true to disable the selection of a category
+ *  - income                    :   (OPT, default false) pass true if this category picker is for incomes
  */
 export default class CategoryPicker extends React.Component {
 
@@ -74,7 +75,7 @@ export default class CategoryPicker extends React.Component {
 
     render() {
 
-        let categoryComponent = categoriesMap.get(this.props.category);
+        let categoryComponent = this.props.income == true ? incomeCategoriesMap.get(this.props.category) : categoriesMap.get(this.props.category);
 
         // Define the size
         let size = this.props.size ? this.props.size : "m"
@@ -86,7 +87,7 @@ export default class CategoryPicker extends React.Component {
             <div className="category-picker">
 
                 <div className={`label ${size}`}>
-                    {this.props.label ? this.props.label : "Payment category"}
+                    {this.props.label ? this.props.label : (this.props.income == true ? "Income category" : "Payment category")}
                 </div>
 
                 <TouchableOpacity className={`category-container ${size} ${color}`} onPress={this.onCategoryPress}>
@@ -101,7 +102,7 @@ export default class CategoryPicker extends React.Component {
                     closeOnEscape={false}
                 >
 
-                    <CategorySelectionPopup onCategoryChange={this.onCategoryChange} />
+                    <CategorySelectionPopup income={this.props.income} onCategoryChange={this.onCategoryChange} />
 
                 </Popup>
 

@@ -89,11 +89,11 @@ class NewExpenseScreen extends Component {
       user: this.user.email,
       monthly: this.state.monthly
     }
-  
+
     const data = await new ExpensesAPI().postExpense(expense);
-  
+
     expense.id = data.id;
-  
+
     // Publish an event
     eventBus.publishEvent({ name: config.EVENTS.expenseCreated, context: { expense: expense } });
 
@@ -102,7 +102,7 @@ class NewExpenseScreen extends Component {
   /**
    * Save an income
    */
-  async saveIncome() { 
+  async saveIncome() {
 
     let income = {
       amount: parseFloat(this.state.amount),
@@ -112,7 +112,7 @@ class NewExpenseScreen extends Component {
     }
 
     await new ExpensesAPI().postIncome(income);
-    
+
   }
 
   /**
@@ -133,7 +133,10 @@ class NewExpenseScreen extends Component {
   toggleTransactionType() {
 
     this.setState((prev) => {
-      return { payment: !prev.payment }
+      return {
+        payment: !prev.payment, 
+        category: "VARIE"
+      }
     })
 
   }
@@ -250,11 +253,9 @@ class NewExpenseScreen extends Component {
           />
         </div>
 
-        {this.state.payment == true &&
-          <div className="line3">
-            <CategoryPicker category={this.state.category} onCategoryChange={this.setCategory} />
-          </div>
-        }
+        <div className="line3">
+          <CategoryPicker category={this.state.category} income={this.state.payment == false} onCategoryChange={this.setCategory} />
+        </div>
 
         {this.state.payment == true &&
           <div className="line4">
@@ -266,7 +267,7 @@ class NewExpenseScreen extends Component {
         </div>
 
         <div className="line5">
-          <div style={{ marginLeft: 6, marginRight: 6 }}>{saveButton}</div>
+          {saveButton && <div style={{ marginLeft: 6, marginRight: 6 }}>{saveButton}</div>}
           <div style={{ marginLeft: 6, marginRight: 6 }}><TotoIconButton image={(<CloseSVG className="icon" />)} onPress={this.cancel} /></div>
         </div>
 

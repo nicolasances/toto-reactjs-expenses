@@ -5,11 +5,11 @@ import {ReactComponent as REIMBURSEMENT} from '../img/incomescat/reimbursement.s
 import {ReactComponent as OTHER} from '../img/incomescat/other.svg';
 
 
-export const categoriesMap = new Map([
+export const incomeCategoriesMap = new Map([
   ['SALARY', {image: (<SALARY />), label: 'Salary'}],
   ['BONUS', {image: (<BONUS/>), label: 'Bonus'}],
   ['CHILD', {image: (<CHILD/>), label: 'Child support'}],
   ['REIMBURSEMENT', {image: (<REIMBURSEMENT/>), label: 'Reimbursement'}],
-  ['OTHER', {image: (<OTHER/>), label: 'Other'}],
+  ['VARIE', {image: (<OTHER/>), label: 'Other'}],
 ])
 
