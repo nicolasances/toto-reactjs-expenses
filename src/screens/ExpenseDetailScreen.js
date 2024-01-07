@@ -269,18 +269,17 @@ class ExpenseDetailScreen extends Component {
                     />
                 </div>
 
-                {this.state.income == false &&
-                    <div className="line3">
-                        <CategoryPicker initialValueLoader={this.loadCategory}
-                            category={this.state.transaction.category}
-                            onCategoryChange={(cat) => {
-                                let transaction = this.state.transaction;
-                                transaction.category = cat;
-                                this.setState({ transaction: transaction });
-                            }}
-                        />
-                    </div>
-                }
+                <div className="line3">
+                    <CategoryPicker initialValueLoader={this.loadCategory}
+                        category={this.state.transaction.category ? this.state.transaction.category : "VARIE"}
+                        income={this.state.income}
+                        onCategoryChange={(cat) => {
+                            let transaction = this.state.transaction;
+                            transaction.category = cat;
+                            this.setState({ transaction: transaction });
+                        }}
+                    />
+                </div>
 
                 {this.state.income == false &&
                     <div className="line4">
