@@ -109,6 +109,7 @@ class NewExpenseScreen extends Component {
       date: this.state.date,
       description: this.state.description,
       currency: this.state.currency,
+      category: this.state.category
     }
 
     await new ExpensesAPI().postIncome(income);
