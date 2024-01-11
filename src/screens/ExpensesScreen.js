@@ -15,6 +15,7 @@ import ScrollPicker from '../picker/ScrollPicker';
 import Popup from 'reactjs-popup';
 import CategorySelectionPopup from '../comp/cateogrypicker/CategorySelectionPopup';
 import querystring from 'querystring';
+import { incomeCategoriesMap } from '../services/IncomeCategoriesMap';
 
 const cookies = new Cookies();
 
@@ -178,9 +179,18 @@ class ExpensesScreen extends Component {
 
         expense.category = newCategory;
 
-        new ExpensesAPI().putExpense(expense.id, expense).then((data) => {
-            this.setState({ selectedExpense: null });
-        });
+        // Update the income 
+        if (expense.income == true) {
+            new ExpensesAPI().putIncome(expense.id, expense).then((data) => {
+                this.setState({ selectedExpense: null });
+            });
+        }
+        // or update the expense, based on the type
+        else {
+            new ExpensesAPI().putExpense(expense.id, expense).then((data) => {
+                this.setState({ selectedExpense: null });
+            });
+        }
 
     }
 
@@ -221,7 +231,7 @@ class ExpensesScreen extends Component {
         return {
             avatar: {
                 type: 'image',
-                value: item.category ? categoriesMap.get(item.category).image : (item.income ? <IncomeSVG /> : null),
+                value: item.income == true ? incomeCategoriesMap.get(item.category).image : categoriesMap.get(item.category).image,
                 size: 'l'
             },
             date: { date: item.date },
@@ -265,6 +275,7 @@ class ExpensesScreen extends Component {
 
                     <CategorySelectionPopup
                         onCategoryChange={this.onCategoryChange}
+                        income={this.state.selectedExpense ? this.state.selectedExpense.income : false}
                         onPressClose={() => { this.setState({ categoryPopupOpen: false }) }}
                     />
 

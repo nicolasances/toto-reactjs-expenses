@@ -12,7 +12,7 @@ export default class ExpCatAPI {
    * 
    * An example is {prediction: ["VIAGGI"]}
    */
-  predictCategory(desc, email) {
+  async predictCategory(desc, email) {
 
     return new TotoAPI().fetch('expcat', `/predict?description=${desc}&email=${email}`).then((response) => response.json());
 
@@ -22,7 +22,7 @@ export default class ExpCatAPI {
   /**
    * Calls the smoke endpoint to check if the API is running (or activate it, if dormient)
    */
-  smoke() {
+  async smoke() {
 
     return new TotoAPI().fetch('expcat', '/').then((response) => response.json())
 

@@ -89,11 +89,11 @@ class NewExpenseScreen extends Component {
       user: this.user.email,
       monthly: this.state.monthly
     }
-  
+
     const data = await new ExpensesAPI().postExpense(expense);
-  
+
     expense.id = data.id;
-  
+
     // Publish an event
     eventBus.publishEvent({ name: config.EVENTS.expenseCreated, context: { expense: expense } });
 
@@ -102,17 +102,18 @@ class NewExpenseScreen extends Component {
   /**
    * Save an income
    */
-  async saveIncome() { 
+  async saveIncome() {
 
     let income = {
       amount: parseFloat(this.state.amount),
       date: this.state.date,
       description: this.state.description,
       currency: this.state.currency,
+      category: this.state.category
     }
 
     await new ExpensesAPI().postIncome(income);
-    
+
   }
 
   /**
@@ -133,7 +134,10 @@ class NewExpenseScreen extends Component {
   toggleTransactionType() {
 
     this.setState((prev) => {
-      return { payment: !prev.payment }
+      return {
+        payment: !prev.payment, 
+        category: "VARIE"
+      }
     })
 
   }
@@ -183,10 +187,12 @@ class NewExpenseScreen extends Component {
 
   async predictCategory() {
 
+    if (this.state.payment === false) return;
+
     const prediction = await new ExpCatAPI().predictCategory(this.state.description, this.user.email);
 
-    if (prediction && prediction.prediction && prediction.prediction.length > 0 && categoriesMap.get(prediction.prediction[0])) {
-      this.setState({ category: prediction.prediction[0] })
+    if (prediction && prediction.category && categoriesMap.get(prediction.category)) {
+      this.setState({ category: prediction.category })
     }
 
   }
@@ -250,11 +256,9 @@ class NewExpenseScreen extends Component {
           />
         </div>
 
-        {this.state.payment == true &&
-          <div className="line3">
-            <CategoryPicker category={this.state.category} onCategoryChange={this.setCategory} />
-          </div>
-        }
+        <div className="line3">
+          <CategoryPicker category={this.state.category} income={this.state.payment == false} onCategoryChange={this.setCategory} />
+        </div>
 
         {this.state.payment == true &&
           <div className="line4">
@@ -266,7 +270,7 @@ class NewExpenseScreen extends Component {
         </div>
 
         <div className="line5">
-          <div style={{ marginLeft: 6, marginRight: 6 }}>{saveButton}</div>
+          {saveButton && <div style={{ marginLeft: 6, marginRight: 6 }}>{saveButton}</div>}
           <div style={{ marginLeft: 6, marginRight: 6 }}><TotoIconButton image={(<CloseSVG className="icon" />)} onPress={this.cancel} /></div>
         </div>
 
