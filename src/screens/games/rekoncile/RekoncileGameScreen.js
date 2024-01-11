@@ -17,17 +17,6 @@ import PlayerProgressWidget from '../widgets/PlayerProgressWidget'
 import { LevelUpWidget } from '../widgets/LevelUpWidget'
 import { GameFinished } from '../widgets/GameFinished'
 
-const Status = {
-    notUploaded: "not-uploaded",
-    uploading: "uploading",
-    uploaded: "uploaded"
-}
-
-const padMonth = (month) => {
-    if (String(month).trim().length == 1) return `0${month}`
-    return month;
-}
-
 export default function RekoncileGameScreen(props) {
 
     // State variable: status of the upload
@@ -298,16 +287,6 @@ export default function RekoncileGameScreen(props) {
                                     tertiary={true}
                                     onPress={onInvalidate}
                                 />
-                                {/* <TouchableOpacity className="option" onPress={onCreateExpense}>
-                                    <div className="text">
-                                        {roundData.candidates.length > 0 ? "If none fit, I can create a Toto Expense for you" : "Create automatically a Toto Expense"}
-                                    </div>
-                                    <div className="image"><TotoIconButton image={<AddSVG />} size="s" /></div>
-                                </TouchableOpacity>
-                                <TouchableOpacity className="option" onPress={onPass}>
-                                    <div className="text">If you're not sure, you can pass for now..</div>
-                                    <div className="image"><TotoIconButton image={<NextSVG />} size="s" /></div>
-                                </TouchableOpacity> */}
                             </div>
                         }
 

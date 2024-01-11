@@ -44,11 +44,11 @@ export default function PlayerProgressWidget(props, ref) {
         progressRef.current.style.backgroundColor = '#588e17'
 
         setTimeout(() => {
-            progressRef.current.style.width = `${completionPerc}%`;
+            if (progressRef.current) progressRef.current.style.width = `${completionPerc}%`;
         }, 100)
 
         setTimeout(() => {
-            progressRef.current.style.backgroundColor = 'var(--color-dark-primary)'
+            if (progressRef.current) progressRef.current.style.backgroundColor = 'var(--color-dark-primary)'
         }, 500)
     }
 
