@@ -1,0 +1,155 @@
+.inkome-screen {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    align-items: stretch;
+}
+
+.inkome-screen .progress-container {
+    margin: 12px 0;
+}
+
+.inkome-screen .game-body {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    align-items: stretch;
+    padding: 0 12px;
+    margin-top: 12px;
+}
+
+.inkome-screen .goal {
+    text-align: center;
+    font-size: 12px;
+    margin-bottom: 24px;
+}
+
+.inkome-screen .buttons-container {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 24px;
+}
+
+.inkome-screen .candidates-container {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    margin-top: 24px;
+}
+.inkome-screen .candidates-container .title {
+    display: flex;
+    flex: 0;
+    font-size: 12px;
+    text-align: center;
+    justify-content: center;
+    padding: 12px 12px;
+    color: var(--color-text-light);
+    background-color: var(--color-dark-primary);
+    margin: 0 -12px 12px -12px;
+}
+.inkome-screen .candidates-container .list-container {
+    display: flex;
+    flex: 1;
+}
+
+
+/************************************************************************
+ * Options
+ ************************************************************************/
+.options-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    margin: 0 0 24px 0;
+}
+.options-container .option {
+    display: flex;
+    flex-direction: row;
+    margin: 6px 0;
+    align-items: center;
+    border: 1px solid var(--color-dark-primary);
+    border-radius: 5px;
+    padding: 6px 12px;
+    cursor: pointer;
+}
+.options-container .option .text {
+    display: flex;
+    flex: 1;
+    font-size: 12px;
+}
+
+/************************************************************************
+ * Next game?
+ ************************************************************************/
+.inkome-screen .next {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.inkome-screen .next .congrats {
+    font-size: 16px;
+    text-transform: uppercase;
+}
+.inkome-screen .next .points {
+    font-size: 10px;
+    text-transform: uppercase;
+    margin-top: 3px;
+}
+.inkome-screen .next .question {
+    margin: 24px 0;
+}
+.inkome-screen .next .actions-box {
+    display: flex;
+}
+.inkome-screen .next .actions-box .toto-icon-button-container {
+    margin: 0px 12px;
+    cursor: pointer;
+}
+
+
+/******************************************************
+ * Category selection
+ ******************************************************/
+.inkome-screen .category-selection {
+    display: flex;
+    flex: 1;
+    justify-content: center;
+    margin-top: 10vh;
+}
+
+/******************************************************
+ * Rekoncile Option
+ ******************************************************/
+ .inkome-option {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 30vw;
+    height: 40vw;
+    padding: 12px;
+    box-sizing: border-box;
+    cursor: pointer;
+    border-radius: 5px;
+    margin: 6px 0;
+}
+.inkome-option .icon-container {
+    display: flex;
+    flex: 1;
+    justify-content: center;
+    align-items: center;
+}
+.inkome-option .icon-container svg {
+    width: 7vw;
+    height: auto;
+    fill :currentColor;
+}
+.inkome-option .option-title {
+    font-size: 14px;
+    font-weight: bold;
+}
+.inkome-option .option-text {
+    font-size: 10px;
+    text-align: center;
+    margin-top: 3px;
+}

@@ -5,6 +5,7 @@ import { useHistory } from 'react-router-dom/cjs/react-router-dom.min';
 import { ReactComponent as UploadSVG } from '../../img/games/games/kupload.svg'
 import { ReactComponent as RekoncileSVG } from '../../img/games/games/rekoncile.svg'
 import { ReactComponent as CattieSVG } from '../../img/cat.svg'
+import { ReactComponent as InkomeSVG } from '../../img/games/games/inkome.svg'
 
 import monkeyZenAnimation from '../../lottie/anim-zen-monkey.json'
 
@@ -21,18 +22,22 @@ const COLORS = [
     { bck: "#8ECDDD", color: "#22668D" },
     { bck: "#22668D", color: "#FFCC70" },
     { bck: "#FFCC70", color: "#22668D" },
+    { bck: "#A94438", color: "#E4DEBE" },
+    { bck: "#B138D0", color: "#FFE7C1" },
 ]
 
 const GAME_LABELS = {
     kupload: "The Kupload",
     rekoncile: "Rekoncile",
-    cattie: "The Cattie"
+    cattie: "The Cattie", 
+    inkome: "Inkome"
 }
 
 const GAME_IMAGES = {
     kupload: <UploadSVG />,
     rekoncile: <RekoncileSVG />,
-    cattie: <CattieSVG />
+    cattie: <CattieSVG />, 
+    inkome: <InkomeSVG />
 }
 
 export default function GamesScreen(props) {

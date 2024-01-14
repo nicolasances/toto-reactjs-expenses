@@ -63,6 +63,19 @@ export default class GamesAPI {
   }
 
   /**
+   * Gets the next round for the Inkome Game
+   * 
+   * @param roundsToSkip (default null) pass a number, if you want to skip some expenses
+   * 
+   * @returns 
+   */
+  async getInkomeNextRound(roundsToSkip) {
+
+    return new TotoAPI().fetch('games', `/games/inkome/next?roundsToSkip=${roundsToSkip}`).then((response) => response.json());
+
+  }
+
+  /**
    * Posts a reconciliation to the Rekoncile Game
    * 
    * @param {*} kudPayment the kud payment  
@@ -79,6 +92,30 @@ export default class GamesAPI {
       body: JSON.stringify({
         kudPayment: kudPayment,
         totoTransaction: totoTransaction
+      })
+    }).then((response) => response.json());
+
+  }
+
+  /**
+   * Posts a reconciliation to the Inkome Game
+   * 
+   * @param {*} kudIncome the kud income  
+   * @param {*} totoTransaction the toto transaction
+   * @param {string} category the chosen category for the income
+   * @returns 
+   */
+  async postIncomeReconciliation(kudIncome, totoTransaction, category) {
+
+    return new TotoAPI().fetch('games', '/games/inkome/reconciliations', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        kudIncome: kudIncome,
+        totoTransaction: totoTransaction,
+        category: category
       })
     }).then((response) => response.json());
 
@@ -104,6 +141,29 @@ export default class GamesAPI {
   }
 
   /**
+   * Creates a TotoIncome with the proivded Kud Income and 
+   * reconciles the two automatically
+   * 
+   * @param {*} kudIncome the kud income
+   * @param {string} category the chosen category for the income
+   * @returns 
+   */
+  async createTotoIncomeAndReconcile(kudIncome, category) {
+
+    return new TotoAPI().fetch('games', '/games/inkome/incomes', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        kudIncome: kudIncome, 
+        category: category
+      })
+    }).then((response) => response.json());
+
+  }
+
+  /**
    * Invalidates the kud payment
    * @param {*} kudPayment the kyd pyament
    * @returns 
@@ -118,6 +178,22 @@ export default class GamesAPI {
       body: JSON.stringify({ kudTransactionId: kudPayment.id })
     }).then((response) => response.json());
 
+  }
+
+  /**
+   * Invalidates the kud income
+   * @param {*} kudIncome the kud income
+   * @returns 
+   */
+  async invalidateKudIncome(kudIncome) {
+
+    return new TotoAPI().fetch('games', '/games/inkome/invalidate', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ kudTransactionId: kudIncome.id })
+    }).then((response) => response.json());
 
   }
 
