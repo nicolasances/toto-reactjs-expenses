@@ -16,6 +16,8 @@ import './Screen.css';
 import './HomeScreen.css';
 import TotoIconButton from '../comp/TotoIconButton';
 import PastMonthsGraph from '../comp/graphs/PastMonthsGraph';
+import { DashboardKeyInfoV1 } from '../comp/dashboard/DashboardKeyInfoV1';
+import { DashboardKeyInfoV2 } from '../comp/dashboard/DashboardKeyInfoV2';
 
 export default class HomeScreen extends Component {
 
@@ -45,10 +47,7 @@ export default class HomeScreen extends Component {
                     rightButton={<TotoIconButton image={(<SettingsSVG className="icon" />)} navigateTo="/settings" size="ms" borders={false} />}
                 />
 
-                <div className="home-screen-h1">
-                    <div style={{ flex: 1 }}><LastDaysSpendingGraph /></div>
-                    <div style={{ flex: 0.5, alignItems: "center" }}><MonthSpendingBubble /></div>
-                </div>
+                <DashboardKeyInfoV2/>
 
                 <div className="home-screen-h2">
                     <div className="button-container"> <TotoIconButton image={(<DiceSVG className="icon" />)} navigateTo="/games" /></div>

@@ -1,0 +1,61 @@
+.home-screen-h1.v2 {
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+}
+/************************************************************
+ * AMOUNT BUBBLES
+ ************************************************************/
+.amount-bubble {
+    display: flex;
+    flex-direction: column;
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    border: 3px solid #5ddef4;
+    justify-content: center;
+    align-items: center;
+    color: rgba(0,0,0,0.7);
+}
+.amount-bubble.expenses {
+    transform: scale(0.7);
+    background-color: #5ddef5;
+    opacity: 0.8;
+}
+.amount-bubble.income {
+    transform: scale(0.7);
+    /* background-color: #3cd2c5; */
+    background-color: #5ddef5;
+    /* border-color: #3cd2c5; */
+    opacity: 0.8;
+}
+.amount-bubble.savings {
+    color: #ade2ec;
+    border-color: #ade2ec;
+}
+
+.amount-bubble .currency {
+    font-size: 12px;
+    color: currentColor;
+}
+
+.amount-bubble .amount {
+    font-size: 22px;
+    color: currentColor;
+}
+
+.amount-bubble .type {
+    font-size: 10px;
+    color: currentColor;
+    text-transform: uppercase;
+    margin-bottom: 2px;
+}
+
+.amount-bubble .image-container svg {
+    stroke: var(--color-dark-primary);
+    fill: none;
+    margin-top: 3px;
+    width: 16px;
+    height: auto;
+}
+
