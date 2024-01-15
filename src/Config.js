@@ -7,7 +7,7 @@ export const APIS = {
   incast: process.env.REACT_APP_INCAST_API_ENDPOINT,
 }
 
-export const APP_VERSION = "1.15.0.1"
+export const APP_VERSION = "1.16.0.0"
 
 export const EVENTS = {
   userInfoChanged: 'userInfoChanged', // User info received from Google
