@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, useEffect, useState } from 'react';
 import moment from 'moment-timezone';
 
 import MonthSpendingBubble from "../comp/MonthSpendingBubble";
@@ -18,49 +18,56 @@ import TotoIconButton from '../comp/TotoIconButton';
 import PastMonthsGraph from '../comp/graphs/PastMonthsGraph';
 import { DashboardKeyInfoV1 } from '../comp/dashboard/DashboardKeyInfoV1';
 import { DashboardKeyInfoV2 } from '../comp/dashboard/DashboardKeyInfoV2';
+import ExpensesAPI from '../services/ExpensesAPI';
+import Cookies from 'universal-cookie';
 
-export default class HomeScreen extends Component {
+const cookies = new Cookies();
 
-    constructor(props) {
-        super(props);
+export default function HomeScreen(props) {
 
-        this.state = {
+    const [highlightsComponent, setHighlightsComponent] = useState(null)
+    const [loading, setLoading] = useState(true)
 
-        }
+    /**
+     * Loads the settings of the user and decides which dashboard to show
+     */
+    const init = async () => {
+
+        const settings = await new ExpensesAPI().getSettings(cookies.get('user').email);
+
+        // Check if the dashboard is specified
+        if (settings.dashboardHighlightsVersion && settings.dashboardHighlightsVersion == 'V2') setHighlightsComponent(<DashboardKeyInfoV2 />)
+        else setHighlightsComponent(<DashboardKeyInfoV1 />)
+
+        setLoading(false)
+
     }
 
-    componentDidMount() {
+    useEffect(init, [])
 
-    }
+    if (loading) return <div className="screen"></div>
 
-    componentWillUnmount() {
+    return (
+        <div className="screen">
 
-    }
+            <TitleBar
+                title="Payments"
+                rightButton={<TotoIconButton image={(<SettingsSVG className="icon" />)} navigateTo="/settings" size="ms" borders={false} />}
+            />
 
-    render() {
+            {highlightsComponent}
 
-        return (
-            <div className="screen">
-
-                <TitleBar
-                    title="Payments"
-                    rightButton={<TotoIconButton image={(<SettingsSVG className="icon" />)} navigateTo="/settings" size="ms" borders={false} />}
-                />
-
-                <DashboardKeyInfoV2/>
-
-                <div className="home-screen-h2">
-                    <div className="button-container"> <TotoIconButton image={(<DiceSVG className="icon" />)} navigateTo="/games" /></div>
-                    <div className="button-container"> <TotoIconButton image={(<TagSVG className="icon" />)} navigateTo="/tag" /></div>
-                    <div className="button-container"> <TotoIconButton image={(<AddSVG className="icon" />)} navigateTo="/newExpense" /></div>
-                    <div className="button-container"> <TotoIconButton image={(<ListSVG className="icon" />)} navigateTo="/expenses" navigationParams={{ selectedMonth: moment().format("YYYYMM") }} /></div>
-                    <div className="button-container"> <TotoIconButton image={(<IdeaSVG className="icon" />)} navigateTo="/insights" /></div>
-                </div>
-
-                <div className="home-graph-container">
-                    <PastMonthsGraph months={9} />
-                </div>
+            <div className="home-screen-h2">
+                <div className="button-container"> <TotoIconButton image={(<DiceSVG className="icon" />)} navigateTo="/games" /></div>
+                <div className="button-container"> <TotoIconButton image={(<TagSVG className="icon" />)} navigateTo="/tag" /></div>
+                <div className="button-container"> <TotoIconButton image={(<AddSVG className="icon" />)} navigateTo="/newExpense" /></div>
+                <div className="button-container"> <TotoIconButton image={(<ListSVG className="icon" />)} navigateTo="/expenses" navigationParams={{ selectedMonth: moment().format("YYYYMM") }} /></div>
+                <div className="button-container"> <TotoIconButton image={(<IdeaSVG className="icon" />)} navigateTo="/insights" /></div>
             </div>
-        )
-    }
+
+            <div className="home-graph-container">
+                <PastMonthsGraph months={9} />
+            </div>
+        </div>
+    )
 }

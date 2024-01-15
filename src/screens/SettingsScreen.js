@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, useEffect, useState } from 'react';
 import Cookies from 'universal-cookie';
 import { withRouter } from 'react-router-dom';
 import TitleBar from '../comp/TitleBar';
@@ -9,55 +9,68 @@ import { APP_VERSION } from '../Config';
 import './SettingsScreen.css';
 import CurrencySwitcher from '../comp/CurrencySwitcher';
 import ExpensesAPI from '../services/ExpensesAPI';
+import Checkbox from '../comp/Checkbox';
+import { useHistory } from 'react-router-dom/cjs/react-router-dom.min';
 
 const cookies = new Cookies();
 
-class SettingsScreen extends Component {
+export default function SettingsScreen(props) {
 
-    constructor(props) {
-        super(props);
+    const [currency, setCurrency] = useState("EUR")
+    const [dashboardHighlightsVersion, setDashboardHighlightsVersion] = useState("V1")
 
-        this.state = {
-        }
+    const history = useHistory()
 
-        this.save = this.save.bind(this);
+    /**
+     * Load the user settings
+     */
+    const load = async () => {
 
+        const settings = await new ExpensesAPI().getSettings()
+
+        setCurrency(settings.currency)
+        setDashboardHighlightsVersion(settings.dashboardHighlightsVersion)
     }
 
-    componentDidMount() {
-    }
+    /**
+     * Save the settings
+     */
+    const save = async () => {
 
-    save() {
-        new ExpensesAPI().putSettings({
-            user: cookies.get('user').email,
-            currency: this.state.currency
-        }).then(() => {
-            this.props.history.goBack();
+        // Update the Settings
+        await new ExpensesAPI().putSettings({
+            currency: currency,
+            dashboardHighlightsVersion: dashboardHighlightsVersion
         })
+
+        // Go back
+        history.goBack();
     }
 
-    render() {
-        return (
-            <div className="screen settings-screen">
-                <TitleBar title="App Settings" back={true} />
+    useEffect(load, [])
 
-                <Setting label="Displayed Currency">
-                    <CurrencySwitcher onCurrencyChange={(c) => { this.setState({ currency: c }) }} />
-                </Setting>
-                <Setting label="App Version">
-                    <Text>{APP_VERSION}</Text>
-                </Setting>
+    return (
+        <div className="screen settings-screen">
+            <TitleBar title="App Settings" back={true} />
 
-                <div style={{ display: 'flex', flex: 1 }}></div>
+            <Setting label="Displayed Currency">
+                <CurrencySwitcher onCurrencyChange={(c) => { setCurrency(c) }} />
+            </Setting>
+            <Setting label="App Version">
+                <Text>{APP_VERSION}</Text>
+            </Setting>
+            <Setting label="Home Screen">
+                <Checkbox label="Show Savings in Home screen" flag={dashboardHighlightsVersion == 'V2'} onToggleFlag={() => { setDashboardHighlightsVersion(dashboardHighlightsVersion == 'V1' ? "V2" : "V1") }} />
+            </Setting>
 
-                <div className="button-container">
-                    <div style={{ marginLeft: 6, marginRight: 6 }}><TotoIconButton image={(<TickSVG className="icon" />)} onPress={this.save} /></div>
-                </div>
+            <div style={{ display: 'flex', flex: 1 }}></div>
+
+            <div className="button-container">
+                <div style={{ marginLeft: 6, marginRight: 6 }}><TotoIconButton image={(<TickSVG className="icon" />)} onPress={save} /></div>
             </div>
-        )
-    }
+        </div>
+    )
 }
-export default withRouter(SettingsScreen);
 
 function Setting(props) {
 

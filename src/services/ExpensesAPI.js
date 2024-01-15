@@ -251,9 +251,9 @@ export default class ExpensesAPI {
   /**
    * Retrieves the settings
    */
-  getSettings(userEmail) {
+  async getSettings() {
 
-    return new TotoAPI().fetch('expenses', '/settings?user=' + userEmail).then((response) => response.json());
+    return new TotoAPI().fetch('expensesV2', '/settings').then((response) => response.json());
 
   }
 
@@ -263,7 +263,7 @@ export default class ExpensesAPI {
   putSettings(settings) {
 
     // Post the data
-    return new TotoAPI().fetch('expenses', '/settings', {
+    return new TotoAPI().fetch('expensesV2', '/settings', {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json'
