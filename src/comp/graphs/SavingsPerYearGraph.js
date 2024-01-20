@@ -24,7 +24,7 @@ export function SavingsPerYearGraph(props) {
 
         if (!savings) return;
 
-        const margin = { top: 20, right: 0, bottom: 30, left: 0 };
+        const margin = { top: 40, right: 0, bottom: 30, left: 0 };
         const width = graphRef.current.clientWidth - margin.left - margin.right;
         const height = graphRef.current.clientHeight - margin.top - margin.bottom;
 
@@ -76,7 +76,7 @@ export function SavingsPerYearGraph(props) {
             .append('text')
             .attr('class', 'bar-label')
             .attr('x', (d) => xScale(d.year) + xScale.bandwidth() / 2)
-            .attr('y', yScale(0) + 12) // Position above the y=0 line
+            .attr('y', -20) // Position above the y=0 line
             .attr('text-anchor', 'middle')
             .text((d) => d.year);
            

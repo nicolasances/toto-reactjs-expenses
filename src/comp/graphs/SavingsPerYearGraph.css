@@ -13,7 +13,9 @@
     stroke: none;
 }
 .totograph.savingsperyear .bar-label {
-    font-size: x-small;
+    font-size: 7px;
     fill: rgba(255, 255, 255, 0.8);
-
+}
+.totograph.savingsperyear .bar-label-savings {
+    font-size: x-small;
 }
