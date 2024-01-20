@@ -249,6 +249,16 @@ export default class ExpensesAPI {
   }
 
   /**
+   * Retrieves the spending categories per month since yearMonthGte
+   */
+  async getSavingsPerYear(yearMonthGte, targetCurrency) {
+
+    return new TotoAPI().fetch('expensesV2', `/stats/savingsPerYear?yearMonthGte=${yearMonthGte}&currency=${targetCurrency}`)
+      .then((response) => response.json());
+
+  }
+
+  /**
    * Retrieves the settings
    */
   async getSettings() {

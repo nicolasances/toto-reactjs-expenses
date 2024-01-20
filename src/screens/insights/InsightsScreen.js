@@ -8,6 +8,7 @@ import { ReactComponent as ClickSVG } from '../../img/click.svg';
 
 import ExpensesAPI from '../../services/ExpensesAPI';
 import { useHistory } from 'react-router-dom/cjs/react-router-dom.min';
+import { SavingsPerYearGraph } from '../../comp/graphs/SavingsPerYearGraph';
 
 export default function InsightsScreen(props) {
 
@@ -35,6 +36,11 @@ export default function InsightsScreen(props) {
             <TitleBar title="Your Insights" back={true} />
 
             {unconsolidatedMonths.length > 0 && <WarningWidget title="Months to Consolidate" data={unconsolidatedMonths.length} onPress={gotoConsolidationScreen} />}
+
+            <div style={{ display: 'flex', flex: 1, maxHeight: '170px' }}>
+                <SavingsPerYearGraph currency="DKK"/>
+            </div>
+
 
         </div>
     )
