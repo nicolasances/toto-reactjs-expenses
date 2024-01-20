@@ -16,7 +16,7 @@ export default function (props) {
                 }
             </div>
             <div className="text">
-                Monthly recurring expense
+                {props.label ? props.label : "Monthly recurring expense"}
             </div>
         </div>
     )
