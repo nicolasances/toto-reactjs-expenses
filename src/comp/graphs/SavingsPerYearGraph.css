@@ -8,6 +8,9 @@
     text-align: left;
     color:  var(--color-text-light);
 }
+.totograph.savingsperyear .title .small {
+    font-size: 7px;
+}
 .totograph.savingsperyear .zero-line {
     stroke: none;
 }

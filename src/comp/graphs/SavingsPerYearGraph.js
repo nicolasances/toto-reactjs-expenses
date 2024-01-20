@@ -91,7 +91,7 @@ export function SavingsPerYearGraph(props) {
 
     return (
         <div ref={graphRef} className="totograph savingsperyear" >
-            <div className="title">Savings per year</div>
+            <div className="title">Savings per year <span className="small">({props.currency})</span></div>
         </div>
     )
 

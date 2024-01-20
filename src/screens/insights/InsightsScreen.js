@@ -67,6 +67,8 @@ export default function InsightsScreen(props) {
     useEffect(loadSettings, []);
     useEffect(init, [settings]);
 
+    if (!settings) return <div className="screen"></div>
+
     return (
         <div className="screen insights-screen">
 
@@ -75,8 +77,8 @@ export default function InsightsScreen(props) {
             {unconsolidatedMonths.length > 0 && <WarningWidget title="Months to Consolidate" data={unconsolidatedMonths.length} onPress={gotoConsolidationScreen} />}
 
             <div class="insights-section row" style={{ height: '170px' }}>
-                <SavingsPerYearGraph savings={savingsPerYear} />
-                <div style={{ marginLeft: "24px" }}><LifetimeSavingsBubble savings={savingsPerYear} /></div>
+                <SavingsPerYearGraph savings={savingsPerYear} currency={settings.currency} />
+                <div style={{ marginLeft: "24px" }}><LifetimeSavingsBubble savings={savingsPerYear} currency={settings.currency} /></div>
             </div>
 
 
