@@ -46,3 +46,15 @@
     height: auto;
     fill: var(--color-background);
 }
+
+/************************************************************** 
+ * INSIGHTS SECTION
+ *************************************************************/
+.insights-section {
+    display: flex;
+    flex-direction: column;
+    margin: 12px 24px;
+}
+.insights-section.row {
+    flex-direction: row;
+}

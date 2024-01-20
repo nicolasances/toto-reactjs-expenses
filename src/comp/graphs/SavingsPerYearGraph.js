@@ -6,16 +6,9 @@ import ExpensesAPI from "../../services/ExpensesAPI"
 
 export function SavingsPerYearGraph(props) {
 
-    const [savings, setSavings] = useState(null)
-
     const graphRef = useRef(null)
 
-    const loadSavings = async () => {
-
-        const result = await new ExpensesAPI().getSavingsPerYear("201801", props.currency)
-
-        setSavings(result.savings);
-    }
+    const savings = props.savings;
 
     /**
      * Builds the SVG graph
@@ -94,7 +87,6 @@ export function SavingsPerYearGraph(props) {
 
     }
 
-    useEffect(loadSavings, [])
     useEffect(buildGraph, [savings])
 
     return (

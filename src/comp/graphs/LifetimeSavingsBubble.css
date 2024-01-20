@@ -1,0 +1,24 @@
+
+.lifetime-savings-bubble {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    border: 2px solid var(--color-light-primary);
+    border-radius: 50%;
+    height: 80px;
+    width: 80px;
+    color: var(--color-dark-primary);
+}
+
+.lifetime-savings-bubble .label {
+    text-transform: uppercase;
+    font-size: xx-small;
+}
+.lifetime-savings-bubble .value {
+    font-size: small;
+    margin: 6px 0 3px 0;
+}
+.lifetime-savings-bubble .currency {
+    font-size: xx-small;
+}

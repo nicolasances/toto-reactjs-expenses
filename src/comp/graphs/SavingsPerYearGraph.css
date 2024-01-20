@@ -1,7 +1,6 @@
 .totograph.savingsperyear {
     display: flex;
     flex-direction: column;
-    margin: 12px 24px;
 }
 .totograph.savingsperyear .title {
     font-size: x-small;
