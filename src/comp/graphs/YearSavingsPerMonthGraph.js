@@ -5,6 +5,7 @@ import * as d3 from 'd3';
 import './TotoGraph.css'
 import './YearSavingsPerMonthGraph.css'
 import TouchableOpacity from "../TouchableOpacity";
+import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 
 /**
  * This component displays a graph that shows, given a specific year, the savings for each month 
@@ -21,6 +22,8 @@ export function YearSavingsPerMonthGraph(props) {
     const [savings, setSavings] = useState(null)
     const [yearSelectorVisible, setYearSelectorVisible] = useState(false);
 
+    const history = useHistory()
+
     // Valid years
     const years = []
     for (let i = 2018; i <= parseInt(moment().format('YYYY')); i++) {
@@ -32,6 +35,34 @@ export function YearSavingsPerMonthGraph(props) {
 
     // Ref to the graph
     const svgRef = useRef();
+
+    /**
+     * When the user clicks on a specific month
+     */
+    const onMonthClick = (amount) => {
+
+        // Indices are 0-based
+        let i = 0;
+        let found = false
+        for (i = 0; i < savings.length; i++) {
+            if (savings[i].saving == amount) {
+                found = true; 
+                break;
+            }
+        }
+
+        if (!found) return;
+
+        i++;
+
+        // Convert to year month
+        let paddedMonth = String(i).length == 1 ? `0${i}` : i;
+        let yearMonth = `${year}${paddedMonth}`
+
+        // Go to expenses list
+        history.push(`/expenses?yearMonth=${yearMonth}`)
+
+    }
 
     /**
      * Builds the graph
@@ -93,6 +124,7 @@ export function YearSavingsPerMonthGraph(props) {
             .attr('cy', d => yScale(d))
             .attr('r', 4)
             .attr('fill', d => (d < 0 ? '#c64343' : 'var(--color-light-primary)')) // Set color based on negative or positive savings
+            .on('click', (event, d) => { onMonthClick(d) })
 
         svg.selectAll('text')
             .data(monthlySavings)
@@ -102,7 +134,8 @@ export function YearSavingsPerMonthGraph(props) {
             .attr('x', (d, i) => xScale(months[i]) + xScale.bandwidth() / 2)
             .attr('y', d => (d >= 0 ? yScale(d) - 10 : yScale(d) + 20))
             .attr('text-anchor', 'middle')
-            .classed('label', true); // Add a CSS class 'label'
+            .classed('label', true) // Add a CSS class 'label'
+            .on('click', (event, d) => { onMonthClick(d) })
 
         // Draw x-axis labels at the top
         const labelYOffset = 30; // Offset to avoid overlap with highest value label
