@@ -210,6 +210,18 @@ export default class ExpensesAPI {
 
   }
 
+  /**
+   * Retrieves the savings of the specified year
+  */
+  async getSavingsOfYear(year, targetCurrency) {
+
+    const yearMonthGte = `${year}01`
+    const yearMonthLte = `${year}12`
+
+    return new TotoAPI().fetch('expensesV2', `/stats/savingsPerMonth?yearMonthGte=${yearMonthGte}&yearMonthLte=${yearMonthLte}&currency=${targetCurrency}`).then((response) => response.json());
+
+  }
+
 
   /**
    * Retrieves the spending (total) for each year

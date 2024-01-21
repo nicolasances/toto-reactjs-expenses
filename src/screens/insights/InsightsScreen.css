@@ -56,3 +56,9 @@
 .insights-section.row {
     flex-direction: row;
 }
+.insights-section.card {
+    background-color: var(--color-dark-primary);
+    border-radius: 5px;
+    padding: 12px 12px;
+    box-shadow: 1px 1px 7px 0px rgba(0, 0, 0, 0.25);
+}
