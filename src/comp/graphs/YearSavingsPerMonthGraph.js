@@ -185,7 +185,7 @@ export function YearSavingsPerMonthGraph(props) {
         setYearSelectorVisible(false)
     }
 
-    useEffect(loadYear, [currency, year])
+    useEffect(() => {loadYear()}, [currency, year])
     useEffect(buildGraph, [savings])
 
     return (

@@ -59,7 +59,7 @@ export default function GamesScreen(props) {
 
     }
 
-    useEffect(initialLoad, []);
+    useEffect(() => {initialLoad()}, []);
 
     return (
         <div className="screen games-screen">

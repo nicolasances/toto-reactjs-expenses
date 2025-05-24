@@ -33,8 +33,8 @@ export default function ConsolidationInsightsScreen(props) {
         setSettings(settings);
     }
 
-    useEffect(loadSettings, []);
-    useEffect(loadUnconsolidatedMonths, [settings]);
+    useEffect(() => {loadSettings()}, []);
+    useEffect(() => {loadUnconsolidatedMonths()}, [settings]);
 
     return (
         <div className="screen cons-insights-screen">

@@ -100,7 +100,7 @@ export const GenericGameScreen = forwardRef(function GenericGameScreen(props, re
 
     }
 
-    useEffect(initialLoad, [])
+    useEffect(() => {initialLoad()}, [])
     useEffect(levelUpAnimation, [playerLevelId])
 
     return (

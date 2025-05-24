@@ -37,7 +37,7 @@ export default function TagsList(props) {
 
     }
 
-    useEffect(loadSettings, [])
+    useEffect(() => {loadSettings()}, [])
 
     return (
         <div className="tags-list">

@@ -43,7 +43,7 @@ export default function HomeScreen(props) {
 
     }
 
-    useEffect(init, [])
+    useEffect(() => {init()}, [])
 
     if (loading) return <div className="screen"></div>
 

@@ -67,7 +67,7 @@ export function DashboardKeyInfoV2(props) {
 
     }
 
-    useEffect(loadData, [])
+    useEffect(() => {loadData()}, [])
 
     return (
         <div className="home-screen-h1 v2">

@@ -11,12 +11,14 @@ import { useHistory } from 'react-router-dom/cjs/react-router-dom.min';
 import { SavingsPerYearGraph } from '../../comp/graphs/SavingsPerYearGraph';
 import { LifetimeSavingsBubble } from '../../comp/graphs/LifetimeSavingsBubble';
 import { YearSavingsPerMonthGraph } from '../../comp/graphs/YearSavingsPerMonthGraph';
+import { MonthlyCategorySpending } from '../../comp/graphs/MonthlyCategorySpending';
 
 export default function InsightsScreen(props) {
 
     const [unconsolidatedMonths, setUnconsolidatedMonths] = useState([]);
     const [savingsPerYear, setSavingsPerYear] = useState(null);
     const [settings, setSettings] = useState(null);
+    const [categoryTotalsPerMonth, setCategoryTotalsPerMonth] = useState(null);
     const history = useHistory();
 
     const init = async () => {
@@ -65,8 +67,8 @@ export default function InsightsScreen(props) {
         history.push("/insights/consolidation")
     }
 
-    useEffect(loadSettings, []);
-    useEffect(init, [settings]);
+    useEffect(() => {loadSettings()}, []);
+    useEffect(() => {init()}, [settings]);
 
     if (!settings) return <div className="screen"></div>
 
@@ -84,6 +86,10 @@ export default function InsightsScreen(props) {
 
             <div className="insights-section row card" style={{ height: '140px' }}>
                 <YearSavingsPerMonthGraph currency={settings.currency} />
+            </div>
+
+            <div className="insights-section row" style={{ height: '170px' }}>
+                <MonthlyCategorySpending currency={settings.currency} />
             </div>
 
 

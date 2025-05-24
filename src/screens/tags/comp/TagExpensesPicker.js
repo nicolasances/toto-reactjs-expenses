@@ -98,7 +98,7 @@ export default function ExpensesPicker(props) {
     }
 
     // Reload the expenses when the month changes
-    useEffect(loadExpenses, [selectedMonth])
+    useEffect(() => {loadExpenses()}, [selectedMonth])
 
     return (
         <div className="tag-expenses-picker">

@@ -174,7 +174,7 @@ export default function KuploadGameScreen(props) {
 
     };
 
-    useEffect(initialLoad, [])
+    useEffect(() => {initialLoad()}, [])
 
     return (
         <div className="screen kupload-screen">

@@ -54,6 +54,15 @@ export default class ExpensesAPI {
   }
 
   /**
+   * Retrieves the category totals from the specified yearMonthGte in the specified currency
+   */
+  async getCategoryTotalsPerMonth(yearMonthGte, currency) {
+
+    return new TotoAPI().fetch('expensesV2', `/stats/categoryTotalsPerMonth?yearMonthGte=${yearMonthGte}&currency=${currency}`).then((response) => response.json());
+
+  }
+
+  /**
    * Retrieves the specified expense
    * @param {string} id the id of the expense to get
    * @returns the expense 

@@ -104,7 +104,7 @@ export function CattieGameScreen(props) {
     }
 
 
-    useEffect(initialLoad, [])
+    useEffect(() => {initialLoad()}, [])
 
     return (
         <GenericGameScreen gameKey="cattie" title="The Cattie Game" ref={genericScreenRef}>
