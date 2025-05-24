@@ -1,8 +1,10 @@
 FROM nginx:1.17.1-alpine
 
-RUN apk update
-RUN apk upgrade
-RUN apk add npm
+RUN apk update && apk upgrade && apk add --no-cache curl
+
+# Install Node.js and npm (version 10.8 or above)
+RUN curl -fsSL https://deb.nodesource.com/setup_18.x | sh - && \
+    apk add --no-cache nodejs npm
 
 RUN mkdir /app
 
