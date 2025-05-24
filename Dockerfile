@@ -1,10 +1,8 @@
-FROM nginx:1.17.1-alpine
+FROM nginx:1.28.0-alpine
 
-RUN apk update && apk upgrade && apk add --no-cache curl
-
-# Install Node.js and npm (version 10.8 or above)
-RUN curl -fsSL https://deb.nodesource.com/setup_18.x | sh - && \
-    apk add --no-cache nodejs npm
+RUN apk update
+RUN apk upgrade
+RUN apk add npm
 
 RUN mkdir /app
 
@@ -21,5 +19,5 @@ ARG EXPENSESV2_API_ENDPOINT
 ARG GAMES_API_ENDPOINT
 ARG INCAST_API_ENDPOINT
 
-RUN npm install
+RUN npm install --legacy-peer-deps
 RUN REACT_APP_INCAST_API_ENDPOINT=$INCAST_API_ENDPOINT REACT_APP_GAMES_API_ENDPOINT=$GAMES_API_ENDPOINT REACT_APP_EXPENSES_V2_API_ENDPOINT=$EXPENSESV2_API_ENDPOINT REACT_APP_EXPCAT_API_ENDPOINT=$EXPCAT_API_ENDPOINT REACT_APP_AUTH_API_ENDPOINT=$AUTH_API_ENDPOINT REACT_APP_EXPENSES_API_ENDPOINT=$EXPENSES_API_ENDPOINT REACT_APP_GOOGLE_CLIENT_ID=$GOOGLE_CLIENT_ID npm run build
