@@ -9,16 +9,15 @@ import CategoryPicker from "../cateogrypicker/CategoryPicker";
  * This component generates a graph using D3.js to visualize the spending per category for each month.
  * It displays the data as a line chart with each line representing a different category. Responsive.
  */
-export function MonthlyCategorySpending({ currency, topCategorries = 3 }) {
+export function MonthlyCategorySpending({ currency, monthsDepth = 6 }) {
 
     const [totals, setTotals] = useState(null);
-    const [selectedCategory, setSelectedCategory] = useState(null);
     const [category, setCategory] = useState('SUPERMERCATO');
     const graphRef = useRef(null)
 
+
     const onChangeCategory = (category) => {
         setCategory(category);
-        setSelectedCategory(category);
 
         const filteredTotals = filterCategory(totals, category);
 
@@ -30,13 +29,13 @@ export function MonthlyCategorySpending({ currency, topCategorries = 3 }) {
     }
 
     /**
-     * Retrieves the spending per category for each month starting 5 months ago
+     * Retrieves the spending per category for each month starting monthsDepth months ago
      * and ending with the current month.
      */
     const loadCategorySpendingPerMonth = async () => {
         try {
             const now = new Date();
-            const startDate = moment(new Date(now.getFullYear(), now.getMonth() - 5, 1)).format('YYYYMM');
+            const startDate = moment(new Date(now.getFullYear(), now.getMonth() - (monthsDepth - 1), 1)).format('YYYYMM');
             const totals = await new ExpensesAPI().getCategoryTotalsPerMonth(startDate, currency);
 
             setTotals(totals);
@@ -86,7 +85,7 @@ export function MonthlyCategorySpending({ currency, topCategorries = 3 }) {
 
         const allMonths = [];
         const now = moment();
-        for (let i = 0; i < 6; i++) {
+        for (let i = 0; i < monthsDepth; i++) {
             allMonths.push(now.clone().subtract(i, 'months').format('YYYYMM'));
         }
         allMonths.reverse();
@@ -121,6 +120,7 @@ export function MonthlyCategorySpending({ currency, topCategorries = 3 }) {
      * 
      */
     const buildGraph = (totals) => {
+
         if (!totals) {
             return;
         }
@@ -129,7 +129,7 @@ export function MonthlyCategorySpending({ currency, topCategorries = 3 }) {
         d3.select(graphRef.current).select("svg").remove();
 
         // Set up the SVG canvas dimensions
-        const margin = { top: 40, right: 30, bottom: 30, left: 10 };
+        const margin = { top: 40, right: 30, bottom: 20, left: 10 };
         const width = graphRef.current.clientWidth - margin.left - margin.right;
         const height = graphRef.current.clientHeight - margin.top - margin.bottom;
 
@@ -156,21 +156,23 @@ export function MonthlyCategorySpending({ currency, topCategorries = 3 }) {
 
         const yScale = d3.scaleLinear()
             .domain([d3.min(data, d => d3.min(d.values, v => v.total)), d3.max(data, d => d3.max(d.values, v => v.total))])
-            .range([height, 0]);
-
-        // Add bottom axis with no line and labels in "MM.YY" format
-        svg.append("g")
-            .attr("transform", `translate(0,${height})`)
-            .call(d3.axisBottom(xScale)
-                .tickFormat(d3.timeFormat("%b"))
-            )
-            .selectAll("path, line") // Remove axis line and ticks
-            .remove();
+            .range([height - 5, 0]);
 
         // Add lines for each category
         const line = d3.line()
             .x(d => xScale(d.month))
             .y(d => yScale(d.total));
+
+        // Limit the number of x-axis ticks to "monthsDepth"
+        const xAxis = d3.axisBottom(xScale)
+            .ticks(monthsDepth)
+            .tickFormat(d3.timeFormat("%b"));
+
+        svg.append("g")
+            .attr("transform", `translate(0,${height})`)
+            .call(xAxis)
+            .selectAll("path, line") // Remove axis line and ticks
+            .remove();
 
 
         data.forEach(categoryData => {
