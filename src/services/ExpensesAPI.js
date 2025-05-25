@@ -420,5 +420,16 @@ export default class ExpensesAPI {
 
   }
 
+  /**
+   * Retrieves the average monthly spend per category per year since yearMonthGte
+   * @param {string} yearMonthGte the yearMonth to start from
+   * @param {string} targetCurrency the target currency to use
+   */
+  async getCategoriesAvgMonthlySpendPerYear(yearMonthGte, targetCurrency) {
+
+    return new TotoAPI().fetch('expensesV2', `/stats/categoryAvgMonthlySpendPerYear?&yearMonthGte=${yearMonthGte}&targetCurrency=${targetCurrency}`).then((response) => response.json());
+
+  }
+
 
 }
