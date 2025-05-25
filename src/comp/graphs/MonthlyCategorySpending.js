@@ -129,7 +129,7 @@ export function MonthlyCategorySpending({ currency, monthsDepth = 6 }) {
         d3.select(graphRef.current).select("svg").remove();
 
         // Set up the SVG canvas dimensions
-        const margin = { top: 40, right: 30, bottom: 20, left: 10 };
+        const margin = { top: 40, right: 30, bottom: 20, left: 15 };
         const width = graphRef.current.clientWidth - margin.left - margin.right;
         const height = graphRef.current.clientHeight - margin.top - margin.bottom;
 
