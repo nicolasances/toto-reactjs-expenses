@@ -110,7 +110,7 @@ export default class TotoBarChart extends Component {
 
         // Update the scales
         this.x = d3.scaleBand().paddingInner(0.05).range([this.marginH, this.width - this.marginH]).domain(data.map((d) => { return d.x }));
-        this.y = d3.scaleLinear().range([this.textPaddingV, this.height - this.textPaddingV]).domain([0, this.yMax]);
+        this.y = d3.scaleLinear().range([this.textPaddingV, this.height - this.textPaddingV - 20]).domain([0, this.yMax]);
         this.fontScale = d3.scaleLinear().range([6, 11]).domain([24, 4]);
 
         // Bars

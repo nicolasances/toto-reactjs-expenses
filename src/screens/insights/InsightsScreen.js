@@ -88,7 +88,7 @@ export default function InsightsScreen(props) {
                 <YearSavingsPerMonthGraph currency={settings.currency} />
             </div>
 
-            <div className="insights-section row" style={{ height: '170px' }}>
+            <div className="insights-section row" style={{ height: '140px' }}>
                 <MonthlyCategorySpending currency={settings.currency} monthsDepth={9} />
             </div>
 
