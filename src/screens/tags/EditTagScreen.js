@@ -77,8 +77,8 @@ export default function EditTagScreen(props) {
         history.push("editTagExpenses", { tag: tag })
     }
 
-    useEffect(loadExpenses, []);
-    useEffect(loadTag, []);
+    useEffect(() => {loadExpenses()}, []);
+    useEffect(() => {loadTag()}, []);
 
     return (
         <div className="screen edit-tag-screen">

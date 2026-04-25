@@ -208,8 +208,8 @@ export default function RekoncileGameScreen(props) {
 
     }
 
-    useEffect(initialLoad, [])
-    useEffect(loadNextRound, [roundsToSkip])
+    useEffect(() => {initialLoad()}, [])
+    useEffect(() => {loadNextRound()}, [roundsToSkip])
     useEffect(levelUpAnimation, [playerLevelId])
 
     return (

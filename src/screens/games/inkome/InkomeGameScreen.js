@@ -206,8 +206,8 @@ export default function InkomeGameScreen(props) {
 
     }
 
-    useEffect(initialLoad, [])
-    useEffect(loadNextRound, [roundsToSkip])
+    useEffect(() => {initialLoad()}, [])
+    useEffect(() => {loadNextRound()}, [roundsToSkip])
 
     return (
         // <div className="screen inkome-screen">

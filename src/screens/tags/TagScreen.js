@@ -1,4 +1,4 @@
-import React, { Component, useEffect, useState } from 'react';
+import React, { Component, useState } from 'react';
 
 import "./TagScreen.css";
 import TitleBar from '../../comp/TitleBar';

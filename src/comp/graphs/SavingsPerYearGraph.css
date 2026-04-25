@@ -1,0 +1,23 @@
+.totograph.savingsperyear {
+    display: flex;
+    flex-direction: column;
+}
+.totograph.savingsperyear .title {
+    font-size: x-small;
+    text-transform: uppercase;
+    text-align: left;
+    color:  var(--color-text-light);
+}
+.totograph.savingsperyear .title .small {
+    font-size: 7px;
+}
+.totograph.savingsperyear .zero-line {
+    stroke: none;
+}
+.totograph.savingsperyear .bar-label {
+    font-size: 7px;
+    fill: rgba(255, 255, 255, 0.8);
+}
+.totograph.savingsperyear .bar-label-savings {
+    font-size: x-small;
+}

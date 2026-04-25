@@ -14,7 +14,8 @@ import YearMonthTile from '../picker/YearMonthTile';
 import ScrollPicker from '../picker/ScrollPicker';
 import Popup from 'reactjs-popup';
 import CategorySelectionPopup from '../comp/cateogrypicker/CategorySelectionPopup';
-import querystring from 'querystring';
+// import querystring from 'querystring';
+import queryString from 'query-string';
 import { incomeCategoriesMap } from '../services/IncomeCategoriesMap';
 
 const cookies = new Cookies();
@@ -54,7 +55,7 @@ class ExpensesScreen extends Component {
     getLastSelectedMonth(navigation) {
 
         let lastUsedMonth;
-        let searchParams = this.props.location.search ? querystring.parse(this.props.location.search.substring(1)) : null;
+        let searchParams = this.props.location.search ? queryString.parse(this.props.location.search.substring(1)) : null;
 
         // Check the cookies: they override everything
         if (cookies.get("expensesListYearMonth")) return moment(cookies.get("expensesListYearMonth") + "01", "YYYYMMDD");

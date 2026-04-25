@@ -1,7 +1,7 @@
 import Lottie from "lottie-react";
 import levelUpAnimation from '../../../lottie/anim-level-up.json';
 import './LevelUpWidget.css';
-import { useEffect, useRef } from "react";
+import { useRef } from "react";
 import TotoIconButton from "../../../comp/TotoIconButton";
 import { ReactComponent as CloseSVG } from '../../../img/close.svg'
 

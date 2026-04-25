@@ -1,5 +1,3 @@
-.insights-screen {
-}
 
 .insights-screen .widget {
     margin: 6px 24px;
@@ -45,4 +43,22 @@
     width: 20px;
     height: auto;
     fill: var(--color-background);
+}
+
+/************************************************************** 
+ * INSIGHTS SECTION
+ *************************************************************/
+.insights-section {
+    display: flex;
+    flex-direction: column;
+    margin: 12px 24px;
+}
+.insights-section.row {
+    flex-direction: row;
+}
+.insights-section.card {
+    background-color: var(--color-dark-primary);
+    border-radius: 5px;
+    padding: 12px 12px;
+    box-shadow: 1px 1px 7px 0px rgba(0, 0, 0, 0.25);
 }

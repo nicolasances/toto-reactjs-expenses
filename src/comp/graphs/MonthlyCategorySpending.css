@@ -1,0 +1,14 @@
+.monthly-category-spending {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+}
+.monthly-category-spending .row {
+    display: flex;
+    align-items: center;
+}
+.monthly-category-spending .title {
+    font-size: x-small;
+    text-align: left;
+    text-transform: uppercase;
+}

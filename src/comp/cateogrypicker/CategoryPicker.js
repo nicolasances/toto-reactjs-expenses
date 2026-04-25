@@ -17,7 +17,8 @@ import TouchableOpacity from '../TouchableOpacity';
  *  - onCategoryChange          :   (OPT) callback to receive changes of selected category
  *  - onPress                   :   (OPT) callback to react to when the user clicks on the category
  *  - label                     :   (OPT) a label to override the default
- *  - size                      :   (OPT, default "m") supported: "s", "m"
+ *  - hideLabel                 :   (OPT, default false) pass true to hide the label
+ *  - size                      :   (OPT, default "m") supported: "2xs", "s", "m"
  *  - color                     :   (OPT) pass a different color for the widget. Admitted values: "accent"
  *  - disableSelection          :   (OPT, default false) pass true to disable the selection of a category
  *  - income                    :   (OPT, default false) pass true if this category picker is for incomes
@@ -83,12 +84,18 @@ export default class CategoryPicker extends React.Component {
         // Define the color
         let color = this.props.color ? this.props.color : "grey"
 
+        let label = (
+            <div className={`label ${size}`}>
+                {this.props.label ? this.props.label : (this.props.income == true ? "Income category" : "Payment category")}
+            </div>
+        );
+        if (this.props.hideLabel === true) label = <></>
+
+
         return (
             <div className="category-picker">
 
-                <div className={`label ${size}`}>
-                    {this.props.label ? this.props.label : (this.props.income == true ? "Income category" : "Payment category")}
-                </div>
+                {label}
 
                 <TouchableOpacity className={`category-container ${size} ${color}`} onPress={this.onCategoryPress}>
                     {categoryComponent.image}

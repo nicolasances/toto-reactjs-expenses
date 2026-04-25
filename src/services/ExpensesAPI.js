@@ -54,6 +54,15 @@ export default class ExpensesAPI {
   }
 
   /**
+   * Retrieves the category totals from the specified yearMonthGte in the specified currency
+   */
+  async getCategoryTotalsPerMonth(yearMonthGte, currency) {
+
+    return new TotoAPI().fetch('expensesV2', `/stats/categoryTotalsPerMonth?yearMonthGte=${yearMonthGte}&currency=${currency}`).then((response) => response.json());
+
+  }
+
+  /**
    * Retrieves the specified expense
    * @param {string} id the id of the expense to get
    * @returns the expense 
@@ -210,6 +219,18 @@ export default class ExpensesAPI {
 
   }
 
+  /**
+   * Retrieves the savings of the specified year
+  */
+  async getSavingsOfYear(year, targetCurrency) {
+
+    const yearMonthGte = `${year}01`
+    const yearMonthLte = `${year}12`
+
+    return new TotoAPI().fetch('expensesV2', `/stats/savingsPerMonth?yearMonthGte=${yearMonthGte}&yearMonthLte=${yearMonthLte}&currency=${targetCurrency}`).then((response) => response.json());
+
+  }
+
 
   /**
    * Retrieves the spending (total) for each year
@@ -244,6 +265,16 @@ export default class ExpensesAPI {
     let targetCurrencyFilter = targetCurrency ? '&targetCurrency=' + targetCurrency : ''
 
     return new TotoAPI().fetch('expenses', '/stats/topCategoriesPerMonth?user=' + userEmail + '&yearMonthGte=' + yearMonthGte + targetCurrencyFilter)
+      .then((response) => response.json());
+
+  }
+
+  /**
+   * Retrieves the spending categories per month since yearMonthGte
+   */
+  async getSavingsPerYear(yearMonthGte, targetCurrency) {
+
+    return new TotoAPI().fetch('expensesV2', `/stats/savingsPerYear?yearMonthGte=${yearMonthGte}&currency=${targetCurrency}`)
       .then((response) => response.json());
 
   }
@@ -386,6 +417,17 @@ export default class ExpensesAPI {
     const response = await new TotoAPI().fetch('expensesV2', `/insights/unconsolidated?targetCurrency=${targetCurrency}`);
 
     return await response.json();
+
+  }
+
+  /**
+   * Retrieves the average monthly spend per category per year since yearMonthGte
+   * @param {string} yearMonthGte the yearMonth to start from
+   * @param {string} targetCurrency the target currency to use
+   */
+  async getCategoriesAvgMonthlySpendPerYear(yearMonthGte, targetCurrency) {
+
+    return new TotoAPI().fetch('expensesV2', `/stats/categoryAvgMonthlySpendPerYear?&yearMonthGte=${yearMonthGte}&targetCurrency=${targetCurrency}`).then((response) => response.json());
 
   }
 

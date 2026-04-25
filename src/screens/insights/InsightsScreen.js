@@ -8,26 +8,69 @@ import { ReactComponent as ClickSVG } from '../../img/click.svg';
 
 import ExpensesAPI from '../../services/ExpensesAPI';
 import { useHistory } from 'react-router-dom/cjs/react-router-dom.min';
+import { SavingsPerYearGraph } from '../../comp/graphs/SavingsPerYearGraph';
+import { LifetimeSavingsBubble } from '../../comp/graphs/LifetimeSavingsBubble';
+import { YearSavingsPerMonthGraph } from '../../comp/graphs/YearSavingsPerMonthGraph';
+import { MonthlyCategorySpending } from '../../comp/graphs/MonthlyCategorySpending';
 
 export default function InsightsScreen(props) {
 
     const [unconsolidatedMonths, setUnconsolidatedMonths] = useState([]);
+    const [savingsPerYear, setSavingsPerYear] = useState(null);
+    const [settings, setSettings] = useState(null);
+    const [categoryTotalsPerMonth, setCategoryTotalsPerMonth] = useState(null);
     const history = useHistory();
+
+    const init = async () => {
+
+        if (!settings) {
+            setTimeout(init, 100)
+            return;
+        }
+
+        loadUnconsolidatedMonths();
+        loadYearlySavings();
+    }
+
+    /**
+     * Loads the user settings
+     */
+    const loadSettings = async () => {
+
+        const settings = await new ExpensesAPI().getSettings()
+
+        setSettings(settings)
+
+    }
 
     /**
      * Load unconsolidated months
      */
     const loadUnconsolidatedMonths = async () => {
+
         const result = await new ExpensesAPI().getUnconsolidatedMonths();
 
         setUnconsolidatedMonths(result.unconsolidated);
+    }
+
+    /**
+     * Loads the yearly savings
+     */
+    const loadYearlySavings = async () => {
+
+        const result = await new ExpensesAPI().getSavingsPerYear("201801", settings.currency)
+
+        setSavingsPerYear(result.savings);
     }
 
     const gotoConsolidationScreen = () => {
         history.push("/insights/consolidation")
     }
 
-    useEffect(loadUnconsolidatedMonths, []);
+    useEffect(() => {loadSettings()}, []);
+    useEffect(() => {init()}, [settings]);
+
+    if (!settings) return <div className="screen"></div>
 
     return (
         <div className="screen insights-screen">
@@ -35,6 +78,20 @@ export default function InsightsScreen(props) {
             <TitleBar title="Your Insights" back={true} />
 
             {unconsolidatedMonths.length > 0 && <WarningWidget title="Months to Consolidate" data={unconsolidatedMonths.length} onPress={gotoConsolidationScreen} />}
+
+            <div className="insights-section row" style={{ height: '170px' }}>
+                <SavingsPerYearGraph savings={savingsPerYear} currency={settings.currency} />
+                <div style={{ marginLeft: "24px" }}><LifetimeSavingsBubble savings={savingsPerYear} currency={settings.currency} /></div>
+            </div>
+
+            <div className="insights-section row card" style={{ height: '140px' }}>
+                <YearSavingsPerMonthGraph currency={settings.currency} />
+            </div>
+
+            <div className="insights-section row" style={{ height: '240px' }}>
+                <MonthlyCategorySpending currency={settings.currency} monthsDepth={9} />
+            </div>
+
 
         </div>
     )

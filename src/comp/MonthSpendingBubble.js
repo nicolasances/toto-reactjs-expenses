@@ -52,7 +52,7 @@ export default function MonthSpendingBubble(props) {
         });
     }
 
-    useEffect(loadSettings, [])
+    useEffect(() => {loadSettings()}, [])
     useEffect(loadSpending, [currency])
 
     return (

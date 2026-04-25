@@ -15,6 +15,7 @@
     align-items: center;
 }
 .category-picker .category-container.s { width: 56px; height: 56px; }
+.category-picker .category-container.xxs { width: 20px; height: 20px; border-width: 1px; }
 .category-picker .category-container.accent { border-color: var(--color-accent); }
 
 .category-picker .category-container svg {
@@ -23,6 +24,7 @@
   fill: rgba(0,0,0,0.7);
 }
 .category-picker .category-container.s svg { width: 26px;  }
+.category-picker .category-container.xxs svg { width: 12px;  }
 .category-picker .category-container.accent svg { fill: var(--color-accent)  }
 
 .category-picker .label {

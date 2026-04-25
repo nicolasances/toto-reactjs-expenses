@@ -17,6 +17,7 @@ export function DashboardKeyInfoV2(props) {
     const [totalSavings, setTotalSavings] = useState()
     const [currency, setCurrency] = useState("")
     const [loading, setLoading] = useState(true)
+    const [incastError, setIncastError] = useState(false)
 
     const yearMonth = moment().format('YYYYMM');
 
@@ -48,8 +49,14 @@ export function DashboardKeyInfoV2(props) {
         // If there is no salary, get a forecast
         let salary = 0;
         if (!salaryPresent) {
-            const salaryPrediction = await new IncastAPI().forecastSalary()
-            salary = salaryPrediction.amount
+            try {
+                const salaryPrediction = await new IncastAPI().forecastSalary()
+                salary = salaryPrediction.amount
+            }
+            catch (e) {
+                console.log("Error fetching Incast: ", e);
+                setIncastError(true)
+            }
         }
 
         sumIncomes += salary
@@ -67,13 +74,13 @@ export function DashboardKeyInfoV2(props) {
 
     }
 
-    useEffect(loadData, [])
+    useEffect(() => { loadData() }, [])
 
     return (
         <div className="home-screen-h1 v2">
-            <AmountBubble currency={currency} amount={totalIncomes} scale="" type="income" loading={loading} />
-            <AmountBubble currency={currency} amount={totalSavings} scale="" type="savings" loading={loading} />
-            <AmountBubble currency={currency} amount={totalExpenses} scale="" type="expenses" loading={loading} />
+            {!incastError && <AmountBubble currency={currency} amount={totalIncomes} scale="" type="income" loading={loading} />}
+            {!incastError && <AmountBubble currency={currency} amount={totalSavings} scale="" type="savings" loading={loading} />}
+            <AmountBubble currency={currency} amount={totalExpenses} scale="" type={incastError ? "savings" : "expenses"} label={incastError ? "expenses" : null} loading={loading} />
         </div>
     )
 
@@ -83,7 +90,7 @@ function AmountBubble(props) {
 
     if (props.loading === true) return (
         <div className={`amount-bubble ${props.type}`}>
-            <MonkeyLoader/>
+            <MonkeyLoader />
         </div>
     )
 
@@ -91,7 +98,7 @@ function AmountBubble(props) {
         <div className={`amount-bubble ${props.type}`}>
             <div className="currency-container"><div className="currency">{props.currency}</div></div>
             <div className="amount-container"><div className="amount">{props.amount != null ? props.amount.toLocaleString("it", { maximumFractionDigits: 0 }) : ''}{props.scale}</div></div>
-            {props.type == 'savings' && <div className="type-container"><div className="type">{props.type}</div></div>}
+            {(props.type == 'savings' || props.label) && <div className="type-container"><div className="type">{props.label ? props.label : props.type}</div></div>}
             {props.type == 'income' && <div className="image-container"><IncomeSVG /></div>}
             {props.type == 'expenses' && <div className="image-container"><ExpensesSVG /></div>}
         </div>

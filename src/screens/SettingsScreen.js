@@ -47,7 +47,7 @@ export default function SettingsScreen(props) {
         history.goBack();
     }
 
-    useEffect(load, [])
+    useEffect(() => {load()}, [])
 
     return (
         <div className="screen settings-screen">
