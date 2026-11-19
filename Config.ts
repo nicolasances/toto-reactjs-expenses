@@ -28,4 +28,4 @@ export function endpoint(api: ApiName): string | undefined {
 
 export const GOOGLE_CLIENT_ID = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID;
 
-export const APP_VERSION = "1.20.0.0"
+export const APP_VERSION = "1.21.0.0"
