@@ -1,30 +1,42 @@
-import './MonthlyCategorySpending.css'
+'use client'
+
 import { useEffect, useState, useRef } from "react";
-import ExpensesAPI from "../../services/ExpensesAPI";
 import moment from "moment";
 import * as d3 from 'd3'
-import CategoryPicker from "../cateogrypicker/CategoryPicker";
+import { ExpensesAPI } from "@/api/ExpensesAPI";
+import CategoryPicker from "@/components/categorypicker/CategoryPicker";
+import { CategoriesAvgMonthlySpendResponse, CategoryTotalsPerMonthResponse } from "@/model/stats";
+import './MonthlyCategorySpending.css'
+
+interface MonthlyCategorySpendingProps {
+    currency?: string;      // The currency to show the amounts in
+    monthsDepth?: number;   // (optional, default 6) how many months to show, ending with the current month
+}
 
 /**
  * This component generates a graph using D3.js to visualize the spending per category for each month.
  * It displays the data as a line chart with each line representing a different category. Responsive.
+ *
+ * @param {MonthlyCategorySpendingProps} props the props
  */
-export function MonthlyCategorySpending({ currency, monthsDepth = 6 }) {
+export function MonthlyCategorySpending({ currency, monthsDepth = 6 }: MonthlyCategorySpendingProps) {
 
-    const [totals, setTotals] = useState(null);
+    const [totals, setTotals] = useState<CategoryTotalsPerMonthResponse | null>(null);
     const [category, setCategory] = useState('SUPERMERCATO');
-    const [avgCategorySpend, setAvgCategorySpend] = useState(null);
+    const [avgCategorySpend, setAvgCategorySpend] = useState<CategoriesAvgMonthlySpendResponse | null>(null);
 
-    const graphRef = useRef(null)
-    const secondGraphRef = useRef(null)
+    const graphRef = useRef<HTMLDivElement>(null)
+    const secondGraphRef = useRef<HTMLDivElement>(null)
 
-
-    const onChangeCategory = (category) => {
+    /**
+     * When the user picks a different category: redraws both graphs
+     */
+    const onChangeCategory = (category: string) => {
         setCategory(category);
 
         const filteredTotals = filterCategory(totals, category);
 
-        // Fix missing data points in the totals            
+        // Fix missing data points in the totals
         const fixedTotals = fixMissingDataPoints(filteredTotals);
 
         buildGraph(fixedTotals);
@@ -32,6 +44,9 @@ export function MonthlyCategorySpending({ currency, monthsDepth = 6 }) {
 
     }
 
+    /**
+     * Loads the data and builds the graphs
+     */
     const loadData = async () => {
 
         const avgCategorySpend = await loadAvgMonthlyCatSpend();
@@ -42,16 +57,19 @@ export function MonthlyCategorySpending({ currency, monthsDepth = 6 }) {
 
         const filteredTotals = filterCategory(monthlyCategorySpend, category);
 
-        // Fix missing data points in the totals            
+        // Fix missing data points in the totals
         const fixedTotals = fixMissingDataPoints(filteredTotals);
 
-        buildGraph(fixedTotals, avgCategorySpend);
+        buildGraph(fixedTotals);
         buildYearlyGraph(avgCategorySpend, category);
     }
 
+    /**
+     * Loads the average monthly spend per category, for each year
+     */
     const loadAvgMonthlyCatSpend = async () => {
 
-        const data = await new ExpensesAPI().getCategoriesAvgMonthlySpendPerYear("201801", currency)
+        const data = await new ExpensesAPI().getCategoriesAvgMonthlySpendPerYear("201801", currency ?? "")
 
         return data;
     }
@@ -64,7 +82,7 @@ export function MonthlyCategorySpending({ currency, monthsDepth = 6 }) {
 
         const now = new Date();
         const startDate = moment(new Date(now.getFullYear(), now.getMonth() - (monthsDepth - 1), 1)).format('YYYYMM');
-        const totals = await new ExpensesAPI().getCategoryTotalsPerMonth(startDate, currency);
+        const totals = await new ExpensesAPI().getCategoryTotalsPerMonth(startDate, currency ?? "");
 
         return totals
     }
@@ -72,7 +90,7 @@ export function MonthlyCategorySpending({ currency, monthsDepth = 6 }) {
     /**
      * Function that filters the totals to only extract the specified category (category)
      */
-    const filterCategory = (totals, category) => {
+    const filterCategory = (totals: CategoryTotalsPerMonthResponse | null, category: string): CategoryTotalsPerMonthResponse | null => {
         if (!totals || !totals.categories) {
             return null;
         }
@@ -89,18 +107,18 @@ export function MonthlyCategorySpending({ currency, monthsDepth = 6 }) {
 
     /**
      * Fixes missing data points in the data array.
-     * 
+     *
      * The "totals" parameter is an object with the following structure:
      * {categories: [{category: "", months: [{yearMonth: "", amount: 0}, ...]}, ...]}
-     * 
-     * The months array has an ordered list of months (format YYYYMM). Some months can be missing and this function fills the missing months with a zero amount. 
+     *
+     * The months array has an ordered list of months (format YYYYMM). Some months can be missing and this function fills the missing months with a zero amount.
      */
-    const fixMissingDataPoints = (totals) => {
+    const fixMissingDataPoints = (totals: CategoryTotalsPerMonthResponse | null) => {
         if (!totals || !totals.categories) {
             return totals;
         }
 
-        const allMonths = [];
+        const allMonths: string[] = [];
         const now = moment();
         for (let i = 0; i < monthsDepth; i++) {
             allMonths.push(now.clone().subtract(i, 'months').format('YYYYMM'));
@@ -112,7 +130,7 @@ export function MonthlyCategorySpending({ currency, monthsDepth = 6 }) {
 
             const filledMonths = allMonths.map(month => ({
                 yearMonth: month,
-                amount: monthMap.has(month) ? monthMap.get(month) : 0
+                amount: monthMap.has(month) ? monthMap.get(month) as number : 0
             }));
 
             category.months = filledMonths;
@@ -124,35 +142,35 @@ export function MonthlyCategorySpending({ currency, monthsDepth = 6 }) {
 
     /**
      * Generates the D3.js line chart graph based on the category totals per month.
-     * 
-     * The graph is instered in the `graphRef` div.
-     * 
-     * The "totals" parameter is an object wiht the following structure:
-     * {categories: [{category: "", months: [{yearMonth: "", amount: 0}, ...]}, ...]}
-     * 
-     * There should be no legend. 
+     *
+     * The graph is inserted in the `graphRef` div.
+     *
+     * There should be no legend.
      * There should be no left axis.
      * The bottom axis should have no line, and only show the labels of the year Month in format (MM.YY)
-     * The line of each category should have a small filled circle for every data point. 
+     * The line of each category should have a small filled circle for every data point.
      * Put the amount on top of the circle. The amount should be in k (so divided by 1000) and max 1 decimal
-     * 
      */
-    const buildGraph = (totals) => {
+    const buildGraph = (totals: CategoryTotalsPerMonthResponse | null) => {
 
-        if (!totals) {
+        const container = graphRef.current
+
+        if (!container) return;
+
+        // Clear any existing SVG elements
+        d3.select(container).select("svg").remove();
+
+        if (!totals || !totals.categories) {
             return;
         }
 
-        // Clear any existing SVG elements
-        d3.select(graphRef.current).select("svg").remove();
-
         // Set up the SVG canvas dimensions
         const margin = { top: 44, right: 30, bottom: 20, left: 15 };
-        
-        const width = graphRef.current.clientWidth - margin.left - margin.right;
-        const height = graphRef.current.clientHeight - margin.top - margin.bottom;
 
-        const svg = d3.select(graphRef.current)
+        const width = container.clientWidth - margin.left - margin.right;
+        const height = container.clientHeight - margin.top - margin.bottom;
+
+        const svg: any = d3.select(container)
             .append("svg")
             .attr("width", width + margin.left + margin.right)
             .attr("height", height + margin.top + margin.bottom)
@@ -169,23 +187,23 @@ export function MonthlyCategorySpending({ currency, monthsDepth = 6 }) {
         }));
 
         // Set up scales
-        const xScale = d3.scaleTime()
-            .domain(d3.extent(data.flatMap(d => d.values), d => d.month))
+        const xScale: any = d3.scaleTime()
+            .domain(d3.extent(data.flatMap(d => d.values), d => d.month) as [Date, Date])
             .range([0, width]);
 
-        const yScale = d3.scaleLinear()
-            .domain([d3.min(data, d => d3.min(d.values, v => v.total)), d3.max(data, d => d3.max(d.values, v => v.total))])
+        const yScale: any = d3.scaleLinear()
+            .domain([d3.min(data, d => d3.min(d.values, v => v.total)) ?? 0, d3.max(data, d => d3.max(d.values, v => v.total)) ?? 0])
             .range([height - 5, 0]);
 
         // Add lines for each category
-        const line = d3.line()
-            .x(d => xScale(d.month))
-            .y(d => yScale(d.total));
+        const line: any = d3.line()
+            .x((d: any) => xScale(d.month))
+            .y((d: any) => yScale(d.total));
 
         // Limit the number of x-axis ticks to "monthsDepth"
-        const xAxis = d3.axisBottom(xScale)
+        const xAxis: any = d3.axisBottom(xScale)
             .ticks(monthsDepth)
-            .tickFormat(d3.timeFormat("%b"))
+            .tickFormat(d3.timeFormat("%b") as any)
 
         svg.append("g")
             .attr("transform", `translate(0,-${height})`)
@@ -193,7 +211,7 @@ export function MonthlyCategorySpending({ currency, monthsDepth = 6 }) {
             .call(xAxis)
             .selectAll("text") // Select all x-axis labels
             .style("font-size", "9px"); // Set the font size to smaller
-            
+
         svg.selectAll("path, line") // Remove axis line and ticks
             .remove()
 
@@ -212,8 +230,8 @@ export function MonthlyCategorySpending({ currency, monthsDepth = 6 }) {
                 .data(categoryData.values)
                 .enter()
                 .append("circle")
-                .attr("cx", d => xScale(d.month))
-                .attr("cy", d => yScale(d.total))
+                .attr("cx", (d: any) => xScale(d.month))
+                .attr("cy", (d: any) => yScale(d.total))
                 .attr("r", 4)
                 .attr("fill", 'var(--color-light-primary)');
 
@@ -222,12 +240,12 @@ export function MonthlyCategorySpending({ currency, monthsDepth = 6 }) {
                 .data(categoryData.values)
                 .enter()
                 .append("text")
-                .attr("x", d => xScale(d.month))
-                .attr("y", d => yScale(d.total) - 10)
+                .attr("x", (d: any) => xScale(d.month))
+                .attr("y", (d: any) => yScale(d.total) - 10)
                 .attr("text-anchor", "middle")
                 .attr("font-size", "10px")
                 .attr("fill", "var(--color-dark-primary)")
-                .text(d => (d.total / 1000).toFixed(1) + 'k')
+                .text((d: any) => (d.total / 1000).toFixed(1) + 'k')
                 .style("font-size", "8px"); // Set the font size to smaller
         });
     }
@@ -235,26 +253,31 @@ export function MonthlyCategorySpending({ currency, monthsDepth = 6 }) {
 
     /**
      * Uses D3js to draw a bar chart that shows for the targetCategory and for each year the average monthly spend.
-     * 
-     * The y axis is not shown, there is no legend, the x axis only shows the label, not any line. 
-     * 
-     * @param {} data an object formatted like so: {categories: [{category: "", avgMonthlySpend: [{year: number, amount: number}, ...]}, ...]}
+     *
+     * The y axis is not shown, there is no legend, the x axis only shows the label, not any line.
+     *
+     * @param {CategoriesAvgMonthlySpendResponse} data an object formatted like so: {categories: [{category: "", avgMonthlySpend: [{year: number, amount: number}, ...]}, ...]}
+     * @param {string} targetCategory the category to draw
      */
-    const buildYearlyGraph = (data, targetCategory) => {
+    const buildYearlyGraph = (data: CategoriesAvgMonthlySpendResponse | null, targetCategory: string) => {
+
+        const container = secondGraphRef.current
+
+        if (!container) return;
+
+        // Clear any existing SVG elements
+        d3.select(container).select("svg").remove();
 
         if (!data || !data.categories) {
             return;
         }
 
-        // Clear any existing SVG elements
-        d3.select(secondGraphRef.current).select("svg").remove();
-
         // Set up the SVG canvas dimensions
         const margin = { top: 20, right: 30, bottom: 20, left: 15 };
-        const width = secondGraphRef.current.clientWidth - margin.left - margin.right;
-        const height = secondGraphRef.current.clientHeight - margin.top - margin.bottom;
+        const width = container.clientWidth - margin.left - margin.right;
+        const height = container.clientHeight - margin.top - margin.bottom;
 
-        const svg = d3.select(secondGraphRef.current)
+        const svg: any = d3.select(container)
             .append("svg")
             .attr("width", width + margin.left + margin.right)
             .attr("height", height + margin.top + margin.bottom)
@@ -274,13 +297,13 @@ export function MonthlyCategorySpending({ currency, monthsDepth = 6 }) {
         }));
 
         // Set up scales
-        const xScale = d3.scaleBand()
-            .domain(parsedData.map(d => d.year))
+        const xScale: any = d3.scaleBand()
+            .domain(parsedData.map(d => String(d.year)))
             .range([0, width])
             .padding(0.2);
 
-        const yScale = d3.scaleLinear()
-            .domain([0, d3.max(parsedData, d => d.amount)])
+        const yScale: any = d3.scaleLinear()
+            .domain([0, d3.max(parsedData, d => d.amount) ?? 0])
             .range([height, 0]);
 
         // Add bars
@@ -289,10 +312,10 @@ export function MonthlyCategorySpending({ currency, monthsDepth = 6 }) {
             .enter()
             .append("rect")
             .attr("class", "bar")
-            .attr("x", d => xScale(d.year))
-            .attr("y", d => yScale(d.amount))
+            .attr("x", (d: any) => xScale(String(d.year)))
+            .attr("y", (d: any) => yScale(d.amount))
             .attr("width", xScale.bandwidth())
-            .attr("height", d => height - yScale(d.amount))
+            .attr("height", (d: any) => height - yScale(d.amount))
             .attr("fill", "var(--color-dark-primary)");
 
         // Add text labels for each bar
@@ -300,17 +323,17 @@ export function MonthlyCategorySpending({ currency, monthsDepth = 6 }) {
             .data(parsedData)
             .enter()
             .append("text")
-            .attr("x", d => xScale(d.year) + xScale.bandwidth() / 2)
-            .attr("y", d => yScale(d.amount) - 5)
+            .attr("x", (d: any) => xScale(String(d.year)) + xScale.bandwidth() / 2)
+            .attr("y", (d: any) => yScale(d.amount) - 5)
             .attr("text-anchor", "middle")
             .attr("font-size", "10px")
             .attr("fill", "var(--color-light-primary)")
-            .text(d => (d.amount / 1000).toFixed(1) + 'k')
+            .text((d: any) => (d.amount / 1000).toFixed(1) + 'k')
             .style("font-weight", "bold")
-            
+
 
         // Add x-axis
-        const xAxis = d3.axisBottom(xScale);
+        const xAxis: any = d3.axisBottom(xScale);
 
         svg.append("g")
             .attr("transform", `translate(0,${height})`)

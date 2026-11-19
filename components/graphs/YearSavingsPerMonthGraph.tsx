@@ -1,31 +1,40 @@
+'use client'
+
 import moment from "moment-timezone"
 import { useEffect, useRef, useState } from "react"
-import ExpensesAPI from "../../services/ExpensesAPI"
+import { useRouter } from "next/navigation"
 import * as d3 from 'd3';
+import { ExpensesAPI } from "@/api/ExpensesAPI"
+import TouchableOpacity from "@/components/TouchableOpacity";
+import { SavingEntry } from "@/model/stats";
 import './TotoGraph.css'
 import './YearSavingsPerMonthGraph.css'
-import TouchableOpacity from "../TouchableOpacity";
-import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
+
+interface YearSavingsPerMonthGraphProps {
+    currency?: string;      // The currency to consider (the graph loads only once it is set)
+}
 
 /**
- * This component displays a graph that shows, given a specific year, the savings for each month 
- * as a line chart. 
- * 
- * The default behaviour is to show the current year. 
- * 
+ * This component displays a graph that shows, given a specific year, the savings for each month
+ * as a line chart.
+ *
+ * The default behaviour is to show the current year.
+ *
  * The user is able to switch between years
+ *
+ * @param {YearSavingsPerMonthGraphProps} props the props
  */
-export function YearSavingsPerMonthGraph(props) {
+export function YearSavingsPerMonthGraph(props: YearSavingsPerMonthGraphProps) {
 
-    // Sate variables
+    // State variables
     const [year, setYear] = useState(moment().format("YYYY"))
-    const [savings, setSavings] = useState(null)
+    const [savings, setSavings] = useState<SavingEntry[] | null>(null)
     const [yearSelectorVisible, setYearSelectorVisible] = useState(false);
 
-    const history = useHistory()
+    const router = useRouter()
 
     // Valid years
-    const years = []
+    const years: number[] = []
     for (let i = 2018; i <= parseInt(moment().format('YYYY')); i++) {
         years.push(i)
     }
@@ -34,19 +43,21 @@ export function YearSavingsPerMonthGraph(props) {
     const currency = props.currency;
 
     // Ref to the graph
-    const svgRef = useRef();
+    const svgRef = useRef<HTMLDivElement>(null);
 
     /**
      * When the user clicks on a specific month
      */
-    const onMonthClick = (amount) => {
+    const onMonthClick = (amount: number) => {
+
+        if (!savings) return;
 
         // Indices are 0-based
         let i = 0;
         let found = false
         for (i = 0; i < savings.length; i++) {
             if (savings[i].saving == amount) {
-                found = true; 
+                found = true;
                 break;
             }
         }
@@ -56,11 +67,11 @@ export function YearSavingsPerMonthGraph(props) {
         i++;
 
         // Convert to year month
-        let paddedMonth = String(i).length == 1 ? `0${i}` : i;
-        let yearMonth = `${year}${paddedMonth}`
+        const paddedMonth = String(i).length == 1 ? `0${i}` : i;
+        const yearMonth = `${year}${paddedMonth}`
 
         // Go to expenses list
-        history.push(`/expenses?yearMonth=${yearMonth}`)
+        router.push(`/expenses?yearMonth=${yearMonth}`)
 
     }
 
@@ -69,17 +80,20 @@ export function YearSavingsPerMonthGraph(props) {
      */
     const buildGraph = () => {
 
-        if (!savings) return;
-
         const container = svgRef.current;
-        const margin = { top: 40, right: 0, bottom: 60, left: 0 };
-        const width = container.clientWidth - margin.left - margin.right;
-        const height = container.clientHeight - margin.top - margin.bottom;
+
+        if (!container) return;
 
         // Clear any existing SVG content
         d3.select(container).select('svg').remove();
 
-        const svg = d3.select(container)
+        if (!savings) return;
+
+        const margin = { top: 40, right: 0, bottom: 60, left: 0 };
+        const width = container.clientWidth - margin.left - margin.right;
+        const height = container.clientHeight - margin.top - margin.bottom;
+
+        const svg: any = d3.select(container)
             .append('svg')
             .attr('width', width + margin.left + margin.right)
             .attr('height', height + margin.top + margin.bottom)
@@ -94,19 +108,19 @@ export function YearSavingsPerMonthGraph(props) {
         });
 
         // Set up scales
-        const xScale = d3.scaleBand()
+        const xScale: any = d3.scaleBand()
             .domain(months)
             .range([0, width])
             .padding(0.1);
 
-        const yScale = d3.scaleLinear()
-            .domain([d3.min(monthlySavings), d3.max(monthlySavings)])
+        const yScale: any = d3.scaleLinear()
+            .domain([d3.min(monthlySavings) ?? 0, d3.max(monthlySavings) ?? 0])
             .range([height, 0]);
 
         // Draw line
-        const line = d3.line()
-            .x((d, i) => xScale(months[i]) + xScale.bandwidth() / 2)
-            .y(d => yScale(d));
+        const line: any = d3.line()
+            .x((d: any, i: number) => xScale(months[i]) + xScale.bandwidth() / 2)
+            .y((d: any) => yScale(d));
 
         svg.append('path')
             .datum(monthlySavings)
@@ -120,22 +134,22 @@ export function YearSavingsPerMonthGraph(props) {
             .data(monthlySavings)
             .enter()
             .append('circle')
-            .attr('cx', (d, i) => xScale(months[i]) + xScale.bandwidth() / 2)
-            .attr('cy', d => yScale(d))
+            .attr('cx', (d: any, i: number) => xScale(months[i]) + xScale.bandwidth() / 2)
+            .attr('cy', (d: any) => yScale(d))
             .attr('r', 4)
-            .attr('fill', d => (d < 0 ? '#c64343' : 'var(--color-light-primary)')) // Set color based on negative or positive savings
-            .on('click', (event, d) => { onMonthClick(d) })
+            .attr('fill', (d: any) => (d < 0 ? '#c64343' : 'var(--color-light-primary)')) // Set color based on negative or positive savings
+            .on('click', (event: any, d: any) => { onMonthClick(d) })
 
         svg.selectAll('text')
             .data(monthlySavings)
             .enter()
             .append('text')
-            .text(d => d3.format('.1f')(d / 1000) + "k") // Format savings in thousands
-            .attr('x', (d, i) => xScale(months[i]) + xScale.bandwidth() / 2)
-            .attr('y', d => (d >= 0 ? yScale(d) - 10 : yScale(d) + 20))
+            .text((d: any) => d3.format('.1f')(d / 1000) + "k") // Format savings in thousands
+            .attr('x', (d: any, i: number) => xScale(months[i]) + xScale.bandwidth() / 2)
+            .attr('y', (d: any) => (d >= 0 ? yScale(d) - 10 : yScale(d) + 20))
             .attr('text-anchor', 'middle')
             .classed('label', true) // Add a CSS class 'label'
-            .on('click', (event, d) => { onMonthClick(d) })
+            .on('click', (event: any, d: any) => { onMonthClick(d) })
 
         // Draw x-axis labels at the top
         const labelYOffset = 30; // Offset to avoid overlap with highest value label
@@ -143,8 +157,8 @@ export function YearSavingsPerMonthGraph(props) {
             .data(months)
             .enter()
             .append('text')
-            .text(d => moment(`${year}${d}01`).format('MMM'))
-            .attr('x', (d, i) => xScale(d) + xScale.bandwidth() / 2)
+            .text((d: any) => moment(`${year}${d}01`).format('MMM'))
+            .attr('x', (d: any) => xScale(d) + xScale.bandwidth() / 2)
             .attr('y', -labelYOffset) // Adjust the y-position for top labels
             .attr('text-anchor', 'middle')
             .attr('fill', 'var(--color-light-primary)')
@@ -175,17 +189,20 @@ export function YearSavingsPerMonthGraph(props) {
         const container = svgRef.current;
 
         // Clear any existing SVG content
-        d3.select(container).select('svg').remove();
+        if (container) d3.select(container).select('svg').remove();
 
     }
 
-    const onChangeYear = (selectedYear) => {
+    /**
+     * When the user selects a year
+     */
+    const onChangeYear = (selectedYear: number) => {
 
-        setYear(selectedYear)
+        setYear(String(selectedYear))
         setYearSelectorVisible(false)
     }
 
-    useEffect(() => {loadYear()}, [currency, year])
+    useEffect(() => { loadYear() }, [currency, year])
     useEffect(buildGraph, [savings])
 
     return (
@@ -207,7 +224,15 @@ export function YearSavingsPerMonthGraph(props) {
 
 }
 
-function YearPicker(props) {
+interface YearPickerProps {
+    years: number[];                        // The selectable years
+    onSelectYear: (year: number) => void;   // Called with the year the user picked
+}
+
+/**
+ * Lets the user pick one of the years
+ */
+function YearPicker(props: YearPickerProps) {
 
     return (
         <div className="yearpicker">

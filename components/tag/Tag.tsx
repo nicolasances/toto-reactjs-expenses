@@ -1,30 +1,38 @@
-import { useHistory } from 'react-router-dom/cjs/react-router-dom.min'
-import TouchableOpacity from '../TouchableOpacity'
-import './Tag.css'
-import CurrencyUtil from '../../util/CurrencyUtil'
+'use client'
+
+import { useRouter } from 'next/navigation'
 import moment from 'moment-timezone'
+import TouchableOpacity from '@/components/TouchableOpacity'
+import { currencyLabel } from '@/utils/CurrencyUtil'
+import { Tag as TagModel } from '@/model/tag'
+import './Tag.css'
+
+interface TagProps {
+    tag?: TagModel;         // A tag object retrieved from the /tags API (when missing, a loading placeholder is shown)
+    currency?: string;      // The currency used by the user (settings)
+}
 
 /**
  * Shows a tag component
- * 
- * @param {object} props Props
- * Properties must include: 
- *  - tag - a tag object retrieved from the /tags API
- *  - currency - the currency used by the user (settings)
- * 
- * @returns 
+ *
+ * @param {TagProps} props the props
  */
-export default function Tag(props) {
+export default function Tag({ tag, currency }: TagProps) {
 
-    const history = useHistory()
+    const router = useRouter()
 
-    const tag = props.tag
-
+    /**
+     * Opens the detail (edit) screen of the tag
+     */
     const openTagDetail = () => {
-        history.push("/editTag", { tag: tag, currency: props.currency })
+        if (!tag) return
+        router.push(`/editTag?tagId=${encodeURIComponent(tag.id)}&currency=${encodeURIComponent(currency ?? "")}`)
     }
 
-    const formatDate = (date) => {
+    /**
+     * Formats a YYYYMMDD date as "MMM YYYY"
+     */
+    const formatDate = (date?: string) => {
 
         if (!date) return ""
 
@@ -33,6 +41,8 @@ export default function Tag(props) {
     }
 
     if (!tag) return (<LoadingTag />)
+
+    const curr = currencyLabel(currency ?? "")
 
     return (
         <TouchableOpacity className="tag-box" onPress={openTagDetail}>
@@ -53,13 +63,13 @@ export default function Tag(props) {
             <div className="tag-amount">
                 {tag.localCurrencyAmount &&
                     <div>
-                        <span className="curr">{new CurrencyUtil().label(props.currency)}</span >
+                        <span className="curr">{curr}</span >
                         <span className="amt">{tag.localCurrencyAmount.toLocaleString("it", { maximumFractionDigits: 2 })}</span>
                     </div>
                 }
                 {!tag.localCurrencyAmount &&
                     <div>
-                        <span className="curr">{new CurrencyUtil().label(props.currency)}</span >
+                        <span className="curr">{curr}</span >
                         <span className="amt no-value">-</span>
                     </div>
                 }
@@ -68,6 +78,9 @@ export default function Tag(props) {
     )
 }
 
+/**
+ * Placeholder shown while the tag is loading
+ */
 function LoadingTag() {
     return (
         <div className="tag-box loading">

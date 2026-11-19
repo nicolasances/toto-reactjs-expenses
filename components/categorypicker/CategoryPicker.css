@@ -18,15 +18,6 @@
 .category-picker .category-container.xxs { width: 20px; height: 20px; border-width: 1px; }
 .category-picker .category-container.accent { border-color: var(--color-accent); }
 
-.category-picker .category-container svg {
-  width: 40px;
-  height: auto;
-  fill: rgba(0,0,0,0.7);
-}
-.category-picker .category-container.s svg { width: 26px;  }
-.category-picker .category-container.xxs svg { width: 12px;  }
-.category-picker .category-container.accent svg { fill: var(--color-accent)  }
-
 .category-picker .label {
     font-size: medium;
     color: rgba(0,0,0,0.7);
@@ -74,13 +65,6 @@
   width: 42px; height: 42px;
   border: 2px solid rgba(0,0,0,0.7);
   border-radius: 50%;
-}
-.category-selection-popup .cat-selector-container .image-container .image, .category-selection-popup .cat-selector-container .image-container .image div {
-  width: 24px; height: 24px;
-}
-.category-selection-popup .cat-selector-container .image-container svg {
-  width: 24px; height: 24px;
-  fill: rgba(0,0,0,0.7);
 }
 .category-selection-popup .cat-selector-container .label {
   color: rgba(0,0,0,0.7);
