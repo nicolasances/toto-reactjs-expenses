@@ -16,7 +16,7 @@ export class ExpensesAPI {
    */
   async getAppSettings(userEmail: string): Promise<Settings> {
 
-    return new TotoAPI().fetchJson('expenses', '/settings?user=' + userEmail);
+    return new TotoAPI().fetchJson('expensesV2', '/settings?user=' + userEmail);
   }
 
   /**
@@ -24,7 +24,7 @@ export class ExpensesAPI {
    */
   async putAppSettings(settings: Settings): Promise<WriteResponse> {
 
-    return new TotoAPI().fetchJson('expenses', '/settings', jsonRequest('PUT', settings));
+    return new TotoAPI().fetchJson('expensesV2', '/settings', jsonRequest('PUT', settings));
   }
 
   /**
@@ -72,7 +72,7 @@ export class ExpensesAPI {
    */
   async postExpense(expense: ExpenseInput): Promise<WriteResponse> {
 
-    return new TotoAPI().fetchJson('expenses', '/expenses', jsonRequest('POST', expense));
+    return new TotoAPI().fetchJson('expensesV2', '/expenses', jsonRequest('POST', expense));
   }
 
   /**
@@ -88,7 +88,7 @@ export class ExpensesAPI {
    */
   async deleteExpense(expenseId: string): Promise<WriteResponse> {
 
-    return new TotoAPI().fetchJson('expenses', '/expenses/' + expenseId, { method: 'DELETE' });
+    return new TotoAPI().fetchJson('expensesV2', '/expenses/' + expenseId, { method: 'DELETE' });
   }
 
   /**
@@ -96,7 +96,7 @@ export class ExpensesAPI {
    */
   async putExpense(expenseId: string, expense: Partial<ExpenseInput>): Promise<WriteResponse> {
 
-    return new TotoAPI().fetchJson('expenses', '/expenses/' + expenseId, jsonRequest('PUT', expense));
+    return new TotoAPI().fetchJson('expensesV2', '/expenses/' + expenseId, jsonRequest('PUT', expense));
   }
 
   /**
@@ -112,7 +112,7 @@ export class ExpensesAPI {
    */
   async consolidateExpense(expenseId: string): Promise<WriteResponse> {
 
-    return new TotoAPI().fetchJson('expenses', '/expenses/' + expenseId, jsonRequest('PUT', { consolidated: true }));
+    return new TotoAPI().fetch('expensesV2', '/expenses/' + expenseId, jsonRequest('PUT', { consolidated: true }));
   }
 
   /**
@@ -170,7 +170,7 @@ export class ExpensesAPI {
 
     const targetCurrencyFilter = targetCurrency ? '&targetCurrency=' + targetCurrency : ''
 
-    return new TotoAPI().fetchJson('expenses', '/stats/expensesPerYear?user=' + userEmail + targetCurrencyFilter);
+    return new TotoAPI().fetchJson('expensesV2', '/stats/expensesPerYear?user=' + userEmail + targetCurrencyFilter);
   }
 
   /**
@@ -181,7 +181,7 @@ export class ExpensesAPI {
     const maxCatFilter = maxCategories ? '&maxCategories=' + maxCategories : '';
     const targetCurrencyFilter = targetCurrency ? '&targetCurrency=' + targetCurrency : ''
 
-    return new TotoAPI().fetchJson('expenses', '/stats/topCategoriesOfMonth?user=' + userEmail + '&yearMonth=' + yearMonth + maxCatFilter + targetCurrencyFilter);
+    return new TotoAPI().fetchJson('expensesV2', '/stats/topCategoriesOfMonth?user=' + userEmail + '&yearMonth=' + yearMonth + maxCatFilter + targetCurrencyFilter);
   }
 
   /**
@@ -191,7 +191,7 @@ export class ExpensesAPI {
 
     const targetCurrencyFilter = targetCurrency ? '&targetCurrency=' + targetCurrency : ''
 
-    return new TotoAPI().fetchJson('expenses', '/stats/topCategoriesPerMonth?user=' + userEmail + '&yearMonthGte=' + yearMonthGte + targetCurrencyFilter);
+    return new TotoAPI().fetchJson('expensesV2', '/stats/topCategoriesPerMonth?user=' + userEmail + '&yearMonthGte=' + yearMonthGte + targetCurrencyFilter);
   }
 
   /**
