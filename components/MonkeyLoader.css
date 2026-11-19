@@ -13,8 +13,6 @@
     display: flex;
     justify-content: center;
 }
-.monkey-loader svg {
-    width: 32px;
-    height: 32px;
+.monkey-loader .monkey-icon {
     animation: monkey-load 2s infinite alternate;
 }
