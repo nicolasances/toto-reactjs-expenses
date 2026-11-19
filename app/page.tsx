@@ -1,9 +1,11 @@
 'use client'
 
+import HomeScreen from './HomeScreen';
+
 /**
- * Home page. Placeholder until the HomeScreen is migrated.
+ * Home page ("/").
  */
 export default function HomePage() {
 
-  return <div className="screen"></div>;
+  return <HomeScreen />;
 }

@@ -1,10 +1,11 @@
 import { TotoAPI } from './TotoAPI';
 
 /**
- * Category prediction, e.g. { prediction: ["VIAGGI"] }
+ * Category prediction. The app reads the predicted code from `category` (e.g. "VIAGGI").
+ * The legacy doc comment described { prediction: ["VIAGGI"] }, but the code has always read `category`: verify against the backend.
  */
 export interface PredictCategoryResponse {
-  prediction: string[];   // Predicted category codes, best first
+  category?: string;      // Predicted category code
 }
 
 /**
