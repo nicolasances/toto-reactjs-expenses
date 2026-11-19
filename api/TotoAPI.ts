@@ -88,7 +88,7 @@ export class TotoAPI {
 
     const response = await this.fetch(api, path, options, noHeaderOverride);
 
-    return response.json();
+    return parseJsonBody<T>(response);
   }
 
   /**
@@ -102,8 +102,27 @@ export class TotoAPI {
 
     if (!response.ok) throw new ApiError(response.status);
 
-    return response.json();
+    return parseJsonBody<T>(response);
   }
+}
+
+/**
+ * Parses the JSON body of a response, tolerating responses without a payload.
+ *
+ * Some endpoints (e.g. PUT /expenses/:id on expensesV2) return no body: in that case an empty object is returned
+ * instead of failing with a JSON parse error.
+ *
+ * @param {Response} response - the fetch response
+ *
+ * @returns {Promise<T>} the parsed body, or {} when the body is empty
+ */
+export async function parseJsonBody<T>(response: Response): Promise<T> {
+
+  const text = await response.text();
+
+  if (text.trim() === '') return {} as T;
+
+  return JSON.parse(text) as T;
 }
 
 /**
