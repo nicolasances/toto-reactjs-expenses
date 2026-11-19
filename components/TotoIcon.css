@@ -1,0 +1,12 @@
+.toto-icon {
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  border-radius: 50%;
+}
+.toto-icon.disabled {
+  opacity: 0.5;
+}
+
+.toto-icon.ms {padding: 8px;}
+.toto-icon.s {padding: 6px;}

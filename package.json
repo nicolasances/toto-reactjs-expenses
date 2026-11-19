@@ -1,69 +1,41 @@
 {
   "name": "toto-reactjs-expenses",
-  "version": "1.3.3",
+  "version": "1.4.0",
   "private": true,
-  "dependencies": {
-    "@testing-library/jest-dom": "^5.11.9",
-    "@testing-library/react": "^11.2.5",
-    "@testing-library/user-event": "^12.7.1",
-    "buffer": "^6.0.3",
-    "crypto-browserify": "^3.12.1",
-    "d3": "^6.6.0",
-    "jsonwebtoken": "^9.0.0",
-    "local-storage": "^2.0.0",
-    "lottie-react": "^2.4.0",
-    "moment-timezone": "^0.5.33",
-    "process": "^0.11.10",
-    "query-string": "^7.0.0",
-    "querystring-es3": "^0.2.1",
-    "react": "^19.1.0",
-    "react-app-rewired": "^2.2.1",
-    "react-dom": "^19.1.0",
-    "react-google-login": "^5.2.2",
-    "react-router-dom": "^5.2.0",
-    "react-scripts": "^5.0.1",
-    "react-svg": "^11.2.4",
-    "reactjs-popup": "^2.0.4",
-    "stream-browserify": "^3.0.0",
-    "universal-cookie": "^8.0.1",
-    "util": "^0.12.5",
-    "web-vitals": "^0.2.4",
-    "webpack": "^5.99.8",
-    "workbox-background-sync": "^5.1.4",
-    "workbox-broadcast-update": "^5.1.4",
-    "workbox-cacheable-response": "^5.1.4",
-    "workbox-core": "^5.1.4",
-    "workbox-expiration": "^5.1.4",
-    "workbox-google-analytics": "^5.1.4",
-    "workbox-navigation-preload": "^5.1.4",
-    "workbox-precaching": "^5.1.4",
-    "workbox-range-requests": "^5.1.4",
-    "workbox-routing": "^5.1.4",
-    "workbox-strategies": "^5.1.4",
-    "workbox-streams": "^5.1.4"
-  },
   "scripts": {
-    "start": "react-app-rewired start",
-    "build": "react-app-rewired build",
-    "test": "react-app-rewired test",
-    "eject": "react-scripts eject"
+    "dev": "next dev",
+    "build": "rm -rf .next && next build",
+    "start": "next start",
+    "lint": "next lint",
+    "typecheck": "tsc --noEmit",
+    "test": "jest"
   },
-  "eslintConfig": {
-    "extends": [
-      "react-app",
-      "react-app/jest"
-    ]
+  "dependencies": {
+    "d3": "^6.6.0",
+    "jwt-decode": "^4.0.0",
+    "lottie-react": "^2.4.0",
+    "moment": "^2.30.1",
+    "moment-timezone": "^0.5.33",
+    "next": "15.5.29",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0",
+    "reactjs-popup": "^2.0.4",
+    "toto-react": "^0.1.2",
+    "universal-cookie": "^8.0.1"
   },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
+  "devDependencies": {
+    "@eslint/eslintrc": "^3",
+    "@types/d3": "^6.7.8",
+    "@types/jest": "^30.0.0",
+    "@types/node": "^20",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "eslint": "^9",
+    "eslint-config-next": "15.5.29",
+    "jest": "^30.4.2",
+    "postcss": "^8",
+    "tailwindcss": "^3.4.1",
+    "ts-jest": "^29.4.11",
+    "typescript": "^5"
   }
 }
