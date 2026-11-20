@@ -28,21 +28,21 @@ COPY . .
 
 RUN npm run build
 
-# Runtime stage
+# Runtime stage: runs the standalone server emitted by `output: "standalone"`.
+# next.config.ts is resolved at build time, so no TypeScript or npm install is needed here.
 FROM node:20-alpine AS production
 
 WORKDIR /app
 
 ENV NODE_ENV=production
+# Cloud Run sets PORT (8080); bind on all interfaces so the container is reachable.
+ENV PORT=8080
+ENV HOSTNAME=0.0.0.0
 
-COPY --from=build /app/package.json /app/package-lock.json* ./
-COPY --from=build /app/.next ./.next
+COPY --from=build /app/.next/standalone ./
+COPY --from=build /app/.next/static ./.next/static
 COPY --from=build /app/public ./public
-COPY --from=build /app/next.config.ts ./next.config.ts
 
-RUN npm ci --omit=dev
-
-# Cloud Run sets PORT (8080); `next start` listens on it.
 EXPOSE 8080
 
-CMD ["npm", "start"]
+CMD ["node", "server.js"]
