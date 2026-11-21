@@ -1,5 +1,5 @@
 /**
- * Statistics returned by the expenses APIs (/stats/*, /insights/*) and the incast API.
+ * Statistics returned by the expenses APIs (/stats/*, /insights/*).
  *
  * Item shapes were inferred from the pre-TypeScript app: verify against the backend before relying on optional fields.
  */

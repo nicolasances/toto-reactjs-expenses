@@ -1,4 +1,4 @@
-export type ApiName = 'expenses' | 'expensesV2' | 'auth' | 'expcat' | 'games' | 'incast';
+export type ApiName = 'expenses' | 'expensesV2' | 'auth' | 'expcat' | 'games';
 
 /**
  * Endpoints of the backend APIs used by the app.
@@ -12,7 +12,6 @@ ApiEndpoints.set("expensesV2", String(process.env.NEXT_PUBLIC_EXPENSES_V2_API_EN
 ApiEndpoints.set("auth", String(process.env.NEXT_PUBLIC_AUTH_API_ENDPOINT))
 ApiEndpoints.set("expcat", String(process.env.NEXT_PUBLIC_EXPCAT_API_ENDPOINT))
 ApiEndpoints.set("games", String(process.env.NEXT_PUBLIC_GAMES_API_ENDPOINT))
-ApiEndpoints.set("incast", String(process.env.NEXT_PUBLIC_INCAST_API_ENDPOINT))
 
 /**
  * Returns the base endpoint (including the microservice basepath) of the specified API.

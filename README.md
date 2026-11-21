@@ -20,7 +20,7 @@ Commands:
 * `npm run lint`, `npm run typecheck`
 
 Environment variables (set at build time, see `Config.ts` and the `Dockerfile`):
-`NEXT_PUBLIC_EXPENSES_API_ENDPOINT`, `NEXT_PUBLIC_EXPENSES_V2_API_ENDPOINT`, `NEXT_PUBLIC_AUTH_API_ENDPOINT`, `NEXT_PUBLIC_EXPCAT_API_ENDPOINT`, `NEXT_PUBLIC_GAMES_API_ENDPOINT`, `NEXT_PUBLIC_INCAST_API_ENDPOINT`, `NEXT_PUBLIC_GOOGLE_CLIENT_ID`.
+`NEXT_PUBLIC_EXPENSES_API_ENDPOINT`, `NEXT_PUBLIC_EXPENSES_V2_API_ENDPOINT`, `NEXT_PUBLIC_AUTH_API_ENDPOINT`, `NEXT_PUBLIC_EXPCAT_API_ENDPOINT`, `NEXT_PUBLIC_GAMES_API_ENDPOINT`, `NEXT_PUBLIC_GOOGLE_CLIENT_ID`.
 
 # Version 1.21.0
 * Technical: migrated to Next.js (App Router) and strict TypeScript. No functional changes; detail and tag-edit screens now work on reload/deep link (data comes from the URL instead of in-memory router state)
