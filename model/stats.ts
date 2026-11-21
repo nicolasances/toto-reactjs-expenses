@@ -1,5 +1,5 @@
 /**
- * Statistics returned by the expenses APIs (/stats/*, /insights/*) and the incast API.
+ * Statistics returned by the expenses APIs (/stats/*, /insights/*).
  *
  * Item shapes were inferred from the pre-TypeScript app: verify against the backend before relying on optional fields.
  */
@@ -71,9 +71,10 @@ export interface CategoriesAvgMonthlySpendResponse {
     [key: string]: any;             // Other fields returned by the API
 }
 
-export interface SalaryForecast {
-    amount: number;                 // Forecasted salary of the current month
-    [key: string]: any;             // Other fields returned by the API
+export interface SalaryPrediction {
+    predictedSalary: number | null;     // Average salary of the last three completed months. Null when there is no salary data
+    currency: string;                   // ISO currency code of the predicted salary
+    basedOnMonths: number[];            // The months (YYYYMM) the prediction is based on
 }
 
 export type StatsResponse = Record<string, any>;
