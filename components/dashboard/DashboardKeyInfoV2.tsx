@@ -4,7 +4,8 @@ import moment from 'moment-timezone'
 import { useEffect, useState } from 'react'
 import { MaskedSvgIcon } from 'toto-react'
 import { ExpensesAPI } from '@/api/ExpensesAPI'
-import { IncastAPI } from '@/api/IncastAPI'
+import { SalaryPrediction } from '@/model/stats'
+import { computeIncomeAndSavings, hasSalary } from '@/utils/incomeSavings'
 import MonkeyLoader from '@/components/MonkeyLoader'
 import './DashboardKeyInfoV2.css'
 
@@ -18,12 +19,12 @@ export function DashboardKeyInfoV2() {
     const [totalSavings, setTotalSavings] = useState<number | undefined>()
     const [currency, setCurrency] = useState("")
     const [loading, setLoading] = useState(true)
-    const [incastError, setIncastError] = useState(false)
+    const [predictionError, setPredictionError] = useState(false)
 
     const yearMonth = moment().format('YYYYMM');
 
     /**
-     * Loads the totals of the month (and the salary forecast, if no salary has been received yet)
+     * Loads the totals of the month (and the salary prediction, if no salary has been received yet)
      */
     const loadData = async () => {
 
@@ -38,32 +39,21 @@ export function DashboardKeyInfoV2() {
         // Load the total incomes
         const { incomes } = await new ExpensesAPI().getIncomes(yearMonth)
 
-        // If there are no salaries in the incomes, fetch a prediction for the salary
-        let salaryPresent = false
-        let sumIncomes = 0
-        for (const income of incomes) {
+        // If there is no salary in the incomes, fetch the salary prediction
+        let prediction: SalaryPrediction | null = null
+        let predictionFailed = false
 
-            // Accumulate the income
-            sumIncomes += income.amount;
-
-            // Check if it's a salary
-            if (income.category == "SALARY") salaryPresent = true
-        }
-
-        // If there is no salary, get a forecast
-        let salary = 0;
-        if (!salaryPresent) {
+        if (!hasSalary(incomes)) {
             try {
-                const salaryPrediction = await new IncastAPI().forecastSalary()
-                salary = salaryPrediction.amount
+                prediction = await new ExpensesAPI().getSalaryPrediction(settings.currency)
             }
             catch (e) {
-                console.log("Error fetching Incast: ", e);
-                setIncastError(true)
+                console.log("Error fetching the salary prediction: ", e);
+                predictionFailed = true
             }
         }
 
-        sumIncomes += salary
+        const { available, totalIncomes, totalSavings } = computeIncomeAndSavings({ incomes, totalExpenses: totalExpenses.total, prediction, predictionFailed })
 
         // Stop the loading timer
         clearTimeout(loadingTimer)
@@ -73,8 +63,9 @@ export function DashboardKeyInfoV2() {
 
         setCurrency(settings.currency)
         setTotalExpenses(totalExpenses.total)
-        setTotalIncomes(sumIncomes)
-        setTotalSavings(sumIncomes - totalExpenses.total)
+        setPredictionError(!available)
+        setTotalIncomes(totalIncomes)
+        setTotalSavings(totalSavings)
 
     }
 
@@ -82,9 +73,9 @@ export function DashboardKeyInfoV2() {
 
     return (
         <div className="home-screen-h1 v2">
-            {!incastError && <AmountBubble currency={currency} amount={totalIncomes} scale="" type="income" loading={loading} />}
-            {!incastError && <AmountBubble currency={currency} amount={totalSavings} scale="" type="savings" loading={loading} />}
-            <AmountBubble currency={currency} amount={totalExpenses} scale="" type={incastError ? "savings" : "expenses"} label={incastError ? "expenses" : null} loading={loading} />
+            {!predictionError && <AmountBubble currency={currency} amount={totalIncomes} scale="" type="income" loading={loading} />}
+            {!predictionError && <AmountBubble currency={currency} amount={totalSavings} scale="" type="savings" loading={loading} />}
+            <AmountBubble currency={currency} amount={totalExpenses} scale="" type={predictionError ? "savings" : "expenses"} label={predictionError ? "expenses" : null} loading={loading} />
         </div>
     )
 
