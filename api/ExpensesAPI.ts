@@ -2,7 +2,7 @@ import { TotoAPI, jsonRequest } from './TotoAPI';
 import { Expense, ExpenseInput, GetExpensesResponse, GetIncomesResponse, Income, IncomeInput, WriteResponse } from '@/model/expense';
 import { Settings } from '@/model/settings';
 import { GetTagExpensesResponse, GetTagsResponse, Tag } from '@/model/tag';
-import { CategoriesAvgMonthlySpendResponse, CategoryTotalsPerMonthResponse, ExpensesPerDayResponse, MonthTotalResponse, MonthsTotalsResponse, SavingsResponse, StatsResponse, UnconsolidatedMonthsResponse } from '@/model/stats';
+import { CategoriesAvgMonthlySpendResponse, CategoryTotalsPerMonthResponse, ExpensesPerDayResponse, MonthTotalResponse, MonthsTotalsResponse, SalaryPrediction, SavingsResponse, StatsResponse, UnconsolidatedMonthsResponse } from '@/model/stats';
 
 /**
  * API to access the expenses microservices ("expenses" v1 and "expensesV2").
@@ -41,6 +41,15 @@ export class ExpensesAPI {
   async getIncomes(yearMonth: string): Promise<GetIncomesResponse> {
 
     return new TotoAPI().fetchJson('expensesV2', `/incomes?yearMonth=${yearMonth}`);
+  }
+
+  /**
+   * Retrieves the predicted salary (average of the last three completed months), in the given currency.
+   * The predicted salary is null when there is no salary data.
+   */
+  async getSalaryPrediction(currency: string): Promise<SalaryPrediction> {
+
+    return new TotoAPI().fetchJson('expensesV2', `/predictions/salary?currency=${currency}`);
   }
 
   /**
