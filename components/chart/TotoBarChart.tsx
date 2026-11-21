@@ -3,6 +3,8 @@
 import { useEffect, useRef } from 'react';
 import * as d3 from 'd3';
 
+import { computeYMax } from '@/utils/chartScale';
+
 import './TotoBarChart.css';
 
 /**
@@ -110,12 +112,12 @@ export default function TotoBarChart(props: TotoBarChartProps) {
 
         const svg: any = d3.select(container).append('svg').attr('width', width).attr('height', height);
 
-        // Create ranges
-        const yMax = d3.max(data, (d) => { return d.y });
+        // Create ranges (bars and line share the same scale, so the line values must be considered too)
+        const yMax = computeYMax(data, lineData);
 
         // Update the scales
         const x: any = d3.scaleBand().paddingInner(0.05).range([marginH, width - marginH]).domain(data.map((d) => { return String(d.x) }));
-        const y: any = d3.scaleLinear().range([textPaddingV, height - textPaddingV - 20]).domain([0, yMax ?? 0]);
+        const y: any = d3.scaleLinear().range([textPaddingV, height - textPaddingV - 20]).domain([0, yMax]);
         const fontScale: any = d3.scaleLinear().range([6, 11]).domain([24, 4]);
 
         // Bars
