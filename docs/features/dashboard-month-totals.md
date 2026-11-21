@@ -44,7 +44,7 @@ The incomes of the month are summed as returned by `/incomes` (`amount`), withou
 The prediction itself is defined by `toto-ms-expenses`: the average salary of the last three completed months, returned as `null` when it has no salary data. See [Salary Prediction](https://github.com/nicolasances/toto-ms-expenses/blob/main/docs/features/salary-prediction.md).
 
 ## Edge cases & errors
-- **Loading**: a loader is shown inside each bubble. It only appears if loading takes longer than 500 ms.
+- **Loading**: a loader is shown inside each bubble until all the data is loaded.
 - **Prediction is `null`** (no salary data) **or the prediction call fails**, and the salary has not been received: the income and savings bubbles are **hidden** and only the expenses bubble is shown. In that case the expenses bubble is styled like the savings bubble and keeps the `expenses` label. A failed prediction call is only logged to the console.
 - **Salary already received**: a prediction problem can never hide the bubbles, since the prediction is not requested.
 - **No incomes and no expenses**: the amounts are shown as `0`.

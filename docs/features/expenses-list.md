@@ -55,7 +55,6 @@ Incomes are tagged as incomes in the client (`income: true`) and merged with the
 ## Out of scope
 - The expense / income detail and edit screen (`app/expenses/[id]`). Only the navigation to it is described.
 - The new expense screen.
-- Other ways of changing items (e.g. deleting).
 
 ## Related code
 - `app/expenses/ExpensesScreen.tsx`: the screen
